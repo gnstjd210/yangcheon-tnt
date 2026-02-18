@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String?
+  email     String?
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+}
+
+model Notice {
+  id        String   @id @default(cuid())
+  type      String   // '공지', '소식', '안내'
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  program   String
+  content   String
+  rating    Int      @default(5)
+  color     String   @default("bg-white")
+  createdAt DateTime @default(now())
+}
+
+model Greeting {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  imageUrl  String?
+  isVisible Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Coach {
+  id        String   @id @default(cuid())
+  name      String
+  position  String
+  message   String?
+  careers   String   // JSON string of string[]
+  imageUrl  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Facility {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  imageUrl  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  title     String
+  address   String
+  lat       Float
+  lng       Float
+  content   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Schedule {
+  id           String   @id @default(cuid())
+  day          String?  // Mon, Tue, Wed, etc. (Optional if date is set)
+  date         DateTime? // Specific date for one-time events
+  isRecurring  Boolean  @default(true)
+  startTime    String
+  endTime      String
+  className    String
+  color        String   @default("blue")
+  currentUsers Int      @default(0)
+  maxUsers     Int      @default(12)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Shuttle {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Gallery {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  title     String?
+  category  String   @default("Youth") // 'Youth', 'Adult', 'TNTW'
+  day       String   @default("All") // 'Mon', 'Tue', ... 'All'
+  createdAt DateTime @default(now())
+}
+
+model Registration {
+  id         String   @id @default(cuid())
+  name       String
+  phone      String
+  email      String?
+  address    String?
+  detailAddress String?
+  experience String? // Adult only
+  affiliation String? // Youth only: School/Kindergarten
+  age        String? // Youth only: 1-19
+  team       String? // TNTW only: 'Futsal', 'Soccer'
+  type       String   // 'Youth', 'Adult', 'TNTW'
+  desiredClass String? // Trial Class only
+  consultationMethod String? // Trial Class only
+  awarenessPath String? // Trial Class only
+  status     String   @default("pending") // 'pending', 'completed'
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  author    String   @default("이름없음")
+  password  String?  // Simple password for edit/delete
+  category  String?  // '자유', '질문', etc.
+  views     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String   @default("General")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
