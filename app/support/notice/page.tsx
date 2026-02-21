@@ -11,10 +11,10 @@ export default async function NoticesPage() {
             <h2 className="text-2xl font-bold text-navy-900 mb-6">공지사항</h2>
 
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                <div className="grid grid-cols-12 bg-gray-50 p-4 text-xs font-bold text-gray-500 border-b border-gray-100">
-                    <div className="col-span-2 text-center">분류</div>
+                <div className="grid grid-cols-12 bg-gray-50 p-4 text-xs font-bold text-gray-500 border-b border-gray-100 items-center">
+                    <div className="col-span-2 text-center">작성자</div>
                     <div className="col-span-8">제목</div>
-                    <div className="col-span-2 text-center">날짜</div>
+                    <div className="col-span-2 text-center">등록일</div>
                 </div>
                 <div className="divide-y divide-gray-50">
                     {notices.length === 0 ? (
@@ -24,13 +24,7 @@ export default async function NoticesPage() {
                     ) : (
                         notices.map((notice) => (
                             <div key={notice.id} className="grid grid-cols-12 p-4 text-sm hover:bg-gray-50 transition cursor-pointer group items-center">
-                                <div className="col-span-2 text-center">
-                                    <span className={`px-2 py-1 rounded text-xs font-bold ${notice.type === '공지' ? 'bg-rose-100 text-rose-600' :
-                                            notice.type === '소식' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
-                                        }`}>
-                                        {notice.type}
-                                    </span>
-                                </div>
+                                <div className="col-span-2 text-center text-gray-500">{notice.author}</div>
                                 <div className="col-span-8 font-bold text-navy-900 group-hover:text-rose-600 truncate pr-4">
                                     {notice.title}
                                 </div>
