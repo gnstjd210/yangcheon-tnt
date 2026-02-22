@@ -32,13 +32,14 @@ model Notice {
 }
 
 model Review {
-  id        String   @id @default(cuid())
-  name      String
-  program   String
-  content   String
-  rating    Int      @default(5)
-  color     String   @default("bg-white")
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  name       String
+  program    String
+  content    String
+  rating     Int      @default(5)
+  color      String   @default("bg-white")
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
 }
 
 model Greeting {

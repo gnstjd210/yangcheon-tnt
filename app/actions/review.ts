@@ -6,6 +6,7 @@ import prisma from "@/lib/prisma";
 export async function getReviews() {
     try {
         const reviews = await prisma.review.findMany({
+            where: { isApproved: true },
             orderBy: { createdAt: "desc" },
         });
         return reviews;
