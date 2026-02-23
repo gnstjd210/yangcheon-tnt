@@ -1,8 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function KakaoFloatingBtn() {
+    const pathname = usePathname();
+
+    if (pathname.startsWith("/admin")) {
+        return null;
+    }
+
     return (
         <a
             href="https://pf.kakao.com/_xxxx" // Replace with actual Kakao Channel Link

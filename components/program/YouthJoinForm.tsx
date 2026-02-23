@@ -22,6 +22,17 @@ export default function YouthJoinForm() {
         agreed: false
     });
 
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const raw = e.target.value.replace(/[^0-9]/g, "");
+        let formatted = raw;
+        if (raw.length > 3 && raw.length <= 7) {
+            formatted = `${raw.slice(0, 3)}-${raw.slice(3)}`;
+        } else if (raw.length > 7) {
+            formatted = `${raw.slice(0, 3)}-${raw.slice(3, 7)}-${raw.slice(7, 11)}`;
+        }
+        setFormData({ ...formData, phone: formatted });
+    };
+
     const handleAddressComplete = (data: { address: string; addressType: string; bname: string; buildingName: string }) => {
         let fullAddress = data.address;
         let extraAddress = "";
@@ -160,9 +171,10 @@ export default function YouthJoinForm() {
                             <input
                                 type="tel"
                                 placeholder="010-0000-0000"
+                                maxLength={13}
                                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500"
                                 value={formData.phone}
-                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                onChange={handlePhoneChange}
                                 required
                             />
                         </div>

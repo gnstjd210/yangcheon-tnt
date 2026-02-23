@@ -90,7 +90,10 @@ const SEARCH_DATA = [
     { label: '공지사항', href: '/support/notice', keywords: ['공지', '소식', '안내'] },
 ];
 
+import { usePathname } from 'next/navigation';
+
 export default function Header() {
+    const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isTrialModalOpen, setIsTrialModalOpen] = useState(false);
@@ -140,6 +143,8 @@ export default function Header() {
     const handleSearchResultClick = () => {
         closeSearch();
     };
+
+    if (pathname?.startsWith('/admin')) return null;
 
     return (
         <header

@@ -1,0 +1,300 @@
+
+> yangcheon-tnt@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.5.12
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.45.167:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 1293ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 603ms (444 modules)
+ ✓ Compiled in 45ms (250 modules)
+ ⨯ Error: Cannot find module '.prisma/client/default'
+Require stack:
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/@prisma/client/default.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/server/app/api/auth/[...nextauth]/route.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/load-components.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/build/utils.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/build/swc/options.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/build/swc/index.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/config.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/next.js
+- /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/lib/start-server.js
+    at @prisma/client (.next/server/app/api/auth/[...nextauth]/route.js:141:18)
+    at eval (webpack-internal:///(rsc)/./lib/prisma.ts:5:72)
+    at <unknown> (rsc)/./lib/prisma.ts (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/server/app/api/auth/[...nextauth]/route.js:55:1)
+    at eval (webpack-internal:///(rsc)/./auth.ts:16:69)
+    at <unknown> (rsc)/./auth.ts (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/server/app/api/auth/[...nextauth]/route.js:44:1)
+    at eval (webpack-internal:///(rsc)/./app/api/auth/[...nextauth]/route.ts:6:63)
+    at <unknown> (rsc)/./app/api/auth/[...nextauth]/route.ts (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/server/app/api/auth/[...nextauth]/route.js:22:1)
+    at __webpack_exec__ (.next/server/app/api/auth/[...nextauth]/route.js:206:39)
+    at <unknown> (.next/server/app/api/auth/[...nextauth]/route.js:207:292)
+    at <unknown> (.next/server/app/api/auth/[...nextauth]/route.js:207:47)
+    at Object.<anonymous> (.next/server/app/api/auth/[...nextauth]/route.js:210:3) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/api/auth/session'
+}
+ ✓ Compiled /_error in 380ms (791 modules)
+ HEAD /api/auth/session 500 in 1597ms
+ ✓ Compiled in 228ms (791 modules)
+ ✓ Compiled /middleware in 268ms (243 modules)
+ ○ Compiling / ...
+ ⨯ app/layout.tsx
+An error occurred in `next/font`.
+
+Error: Cannot find module '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/nanoid/non-secure/index.cjs'
+    at createEsmNotFoundErr (node:internal/modules/cjs/loader:1485:15)
+    at finalizeEsmResolution (node:internal/modules/cjs/loader:1474:9)
+    at resolveExports (node:internal/modules/cjs/loader:679:14)
+    at Module._findPath (node:internal/modules/cjs/loader:746:31)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1433:27)
+    at /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:57:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1234:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/input.js:6:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/map-generator.js:7:13)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/lazy-result.js:4:20)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/postcss.js:5:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+ ⨯ app/layout.tsx
+An error occurred in `next/font`.
+
+Error: Cannot find module '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/nanoid/non-secure/index.cjs'
+    at createEsmNotFoundErr (node:internal/modules/cjs/loader:1485:15)
+    at finalizeEsmResolution (node:internal/modules/cjs/loader:1474:9)
+    at resolveExports (node:internal/modules/cjs/loader:679:14)
+    at Module._findPath (node:internal/modules/cjs/loader:746:31)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1433:27)
+    at /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:57:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1234:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/input.js:6:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/map-generator.js:7:13)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/lazy-result.js:4:20)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/postcss.js:5:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+ ⨯ app/layout.tsx
+An error occurred in `next/font`.
+
+Error: Cannot find module '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/nanoid/non-secure/index.cjs'
+    at createEsmNotFoundErr (node:internal/modules/cjs/loader:1485:15)
+    at finalizeEsmResolution (node:internal/modules/cjs/loader:1474:9)
+    at resolveExports (node:internal/modules/cjs/loader:679:14)
+    at Module._findPath (node:internal/modules/cjs/loader:746:31)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1433:27)
+    at /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:57:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1234:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/input.js:6:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/map-generator.js:7:13)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/lazy-result.js:4:20)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/postcss.js:5:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+ GET / 500 in 3871ms
+ GET / 500 in 12ms
+ ⨯ ./node_modules/@panva/hkdf/dist/web/index.js
+Error: ENOENT: no such file or directory, open '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/@panva/hkdf/dist/web/index.js'
+
+Import trace for requested module:
+./node_modules/@panva/hkdf/dist/web/index.js
+./node_modules/next-auth/node_modules/@auth/core/jwt.js
+./node_modules/next-auth/node_modules/@auth/core/lib/init.js
+./node_modules/next-auth/node_modules/@auth/core/lib/index.js
+./node_modules/next-auth/node_modules/@auth/core/index.js
+./node_modules/next-auth/index.js
+ GET / 500 in 29ms
+ ⨯ app/layout.tsx
+An error occurred in `next/font`.
+
+Error: Cannot find module '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/nanoid/non-secure/index.cjs'
+    at createEsmNotFoundErr (node:internal/modules/cjs/loader:1485:15)
+    at finalizeEsmResolution (node:internal/modules/cjs/loader:1474:9)
+    at resolveExports (node:internal/modules/cjs/loader:679:14)
+    at Module._findPath (node:internal/modules/cjs/loader:746:31)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1433:27)
+    at /Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:57:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1234:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/input.js:6:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/map-generator.js:7:13)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/lazy-result.js:4:20)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1548:12)
+    at mod.require (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/node_modules/next/node_modules/postcss/lib/postcss.js:5:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+ GET / 500 in 23ms
+ GET / 500 in 17ms
+ GET / 500 in 22ms
+ GET / 500 in 14ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hunsung/Documents/안티그래비티/yangcheon-tnt/.next/routes-manifest.json'
+}
+ GET / 500 in 99ms
+ GET / 500 in 13ms

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const FOOTER_MENU = [
     { label: '아카데미 소개', href: '/about' },
@@ -13,6 +14,10 @@ const FOOTER_MENU = [
 ];
 
 export default function Footer() {
+    const pathname = usePathname();
+
+    if (pathname?.startsWith('/admin')) return null;
+
     return (
         <footer className="bg-navy-900 text-white pt-16 pb-12 border-t border-gray-800">
             <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex flex-col lg:flex-row justify-between gap-12 text-sm text-gray-400">

@@ -36,9 +36,84 @@ export async function submitRegistration(formData: FormData) {
             },
         });
 
+        // Sync with User table based on name and phone
+        let userCategory: string | null = null;
+        let userSubCategory: string | null = null;
+
+        if (type === "Youth") {
+            userCategory = "YOUTH";
+        } else if (type === "Adult") {
+            userCategory = "ADULT";
+            if (experience.includes("남성")) userSubCategory = "남성";
+            else if (experience.includes("여성")) userSubCategory = "여성";
+            else if (experience.includes("혼성")) userSubCategory = "혼성";
+        } else if (type === "TNTW") {
+            userCategory = "TNT_W";
+            if (team && team.includes("풋살")) userSubCategory = "풋살";
+            else if (team && team.includes("축구")) userSubCategory = "축구";
+        }
+
+        if (userCategory) {
+            let updateCount = 0;
+
+            const updateResult = await prisma.user.updateMany({
+                where: {
+                    name,
+                    phone: { contains: phone.replace(/[^0-9]/g, '') }
+                },
+                data: {
+                    category: userCategory,
+                    subCategory: userSubCategory
+                }
+            });
+            updateCount += updateResult.count;
+
+            if (updateCount === 0) {
+                // Fallback: Also try exact match with hyphens
+                const exactUpdateResult = await prisma.user.updateMany({
+                    where: {
+                        name,
+                        phone
+                    },
+                    data: {
+                        category: userCategory,
+                        subCategory: userSubCategory
+                    }
+                });
+                updateCount += exactUpdateResult.count;
+            }
+
+            // If no user was updated, it means this person doesn't have an account. We should create one.
+            if (updateCount === 0) {
+                const baseUsername = phone ? phone.replace(/[^0-9]/g, '') : `user_${Date.now()}`;
+                let username = baseUsername;
+                let counter = 1;
+
+                // Ensure username is unique
+                while (await prisma.user.findUnique({ where: { username } })) {
+                    username = `${baseUsername}_${counter}`;
+                    counter++;
+                }
+
+                await prisma.user.create({
+                    data: {
+                        username,
+                        password: phone || "1234", // Default simple password
+                        name,
+                        phone,
+                        email,
+                        address: fullAddress,
+                        category: userCategory,
+                        subCategory: userSubCategory
+                    }
+                });
+            }
+        }
+
         // In a real app, you might send an email notification to admin here
 
         revalidatePath("/admin/registrations");
+        revalidatePath("/admin/users");
         return { success: true, message: "신청이 완료되었습니다." };
     } catch (error) {
         console.error("Registration failed:", error);
