@@ -4,31 +4,34 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
-type GalleryImage = {
+type GalleryPost = {
     id: string;
-    imageUrl: string;
-    title: string | null;
     category: string;
-    day: string;
+    title: string | null;
+    images: string[];
     createdAt: Date;
+};
+
+const DAY_LABELS: Record<string, string> = {
+    "All": "전체",
+    "Mon": "월요일",
+    "Tue": "화요일",
+    "Wed": "수요일",
+    "Thu": "목요일",
+    "Fri": "금요일",
+    "Sat": "토요일",
+    "Sun": "일요일"
 };
 
 const defaultFilters = ["All", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-export default function GalleryGrid({ initialImages, filters = defaultFilters, filterType = "day" }: { initialImages: GalleryImage[], filters?: string[], filterType?: "day" | "category" | "team" }) {
+export default function GalleryGrid({ initialPosts, filters = defaultFilters }: { initialPosts: GalleryPost[], filters?: string[] }) {
     const [selectedFilter, setSelectedFilter] = useState("All");
 
     // Client-side filtering
-    const filteredImages = selectedFilter === "All"
-        ? initialImages
-        : initialImages.filter(img => {
-            if (filterType === "day") return img.day === selectedFilter;
-            // For TNTW, we might use 'day' field to store 'Futsal'/'Soccer' or add a new field.
-            // Let's assume we reuse 'day' field for now as a generic 'tag' for simplicity in this component,
-            // or we updated schema to have 'team'.
-            // If we use 'day' column for 'Futsal'/'Soccer' storage for TNTW images:
-            return img.day === selectedFilter;
-        });
+    const filteredPosts = selectedFilter === "All"
+        ? initialPosts
+        : initialPosts.filter(post => post.category === selectedFilter);
 
     return (
         <div>
@@ -43,7 +46,7 @@ export default function GalleryGrid({ initialImages, filters = defaultFilters, f
                             : "bg-white text-gray-500 border border-gray-200 hover:bg-gray-50"
                             }`}
                     >
-                        {filter === "All" ? "전체" : filter}
+                        {DAY_LABELS[filter] || filter}
                     </button>
                 ))}
             </div>
@@ -54,30 +57,30 @@ export default function GalleryGrid({ initialImages, filters = defaultFilters, f
                 className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             >
                 <AnimatePresence>
-                    {filteredImages.map((image) => (
+                    {filteredPosts.map((post) => (
                         <motion.div
                             layout
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
-                            key={image.id}
+                            key={post.id}
                             className="relative aspect-square rounded-2xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow"
                         >
                             <Image
-                                src={image.imageUrl}
-                                alt={image.title || "Gallery Image"}
+                                src={post.images[0] || ""}
+                                alt={post.title || "Gallery Image"}
                                 fill
                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                             />
                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <span className="text-white font-bold">{image.day}</span>
+                                <span className="text-white font-bold">{DAY_LABELS[post.category] || post.category}</span>
                             </div>
                         </motion.div>
                     ))}
                 </AnimatePresence>
             </motion.div>
 
-            {filteredImages.length === 0 && (
+            {filteredPosts.length === 0 && (
                 <div className="text-center py-24 text-gray-400">
                     등록된 사진이 없습니다.
                 </div>

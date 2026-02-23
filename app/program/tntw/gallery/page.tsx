@@ -1,13 +1,13 @@
-import { getGalleryImages } from "@/app/actions/gallery";
-import GalleryGrid from "@/components/program/GalleryGrid";
+import { getGalleryPosts } from "@/app/actions/gallery";
+import FreeboardList from "@/components/program/FreeboardList";
 
 export const dynamic = "force-dynamic";
 
 export default async function TNTWGalleryPage() {
-    const images = await getGalleryImages("TNTW");
+    const posts = await getGalleryPosts("TNT_W");
 
     return (
-        <div className="max-w-[1920px] mx-auto px-6 md:px-12 py-16">
+        <div className="max-w-5xl mx-auto px-6 md:px-12 py-16">
             <div className="text-center mb-16">
                 <h2 className="text-4xl md:text-5xl font-black text-navy-900 mb-4">
                     TNT W GALLERY
@@ -17,10 +17,14 @@ export default async function TNTWGalleryPage() {
                 </p>
             </div>
 
-            <GalleryGrid
-                initialImages={images}
-                filters={["All", "Futsal", "Soccer"]}
-                filterType="team"
+            <FreeboardList
+                initialPosts={posts}
+                basePath="/program/tntw/gallery"
+                filters={[
+                    { key: "ALL", label: "전체" },
+                    { key: "축구", label: "축구" },
+                    { key: "풋살", label: "풋살" },
+                ]}
             />
         </div>
     );

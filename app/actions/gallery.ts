@@ -1,62 +1,115 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
-export async function getGalleryImages(category: string = "Youth") {
+export async function getGalleryPosts(type: string, category?: string) {
     try {
-        const images = await prisma.gallery.findMany({
+        const posts = await prisma.gallery.findMany({
             where: {
-                category: category
+                type: type,
+                ...(category ? { category: category } : {})
             },
             orderBy: {
                 createdAt: "desc"
             }
         });
-        return images;
+        return posts;
     } catch (error) {
-        console.error("Error fetching gallery images:", error);
+        console.error("Error fetching gallery posts:", error);
         return [];
     }
 }
 
-export async function getYouthGalleryImages() {
+export async function getGalleryPostById(id: string) {
     try {
-        const images = await prisma.gallery.findMany({
-            where: {
-                category: "Youth",
-            },
-            orderBy: {
-                createdAt: "desc",
-            },
+        const post = await prisma.gallery.findUnique({
+            where: { id }
         });
-        return images;
+        return post;
     } catch (error) {
-        console.error("Failed to fetch gallery images:", error);
-        return [];
+        console.error("Error fetching gallery post by id:", error);
+        return null;
     }
 }
 
-export async function createGalleryImage(data: { title: string, day: string, imageUrl: string, category: string }) {
+export async function createGalleryPost(data: {
+    type: string;
+    category: string;
+    title?: string;
+    content?: string;
+    images: string[];
+}) {
     try {
-        const image = await prisma.gallery.create({
+        const post = await prisma.gallery.create({
             data: {
+                type: data.type,
+                category: data.category,
                 title: data.title,
-                day: data.day,
-                imageUrl: data.imageUrl,
-                category: data.category
+                content: data.content,
+                images: data.images,
             }
         });
-        return image;
-    } catch {
-        throw new Error("Failed to create image");
+
+        // Revalidate relevant paths
+        if (data.type === 'YOUTH') revalidatePath('/program/youth/gallery');
+        if (data.type === 'ADULT') revalidatePath('/program/adult/gallery');
+        if (data.type === 'TNT_W') revalidatePath('/program/tntw/gallery');
+        revalidatePath('/admin/gallery');
+
+        return { success: true, post };
+    } catch (error) {
+        console.error("Failed to create gallery post:", error);
+        return { success: false, message: "게시글 작성에 실패했습니다." };
     }
 }
 
-export async function deleteGalleryImage(id: string) {
+export async function updateGalleryPost(id: string, data: {
+    type: string;
+    category: string;
+    title?: string;
+    content?: string;
+    images: string[];
+}) {
+    try {
+        const post = await prisma.gallery.update({
+            where: { id },
+            data: {
+                type: data.type,
+                category: data.category,
+                title: data.title,
+                content: data.content,
+                images: data.images,
+            }
+        });
+
+        // Revalidate relevant paths
+        if (data.type === 'YOUTH') revalidatePath('/program/youth/gallery');
+        if (data.type === 'ADULT') revalidatePath('/program/adult/gallery');
+        if (data.type === 'TNT_W') revalidatePath('/program/tntw/gallery');
+        revalidatePath('/admin/gallery');
+        revalidatePath(`/program/${data.type.toLowerCase().replace('_', '')}/gallery/${id}`);
+
+        return { success: true, post };
+    } catch (error) {
+        console.error("Failed to update gallery post:", error);
+        return { success: false, message: "게시글 수정에 실패했습니다." };
+    }
+}
+
+export async function deleteGalleryPost(id: string, type: string) {
     try {
         await prisma.gallery.delete({ where: { id } });
+
+        // Revalidate relevant paths
+        if (type === 'YOUTH') revalidatePath('/program/youth/gallery');
+        if (type === 'ADULT') revalidatePath('/program/adult/gallery');
+        if (type === 'TNT_W') revalidatePath('/program/tntw/gallery');
+        revalidatePath('/admin/gallery');
+
         return { success: true };
-    } catch {
-        throw new Error("Failed to delete image");
+    } catch (error) {
+        console.error("Failed to delete gallery post:", error);
+        return { success: false, message: "게시글 삭제에 실패했습니다." };
     }
 }

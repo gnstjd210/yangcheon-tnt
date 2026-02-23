@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export default function KakaoFloatingBtn() {
     const pathname = usePathname();
 
-    if (pathname.startsWith("/admin")) {
+    if ((pathname || "").startsWith("/admin")) {
         return null;
     }
 

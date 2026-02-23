@@ -113,11 +113,13 @@ model Shuttle {
 
 model Gallery {
   id        String   @id @default(cuid())
-  imageUrl  String
+  type      String   // 'YOUTH', 'ADULT', 'TNT_W'
+  category  String   // Day of week for Youth, '축구'/'풋살' for TNT_W
   title     String?
-  category  String   @default("Youth") // 'Youth', 'Adult', 'TNTW'
-  day       String   @default("All") // 'Mon', 'Tue', ... 'All'
+  content   String?  // Rich text or plain description
+  images    String[] // Modified from imageUrl String to support multi-upload
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Registration {

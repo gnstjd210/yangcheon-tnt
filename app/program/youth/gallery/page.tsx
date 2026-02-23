@@ -1,10 +1,10 @@
-import { getGalleryImages } from "@/app/actions/gallery";
+import { getGalleryPosts } from "@/app/actions/gallery";
 import GalleryGrid from "@/components/program/GalleryGrid";
 
 export const dynamic = "force-dynamic";
 
 export default async function YouthGalleryPage() {
-    const images = await getGalleryImages("Youth");
+    const posts = await getGalleryPosts("YOUTH");
 
     return (
         <div className="max-w-[1920px] mx-auto px-6 md:px-12 py-16">
@@ -18,7 +18,7 @@ export default async function YouthGalleryPage() {
             </div>
 
             <GalleryGrid
-                initialImages={images}
+                initialPosts={posts}
                 filters={["All", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
             />
         </div>

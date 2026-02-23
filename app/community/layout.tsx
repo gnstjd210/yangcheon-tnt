@@ -34,7 +34,7 @@ export default function CommunityLayout({ children }: { children: React.ReactNod
                 <div className="container mx-auto px-4">
                     <div className="flex justify-center gap-8 md:gap-12">
                         {TAB_ITEMS.map((item) => {
-                            const isActive = pathname.startsWith(item.href);
+                            const isActive = (pathname || '').startsWith(item.href);
                             return (
                                 <Link
                                     key={item.href}

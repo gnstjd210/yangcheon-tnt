@@ -38,9 +38,11 @@ export default function ImageUpload({ value, onChange, onRemove }: ImageUploadPr
         }
     };
 
+    // If value is provided, it shows the preview (used for single image upload mode).
+    // In multi-upload mode, we pass value="" so it purely acts as the upload button.
     if (value) {
         return (
-            <div className="relative w-[200px] h-[200px] rounded-lg overflow-hidden border border-gray-200">
+            <div className="relative w-full h-full rounded-lg overflow-hidden border border-gray-200">
                 <div className="absolute top-2 right-2 z-10">
                     <button
                         type="button"
@@ -61,7 +63,7 @@ export default function ImageUpload({ value, onChange, onRemove }: ImageUploadPr
     }
 
     return (
-        <div className="w-[200px] h-[200px] border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center p-4 hover:bg-gray-50 transition cursor-pointer relative">
+        <div className="w-full h-full border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center p-4 hover:bg-gray-50 transition cursor-pointer relative min-h-[120px]">
             <input
                 type="file"
                 accept="image/*"
@@ -69,9 +71,9 @@ export default function ImageUpload({ value, onChange, onRemove }: ImageUploadPr
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 disabled={isUploading}
             />
-            <Upload className="w-8 h-8 text-gray-400 mb-2" />
+            <Upload className="w-6 h-6 text-gray-400 mb-2" />
             <span className="text-sm text-gray-500 font-medium">
-                {isUploading ? "업로드 중..." : "이미지 업로드"}
+                {isUploading ? "업로드 중..." : "추가"}
             </span>
         </div>
     );
