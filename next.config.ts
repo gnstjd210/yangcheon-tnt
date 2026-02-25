@@ -25,21 +25,6 @@ const nextConfig: NextConfig = {
             },
         ],
     },
-    async redirects() {
-        return [
-            {
-                source: '/:path*',
-                has: [
-                    {
-                        type: 'host',
-                        value: 'www.tntsa.co.kr',
-                    },
-                ],
-                destination: 'https://tntsa.co.kr/:path*',
-                permanent: true,
-            },
-        ];
-    },
 };
 
 export default nextConfig;
