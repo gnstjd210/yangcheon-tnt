@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { MapPin, Navigation, Car, Bus } from "lucide-react";
+import NaverMap from "@/components/about/NaverMap";
 
 export const dynamic = "force-dynamic";
 
@@ -21,16 +22,9 @@ export default async function LocationPage() {
             </div>
 
             <div className="relative w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl bg-gray-100">
-                {/* 
-                  TODO: Replace with actual center image. 
-                  Place your image in public/images/center-view.jpg and update src below.
-                */}
-                <Image
-                    src="https://placehold.co/1200x600/e2e8f0/1e293b?text=YANGCHEON+TNT+SPORTS+ACADEMY"
-                    alt="Center View"
-                    fill
-                    className="object-cover"
-                    priority
+                <NaverMap
+                    lat={location?.lat || 37.5332}
+                    lng={location?.lng || 126.8643}
                 />
             </div>
 
