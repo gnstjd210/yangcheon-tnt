@@ -182,53 +182,49 @@ export default function Header() {
             >
                 <div className="max-w-[1920px] mx-auto px-6 md:px-12 h-full flex items-center justify-between relative">
 
-                    {/* LEFT: Logo & Main Menu */}
-                    <div className="flex items-center gap-6 xl:gap-12 2xl:gap-16 h-full">
-
-                        {/* Logo: TSA */}
-                        <Link href="/" className="relative group shrink-0 h-full flex items-center">
-                            <div className={clsx(
-                                "flex items-center justify-center transition-all duration-300",
-                                isScrolled ? "scale-90" : "scale-100"
-                            )}>
-                                <div className="relative w-[60px] h-[60px] md:w-[70px] md:h-[70px]">
-                                    <NextImage
-                                        src={logoSrc}
-                                        alt="TSA Emblem"
-                                        fill
-                                        className="object-contain drop-shadow-lg"
-                                        priority
-                                    />
-                                </div>
+                    {/* LEFT: Logo */}
+                    <Link href="/" className="relative group shrink-0 h-full flex items-center">
+                        <div className={clsx(
+                            "flex items-center justify-center transition-all duration-300",
+                            isScrolled ? "scale-90" : "scale-100"
+                        )}>
+                            <div className="relative w-[60px] h-[60px] md:w-[70px] md:h-[70px]">
+                                <NextImage
+                                    src={logoSrc}
+                                    alt="TSA Emblem"
+                                    fill
+                                    className="object-contain drop-shadow-lg"
+                                    priority
+                                />
                             </div>
-                        </Link>
+                        </div>
+                    </Link>
 
-                        {/* Main Menu (Desktop Hover Triggers) */}
-                        <nav className="hidden xl:flex items-center h-full gap-4 xl:gap-6 2xl:gap-8">
-                            {MENU_STRUCTURE.map((item) => (
-                                <div key={item.href} className="relative group h-full flex items-center border-b-2 border-transparent">
-                                    <Link
-                                        href={item.href}
-                                        className={clsx(
-                                            "font-bold tracking-tight transition-all duration-300 block",
-                                            isScrolled ? "text-[16px]" : "text-[18px]",
-                                            textColorClass,
-                                            "hover:text-sky-400"
-                                        )}
-                                    >
-                                        {item.label}
-                                    </Link>
-                                    <span className={clsx(
-                                        "absolute bottom-0 left-0 w-0 h-[3px] bg-sky-500 transition-all duration-300 group-hover:w-full",
-                                        isHoveringHeader ? "opacity-100" : "opacity-0"
-                                    )}></span>
-                                </div>
-                            ))}
-                        </nav>
-                    </div>
+                    {/* CENTER: Main Menu (Desktop Hover Triggers) */}
+                    <nav className="hidden xl:grid grid-cols-6 flex-1 max-w-[1200px] mx-10 2xl:mx-16 h-full items-center">
+                        {MENU_STRUCTURE.map((item) => (
+                            <div key={item.href} className="relative group h-full flex items-center justify-center w-full border-b-2 border-transparent">
+                                <Link
+                                    href={item.href}
+                                    className={clsx(
+                                        "font-bold tracking-tight transition-all duration-300 block text-center",
+                                        isScrolled ? "text-[16px]" : "text-[18px]",
+                                        textColorClass,
+                                        "hover:text-sky-400"
+                                    )}
+                                >
+                                    {item.label}
+                                </Link>
+                                <span className={clsx(
+                                    "absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-sky-500 transition-all duration-300 group-hover:w-[60%]",
+                                    isHoveringHeader ? "opacity-100" : "opacity-0"
+                                )}></span>
+                            </div>
+                        ))}
+                    </nav>
 
                     {/* RIGHT: Utility Buttons & Icons */}
-                    <div className="flex items-center gap-2 xl:gap-3">
+                    <div className="flex items-center shrink-0 gap-2 xl:gap-3 justify-end">
                         {UTILITY_ITEMS.map((item) => {
                             if (item.href === '/trial') {
                                 return (
@@ -364,26 +360,23 @@ export default function Header() {
                                 onMouseEnter={() => setIsHoverMenuOpen(true)}
                                 onMouseLeave={() => setIsHoverMenuOpen(false)}
                             >
-                                <div className="max-w-[1920px] mx-auto px-12 py-10">
-                                    <div className="grid grid-cols-6 gap-8 text-left">
+                                <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex items-start h-full">
+                                    {/* Exact dummy width for Logo to match Header flex layout perfectly */}
+                                    <div className="w-[60px] md:w-[70px] shrink-0" />
+
+                                    <div className="grid grid-cols-6 flex-1 max-w-[1200px] mx-10 2xl:mx-16 py-10 justify-items-center">
                                         {MENU_STRUCTURE.map((section) => (
-                                            <div key={section.label} className="flex flex-col gap-4 group">
-                                                <Link
-                                                    href={section.href}
-                                                    className="text-white font-bold text-lg pb-2 border-b border-white/20 group-hover:border-sky-500 group-hover:text-sky-400 transition-all inline-block w-fit"
-                                                    onClick={() => setIsHoverMenuOpen(false)}
-                                                >
-                                                    {section.label}
-                                                </Link>
-                                                <div className="flex flex-col gap-2">
+                                            <div key={section.label} className="flex flex-col justify-start items-center">
+                                                {/* Space out items according to user request, text-left ensures words align straight down */}
+                                                <div className="flex flex-col space-y-3 text-left w-max">
                                                     {section.subItems.map((sub) => (
                                                         <Link
                                                             key={sub.label}
                                                             href={sub.href}
-                                                            className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium flex items-center gap-1"
+                                                            className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-[15px] font-medium flex items-center gap-2 group/sub py-1"
                                                             onClick={() => setIsHoverMenuOpen(false)}
                                                         >
-                                                            <ChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity text-sky-400" />
+                                                            <ChevronRight size={14} className="opacity-0 group-hover/sub:opacity-100 transition-opacity text-sky-400 shrink-0" />
                                                             {sub.label}
                                                         </Link>
                                                     ))}
@@ -391,6 +384,9 @@ export default function Header() {
                                             </div>
                                         ))}
                                     </div>
+
+                                    {/* Exact dummy space for 'justify-between' to perfectly center flex-1 */}
+                                    <div className="w-[60px] md:w-[70px] shrink-0" />
                                 </div>
                             </motion.div>
                         )}
