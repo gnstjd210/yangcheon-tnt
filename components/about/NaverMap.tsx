@@ -41,10 +41,10 @@ export default function NaverMap({ lat, lng }: { lat: number; lng: number }) {
 
     return (
         <>
-            {/* 4. 스크립트 호출 - 포럼에서 강조한 ncpClientId 파라미터 사용 */}
+            {/* 4. 스크립트 호출 - 최신 oapi 호스트 및 ncpKeyId 파라미터 사용 */}
             <Script
                 strategy="afterInteractive"
-                src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=46ybnu6qg3"
+                src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=46ybnu6qg3"
                 onLoad={initMap}
             />
             <div
