@@ -25,10 +25,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <head>
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=46ybnu6qg3"></script>
-      </head>
       <body
         className={`${notoSansKr.variable} antialiased`}
       >

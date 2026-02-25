@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
+import Script from 'next/script';
 
 declare global {
     interface Window {
@@ -9,56 +10,49 @@ declare global {
     }
 }
 
-interface NaverMapProps {
-    lat: number;
-    lng: number;
-}
+export default function NaverMap({ lat, lng }: { lat: number; lng: number }) {
+    const mapRef = useRef<HTMLDivElement>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mapInstance = useRef<any>(null);
 
-export default function NaverMap({ lat, lng }: NaverMapProps) {
-    const mapElement = useRef<HTMLDivElement>(null);
-
-    // This function will be called when the script loads
     const initMap = () => {
-        if (!mapElement.current || !window.naver?.maps) return;
+        // 1. 네이버 객체가 로드되었는지 확인 (포럼 권장사항)
+        if (typeof window === 'undefined' || !window.naver || !window.naver.maps) return;
 
-        const location = new window.naver.maps.LatLng(lat, lng);
-        const mapOptions = {
-            center: location,
-            zoom: 17,
-        };
+        if (mapRef.current && !mapInstance.current) {
+            const location = new window.naver.maps.LatLng(lat, lng);
 
-        const map = new window.naver.maps.Map(mapElement.current, mapOptions);
+            const mapOptions = {
+                center: location,
+                zoom: 16,
+                minZoom: 10,
+            };
 
-        new window.naver.maps.Marker({
-            position: location,
-            map: map,
-        });
+            // 2. 지도 생성
+            mapInstance.current = new window.naver.maps.Map(mapRef.current, mapOptions);
+
+            // 3. 마커 추가
+            new window.naver.maps.Marker({
+                position: location,
+                map: mapInstance.current,
+            });
+        }
     };
 
-    // Keep map updated if lat/lng change after load
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => {
-        // Since the script is in layout <head>, naver maps should be available.
-        // If not, we could poll, but it's synchronous so it should be there.
-        if (window.naver?.maps) {
-            initMap();
-        } else {
-            const timer = setInterval(() => {
-                if (window.naver?.maps) {
-                    initMap();
-                    clearInterval(timer);
-                }
-            }, 100);
-            return () => clearInterval(timer);
-        }
-    }, [lat, lng]);
-
     return (
-        <div
-            id="map"
-            ref={mapElement}
-            style={{ width: '100%', height: '500px' }}
-            className="bg-gray-100 rounded-2xl" // map loading placeholder
-        />
+        <>
+            {/* 4. 스크립트 호출 - 포럼에서 강조한 ncpClientId 파라미터 사용 */}
+            <Script
+                strategy="afterInteractive"
+                src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=46ybnu6qg3"
+                onLoad={initMap}
+            />
+            <div
+                ref={mapRef}
+                id="map"
+                style={{ width: '100%', height: '500px' }} // 높이 500px 강제 지정
+                className="rounded-2xl shadow-inner bg-gray-100"
+            />
+        </>
     );
 }
