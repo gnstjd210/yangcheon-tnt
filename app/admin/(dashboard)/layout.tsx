@@ -38,6 +38,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <LayoutDashboard size={20} />
                         대시보드
                     </Link>
+                    <Link href="/admin/main-page" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
+                        <LayoutDashboard size={20} />
+                        메인 페이지 관리
+                    </Link>
                     <Link href="/admin/notices" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
                         <Megaphone size={20} />
                         공지사항 관리
@@ -55,9 +59,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <Camera size={20} />
                         갤러리 관리
                     </Link>
-                    <Link href="/admin/registrations" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
+                    <Link href="/admin/trials" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
                         <FileText size={20} />
-                        입단 신청 관리
+                        체험수업 신청 관리
                     </Link>
                 </nav>
 

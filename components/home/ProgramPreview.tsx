@@ -1,35 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import type { ProgramPreview } from '@/lib/mainPageConstants';
+import { DEFAULT_PROGRAMS } from '@/lib/mainPageConstants';
 
-const PROGRAMS = [
-    {
-        title: '유소년 아카데미',
-        desc: 'YOUTH ACADEMY',
-        img: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?q=80&w=2670&auto=format&fit=crop',
-        href: '/program/youth',
-    },
-    {
-        title: '성인 그룹 레슨',
-        desc: 'ADULT GROUP LESSON',
-        img: 'https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?q=80&w=2500&auto=format&fit=crop',
-        href: '/program/adult',
-    },
-    {
-        title: '피지컬 트레이닝',
-        desc: 'PHYSICAL TRAINING',
-        img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2670&auto=format&fit=crop',
-        href: '/program/physical',
-    },
-    {
-        title: 'TNT W 등록',
-        desc: 'TNTW REGISTRATION',
-        img: 'https://images.unsplash.com/photo-1628891890377-571b78f237d7?q=80&w=2671&auto=format&fit=crop',
-        href: '/program/tntw',
-    }
-];
+interface ProgramPreviewProps {
+    programs?: ProgramPreview[];
+}
 
-export default function ProgramPreview() {
+export default function ProgramPreview({ programs = DEFAULT_PROGRAMS }: ProgramPreviewProps) {
     return (
         <section className="py-12 bg-gray-50">
             <div className="max-w-[1920px] mx-auto px-6 md:px-12">
@@ -49,7 +28,7 @@ export default function ProgramPreview() {
 
                 {/* Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {PROGRAMS.map((program, idx) => (
+                    {programs.map((program, idx) => (
                         <Link
                             key={idx}
                             href={program.href}

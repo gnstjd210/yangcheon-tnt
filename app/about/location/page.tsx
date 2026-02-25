@@ -7,8 +7,6 @@ export const dynamic = "force-dynamic";
 export default async function LocationPage() {
     const location = await prisma.location.findFirst();
 
-    const lat = location?.lat || 37.53123;
-    const lng = location?.lng || 126.86314;
     const title = location?.title || "양천 TNT 스포츠 아카데미";
     const address = location?.address || "서울시 강서구 곰달래로 59길 60";
 

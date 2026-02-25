@@ -4,64 +4,26 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import type { HeroImage, QuickMenu } from '@/lib/mainPageConstants';
+import { DEFAULT_HERO_IMAGES, DEFAULT_QUICK_MENU } from '@/lib/mainPageConstants';
 
 import TrialClassModal from '@/components/home/TrialClassModal';
 
-const SLIDES = [
-    {
-        image: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=2670&auto=format&fit=crop',
-        title: 'THE BEST PLACE\nFOR YOUR DREAM',
-        subtitle: '양천 TNT FC 2026 Season',
-    },
-    {
-        image: 'https://images.unsplash.com/photo-1543326727-b5a364656897?q=80&w=2670&auto=format&fit=crop',
-        title: 'PROFESSIONAL\nTRAINING SYSTEM',
-        subtitle: '체계적인 유소년 육성 프로그램',
-    },
-    {
-        image: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?q=80&w=2670&auto=format&fit=crop',
-        title: 'BECOME A LEGEND\nWITH TNT FC',
-        subtitle: '당신의 열정을 응원합니다',
-    }
-];
+interface HeroSplitProps {
+    slides?: HeroImage[];
+    quickMenu?: QuickMenu[];
+}
 
-const QUICK_MENU = [
-    {
-        label: '입단신청',
-        href: '/join',
-        desc: 'Membership',
-        image: 'https://images.unsplash.com/photo-1517466787929-bc90951d6428?q=80&w=2550&auto=format&fit=crop'
-    },
-    {
-        label: '체험수업신청',
-        href: '/trial',
-        desc: 'Trial Class',
-        image: 'https://images.unsplash.com/photo-1526232761682-d26e03ac148e?q=80&w=2629&auto=format&fit=crop'
-    },
-    {
-        label: '재수강결제',
-        href: '/payment',
-        desc: 'Payment',
-        image: 'https://images.unsplash.com/photo-1606925797300-0b35e9d17d27?q=80&w=2670&auto=format&fit=crop'
-    },
-    {
-        label: '갤러리',
-        href: '/gallery',
-        desc: 'Photo & Video',
-        image: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?q=80&w=2670&auto=format&fit=crop'
-    },
-];
-
-export default function HeroSplit() {
+export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DEFAULT_QUICK_MENU }: HeroSplitProps) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isTrialModalOpen, setIsTrialModalOpen] = useState(false);
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
     };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev === 0 ? SLIDES.length - 1 : prev - 1));
+        setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
     };
 
     useEffect(() => {
@@ -83,7 +45,7 @@ export default function HeroSplit() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 1.2 }}
                         className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${SLIDES[currentSlide].image})` }}
+                        style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
                     >
                         <div className="absolute inset-0 bg-gradient-to-t from-navy-900/90 via-navy-900/20 to-transparent" />
                     </motion.div>
@@ -111,7 +73,7 @@ export default function HeroSplit() {
                         transition={{ delay: 0.3, duration: 0.8 }}
                         className="text-white text-5xl lg:text-7xl font-black leading-[0.9] whitespace-pre-line tracking-tighter drop-shadow-lg"
                     >
-                        {SLIDES[currentSlide].title}
+                        {slides[currentSlide].title}
                     </motion.h2>
                     <motion.p
                         key={currentSlide + 'sub'}
@@ -120,12 +82,12 @@ export default function HeroSplit() {
                         transition={{ delay: 0.5, duration: 0.8 }}
                         className="text-sky-400 text-xl font-bold mt-4 tracking-widest uppercase"
                     >
-                        {SLIDES[currentSlide].subtitle}
+                        {slides[currentSlide].subtitle}
                     </motion.p>
                 </div>
 
                 <div className="absolute bottom-12 right-12 z-20 flex gap-2">
-                    {SLIDES.map((_, idx) => (
+                    {slides.map((_, idx) => (
                         <button
                             key={idx}
                             onClick={() => setCurrentSlide(idx)}
@@ -137,7 +99,7 @@ export default function HeroSplit() {
 
             {/* RIGHT: QUICK MENU (30%) - Stronger Brightness Hover */}
             <div className="w-full lg:w-[30%] h-[600px] lg:h-[650px] flex flex-col gap-4">
-                {QUICK_MENU.map((item, idx) => {
+                {quickMenu.map((item, idx) => {
                     if (item.href === '/trial') {
                         return (
                             <button

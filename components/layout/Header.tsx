@@ -95,7 +95,10 @@ import { usePathname } from 'next/navigation';
 export default function Header() {
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [expandedMenu, setExpandedMenu] = useState<number | null>(null);
+    const [isHoveringHeader, setIsHoveringHeader] = useState(false);
     const [isTrialModalOpen, setIsTrialModalOpen] = useState(false);
 
     // Search State
@@ -106,8 +109,8 @@ export default function Header() {
     // Refs for Outside Click
     const searchRef = useRef<HTMLDivElement>(null);
     const searchButtonRef = useRef<HTMLButtonElement>(null);
-    const menuRef = useRef<HTMLDivElement>(null);
-    const menuButtonRef = useRef<HTMLButtonElement>(null);
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
+    const hamburgerRef = useRef<HTMLButtonElement>(null);
 
     const closeSearch = () => {
         setIsSearchOpen(false);
@@ -116,15 +119,25 @@ export default function Header() {
     };
 
     useOutsideClick(searchRef, closeSearch, [searchButtonRef]);
-    useOutsideClick(menuRef, () => setIsDropdownOpen(false), [menuButtonRef]);
+    useOutsideClick(mobileMenuRef, () => setIsMobileMenuOpen(false), [hamburgerRef]);
 
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
         };
         window.addEventListener('scroll', handleScroll);
+        handleScroll();
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setIsMobileMenuOpen(false);
+            setIsHoverMenuOpen(false);
+            closeSearch();
+        }, 0);
+        return () => clearTimeout(timeout);
+    }, [pathname]);
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -146,236 +159,409 @@ export default function Header() {
 
     if (pathname?.startsWith('/admin')) return null;
 
+    // Determine context coloring
+    const isDarkThemeActive = isScrolled || isHoverMenuOpen || isMobileMenuOpen;
+    const headerBgClass = isDarkThemeActive
+        ? 'bg-navy-900/95 backdrop-blur-md shadow-lg border-b border-white/10'
+        : 'bg-transparent border-b border-transparent';
+
+    const headerHeightClass = isScrolled ? 'h-20' : 'h-28';
+    const textColorClass = isDarkThemeActive ? 'text-white' : 'text-navy-900';
+    const logoSrc = '/logo.png';
+
     return (
-        <header
-            className={clsx(
-                'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-                isScrolled ? 'bg-white/95 backdrop-blur-md h-20' : 'bg-transparent h-28'
-            )}
-        >
-            <div className="max-w-[1920px] mx-auto px-6 md:px-12 h-full flex items-center justify-between relative">
+        <>
+            <header
+                onMouseEnter={() => { setIsHoverMenuOpen(true); setIsHoveringHeader(true); }}
+                onMouseLeave={() => { setIsHoverMenuOpen(false); setIsHoveringHeader(false); }}
+                className={clsx(
+                    'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+                    headerBgClass,
+                    headerHeightClass
+                )}
+            >
+                <div className="max-w-[1920px] mx-auto px-6 md:px-12 h-full flex items-center justify-between relative">
 
-                {/* LEFT: Logo & Main Menu (Fixed Left Alignment) */}
-                <div className="flex items-center gap-12 lg:gap-16">
+                    {/* LEFT: Logo & Main Menu */}
+                    <div className="flex items-center gap-6 xl:gap-12 2xl:gap-16 h-full">
 
-                    {/* Logo: TSA */}
-                    <Link href="/" className="relative group shrink-0">
-                        <div className={clsx(
-                            "flex items-center justify-center transition-all duration-300",
-                            isScrolled ? "scale-90" : "scale-100"
-                        )}>
-                            <div className="relative w-[60px] h-[60px] md:w-[70px] md:h-[70px]">
-                                <NextImage
-                                    src="/logo.png"
-                                    alt="TSA Emblem"
-                                    fill
-                                    className="object-contain"
-                                    priority
-                                />
+                        {/* Logo: TSA */}
+                        <Link href="/" className="relative group shrink-0 h-full flex items-center">
+                            <div className={clsx(
+                                "flex items-center justify-center transition-all duration-300",
+                                isScrolled ? "scale-90" : "scale-100"
+                            )}>
+                                <div className="relative w-[60px] h-[60px] md:w-[70px] md:h-[70px]">
+                                    <NextImage
+                                        src={logoSrc}
+                                        alt="TSA Emblem"
+                                        fill
+                                        className="object-contain drop-shadow-lg"
+                                        priority
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    </Link>
+                        </Link>
 
-                    {/* Main Menu (Desktop Row) */}
-                    <nav className="hidden xl:flex items-center gap-8">
-                        {MENU_STRUCTURE.map((item) => (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className="relative group py-2"
-                            >
-                                <span className={clsx(
-                                    "text-navy-900 font-bold tracking-tight group-hover:text-sky-500 transition-all duration-300 block",
-                                    isScrolled ? "text-[16px]" : "text-[18px]"
-                                )}>
-                                    {item.label}
-                                </span>
-                                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-sky-500 transition-all duration-300 group-hover:w-full"></span>
-                            </Link>
-                        ))}
-                    </nav>
-                </div>
+                        {/* Main Menu (Desktop Hover Triggers) */}
+                        <nav className="hidden xl:flex items-center h-full gap-4 xl:gap-6 2xl:gap-8">
+                            {MENU_STRUCTURE.map((item) => (
+                                <div key={item.href} className="relative group h-full flex items-center border-b-2 border-transparent">
+                                    <Link
+                                        href={item.href}
+                                        className={clsx(
+                                            "font-bold tracking-tight transition-all duration-300 block",
+                                            isScrolled ? "text-[16px]" : "text-[18px]",
+                                            textColorClass,
+                                            "hover:text-sky-400"
+                                        )}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                    <span className={clsx(
+                                        "absolute bottom-0 left-0 w-0 h-[3px] bg-sky-500 transition-all duration-300 group-hover:w-full",
+                                        isHoveringHeader ? "opacity-100" : "opacity-0"
+                                    )}></span>
+                                </div>
+                            ))}
+                        </nav>
+                    </div>
 
-                {/* RIGHT: Utility Buttons & Icons */}
-                <div className="flex items-center gap-3">
-                    {UTILITY_ITEMS.map((item) => {
-                        if (item.href === '/trial') {
+                    {/* RIGHT: Utility Buttons & Icons */}
+                    <div className="flex items-center gap-2 xl:gap-3">
+                        {UTILITY_ITEMS.map((item) => {
+                            if (item.href === '/trial') {
+                                return (
+                                    <button
+                                        key={item.label}
+                                        onClick={() => setIsTrialModalOpen(true)}
+                                        className={clsx(
+                                            "hidden 2xl:block rounded-md font-bold transition-all duration-300 shadow-sm border",
+                                            isHoverMenuOpen ? "bg-white text-navy-900 border-transparent hover:bg-gray-100" : "bg-navy-900 border-transparent text-white hover:bg-white hover:text-slate-900 hover:border-slate-900",
+                                            isScrolled ? "text-[11px] px-3 py-1.5" : "text-[12px] px-4 py-2"
+                                        )}
+                                    >
+                                        {item.label}
+                                    </button>
+                                );
+                            }
                             return (
-                                <button
+                                <Link
                                     key={item.label}
-                                    onClick={() => setIsTrialModalOpen(true)}
+                                    href={item.href}
                                     className={clsx(
-                                        "hidden md:block rounded-md bg-white border border-gray-200 hover:border-sky-500 hover:text-sky-500 text-navy-900 font-bold transition-all duration-300 shadow-sm hover:shadow-md",
+                                        "hidden 2xl:block rounded-md font-bold transition-all duration-300 shadow-sm border",
+                                        isHoverMenuOpen ? "bg-white text-navy-900 border-transparent hover:bg-gray-100" : "bg-navy-900 border-transparent text-white hover:bg-white hover:text-slate-900 hover:border-slate-900",
                                         isScrolled ? "text-[11px] px-3 py-1.5" : "text-[12px] px-4 py-2"
                                     )}
                                 >
                                     {item.label}
-                                </button>
+                                </Link>
                             );
-                        }
-                        return (
-                            <Link
-                                key={item.label}
-                                href={item.href}
-                                className={clsx(
-                                    "hidden md:block rounded-md bg-white border border-gray-200 hover:border-sky-500 hover:text-sky-500 text-navy-900 font-bold transition-all duration-300 shadow-sm hover:shadow-md",
-                                    isScrolled ? "text-[11px] px-3 py-1.5" : "text-[12px] px-4 py-2"
-                                )}
-                            >
-                                {item.label}
-                            </Link>
-                        );
-                    })}
+                        })}
 
-                    <button
-                        ref={searchButtonRef}
-                        onClick={() => {
-                            if (isSearchOpen) {
-                                closeSearch();
-                            } else {
-                                setIsSearchOpen(true);
-                            }
-                        }}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        className={clsx(
-                            "flex items-center justify-center rounded-md bg-white border border-gray-200 hover:border-sky-500 hover:text-sky-500 text-navy-900 transition-all shadow-sm ml-2",
-                            isScrolled ? "w-8 h-8" : "w-10 h-10"
-                        )}
-                    >
-                        {isSearchOpen ? <X size={18} /> : <Search size={18} />}
-                    </button>
-
-                    {/* Hamburger Dropdown Trigger */}
-                    <button
-                        ref={menuButtonRef}
-                        className={clsx(
-                            "flex items-center justify-center rounded-md transition-all shadow-md ml-1 z-50 relative",
-                            isDropdownOpen ? "bg-sky-500 text-white" : "bg-navy-900 text-white hover:bg-sky-600",
-                            isScrolled ? "w-8 h-8" : "w-10 h-10"
-                        )}
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        onMouseDown={(e) => e.stopPropagation()}
-                    >
-                        {isDropdownOpen ? <X size={20} /> : <AlignJustify size={20} />}
-                    </button>
-                </div>
-
-                {/* Search Bar Overlay */}
-                <AnimatePresence>
-                    {isSearchOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute top-full right-0 mt-2 w-full md:w-[400px] px-6 md:px-0 z-40"
-                            ref={searchRef}
+                        <button
+                            ref={searchButtonRef}
+                            onClick={() => {
+                                if (isSearchOpen) {
+                                    closeSearch();
+                                } else {
+                                    setIsSearchOpen(true);
+                                }
+                            }}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            className={clsx(
+                                "flex items-center justify-center rounded-md transition-all duration-300 shadow-sm ml-2 border group",
+                                isHoverMenuOpen ? "bg-white text-navy-900 border-transparent hover:bg-gray-100" : "bg-navy-900 border-transparent text-white hover:bg-white hover:text-slate-900 hover:border-slate-900",
+                                isScrolled ? "w-8 h-8" : "w-10 h-10"
+                            )}
                         >
-                            <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden p-2">
-                                <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                    <input
-                                        type="text"
-                                        autoFocus
-                                        placeholder="검색어를 입력하세요 (예: 입단, 레슨)"
-                                        value={searchQuery}
-                                        onChange={(e) => handleSearch(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-lg text-sm font-medium text-navy-900 focus:outline-none focus:ring-2 focus:ring-sky-100 transition-all"
-                                    />
+                            {isSearchOpen ? <X size={18} className="transition-colors duration-300" /> : <Search size={18} className="transition-colors duration-300" />}
+                        </button>
+
+                        {/* Mobile Hamburger Drawer Trigger */}
+                        <button
+                            ref={hamburgerRef}
+                            className={clsx(
+                                "xl:hidden flex items-center justify-center rounded-md transition-all duration-300 shadow-md ml-1 z-50 relative border",
+                                isMobileMenuOpen
+                                    ? "bg-red-600 border-red-500 text-white"
+                                    : "bg-navy-900 border-transparent text-white hover:bg-white hover:text-navy-900 hover:border-navy-900",
+                                isScrolled ? "w-8 h-8" : "w-10 h-10"
+                            )}
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            onMouseDown={(e) => e.stopPropagation()}
+                        >
+                            {isMobileMenuOpen ? <X size={20} /> : <AlignJustify size={20} />}
+                        </button>
+                    </div>
+
+                    {/* Search Bar Overlay */}
+                    <AnimatePresence>
+                        {isSearchOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                                className="absolute top-full right-0 mt-2 w-full sm:w-[350px] md:w-[400px] px-6 md:px-0 z-40"
+                                ref={searchRef}
+                            >
+                                <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden p-2">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                        <input
+                                            type="text"
+                                            autoFocus
+                                            placeholder="검색어를 입력하세요 (예: 입단, 레슨)"
+                                            value={searchQuery}
+                                            onChange={(e) => handleSearch(e.target.value)}
+                                            className="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-lg text-sm font-medium text-navy-900 focus:outline-none focus:ring-2 focus:ring-sky-100 transition-all"
+                                        />
+                                    </div>
+
+                                    {/* Autocomplete Results */}
+                                    {searchQuery && (
+                                        <div className="mt-2 text-left max-h-60 overflow-y-auto">
+                                            {searchResults.length > 0 ? (
+                                                <ul>
+                                                    {searchResults.map((result, idx) => (
+                                                        <li key={idx}>
+                                                            <Link
+                                                                href={result.href}
+                                                                onClick={handleSearchResultClick}
+                                                                className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-sky-50 hover:text-sky-600 rounded-lg transition-colors font-medium flex items-center justify-between group"
+                                                            >
+                                                                <span>{result.label}</span>
+                                                                <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                            </Link>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <div className="px-4 py-6 text-center text-xs text-gray-400">
+                                                    검색 결과가 없습니다.
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* =========================================
+                    DESKTOP: Hover Mega Menu
+                    ========================================= */}
+                    <AnimatePresence>
+                        {isHoverMenuOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                className="absolute top-full left-0 right-0 w-full bg-navy-900/95 backdrop-blur-xl border-t border-white/10 shadow-2xl overflow-hidden z-30 hidden xl:block"
+                                onMouseEnter={() => setIsHoverMenuOpen(true)}
+                                onMouseLeave={() => setIsHoverMenuOpen(false)}
+                            >
+                                <div className="max-w-[1920px] mx-auto px-12 py-10">
+                                    <div className="grid grid-cols-6 gap-8 text-left">
+                                        {MENU_STRUCTURE.map((section) => (
+                                            <div key={section.label} className="flex flex-col gap-4 group">
+                                                <Link
+                                                    href={section.href}
+                                                    className="text-white font-bold text-lg pb-2 border-b border-white/20 group-hover:border-sky-500 group-hover:text-sky-400 transition-all inline-block w-fit"
+                                                    onClick={() => setIsHoverMenuOpen(false)}
+                                                >
+                                                    {section.label}
+                                                </Link>
+                                                <div className="flex flex-col gap-2">
+                                                    {section.subItems.map((sub) => (
+                                                        <Link
+                                                            key={sub.label}
+                                                            href={sub.href}
+                                                            className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium flex items-center gap-1"
+                                                            onClick={() => setIsHoverMenuOpen(false)}
+                                                        >
+                                                            <ChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity text-sky-400" />
+                                                            {sub.label}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* =========================================
+                    MOBILE/TABLET: Hamburger Drawer
+                    ========================================= */}
+                    <AnimatePresence>
+                        {isMobileMenuOpen && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="fixed inset-0 bg-black/60 z-30 xl:hidden top-0"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            />
+                        )}
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                        {isMobileMenuOpen && (
+                            <motion.div
+                                ref={mobileMenuRef}
+                                initial={{ x: '100%' }}
+                                animate={{ x: 0 }}
+                                exit={{ x: '100%' }}
+                                transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
+                                className="fixed inset-y-0 right-0 w-[300px] sm:w-[350px] bg-navy-900/95 backdrop-blur-2xl border-l border-white/10 z-40 shadow-2xl flex flex-col xl:hidden"
+                                style={{ top: 0, height: '100vh' }}
+                            >
+                                <div className="h-20 px-6 border-b border-white/10 flex items-center justify-between shrink-0">
+                                    <span className="text-white/50 text-xs tracking-widest font-bold">MENU</span>
+                                    <button onClick={() => setIsMobileMenuOpen(false)} className="text-white/50 hover:text-white transition-colors">
+                                        <X size={24} />
+                                    </button>
                                 </div>
 
-                                {/* Autocomplete Results */}
-                                {searchQuery && (
-                                    <div className="mt-2 text-left max-h-60 overflow-y-auto">
-                                        {searchResults.length > 0 ? (
-                                            <ul>
-                                                {searchResults.map((result, idx) => (
-                                                    <li key={idx}>
-                                                        <Link
-                                                            href={result.href}
-                                                            onClick={handleSearchResultClick}
-                                                            className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-sky-50 hover:text-sky-600 rounded-lg transition-colors font-medium flex items-center justify-between group"
-                                                        >
-                                                            <span>{result.label}</span>
-                                                            <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                        </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        ) : (
-                                            <div className="px-4 py-6 text-center text-xs text-gray-400">
-                                                검색 결과가 없습니다.
+                                {/* Top Quick Buttons */}
+                                <div className="p-6 pb-2 shrink-0 space-y-3">
+                                    <button
+                                        onClick={() => { setIsMobileMenuOpen(false); setIsTrialModalOpen(true); }}
+                                        className="w-full bg-white text-navy-900 font-bold py-3.5 rounded-xl transition shadow-lg text-[15px]"
+                                    >
+                                        체험수업 신청
+                                    </button>
+                                    <Link
+                                        href="/consult"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="block w-full bg-navy-800 border border-white/20 text-white text-center font-bold py-3.5 rounded-xl transition text-[15px] hover:bg-white/10"
+                                    >
+                                        상담 신청
+                                    </Link>
+                                    <div className="flex gap-2 pt-2">
+                                        <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 text-center py-2 text-sm text-gray-300 hover:text-white bg-white/5 rounded-lg font-medium">로그인</Link>
+                                        <Link href="/join" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 text-center py-2 text-sm text-gray-300 hover:text-white bg-white/5 rounded-lg font-medium">회원가입</Link>
+                                    </div>
+                                </div>
+
+                                {/* Mobile Search */}
+                                <div className="px-6 py-4 shrink-0">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                        <input
+                                            type="text"
+                                            placeholder="검색어 입력..."
+                                            value={searchQuery}
+                                            onChange={(e) => handleSearch(e.target.value)}
+                                            className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-xl text-sm font-medium text-white placeholder-gray-400 focus:outline-none focus:border-sky-500 transition-colors"
+                                        />
+                                        {/* Autocomplete Results for Mobile */}
+                                        {searchQuery && searchResults.length > 0 && (
+                                            <div className="absolute top-full left-0 right-0 mt-2 bg-navy-800 rounded-xl border border-white/10 shadow-xl overflow-hidden z-50">
+                                                <ul className="max-h-48 overflow-y-auto">
+                                                    {searchResults.map((result, idx) => (
+                                                        <li key={idx} className="border-b border-white/5 last:border-0">
+                                                            <Link
+                                                                href={result.href}
+                                                                onClick={() => { handleSearchResultClick(); setIsMobileMenuOpen(false); }}
+                                                                className="block px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                                                            >
+                                                                {result.label}
+                                                            </Link>
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </div>
                                         )}
                                     </div>
-                                )}
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Dark Overlay for Menu */}
-                <AnimatePresence>
-                    {isDropdownOpen && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="fixed inset-0 bg-black/40 z-30"
-                            onClick={() => setIsDropdownOpen(false)}
-                        />
-                    )}
-                </AnimatePresence>
-
-                {/* Detailed Mega Menu Dropdown */}
-                <AnimatePresence>
-                    {isDropdownOpen && (
-                        <motion.div
-                            ref={menuRef}
-                            initial={{ opacity: 0, y: -20, height: 0 }}
-                            animate={{ opacity: 1, y: 0, height: 'auto' }}
-                            exit={{ opacity: 0, y: -20, height: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute top-full right-0 left-0 w-full bg-white shadow-2xl border-t border-gray-100 overflow-hidden z-40"
-                        >
-                            <div className="max-w-[1920px] mx-auto px-6 md:px-12 py-12">
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 text-left">
-                                    {MENU_STRUCTURE.map((section) => (
-                                        <div key={section.label} className="flex flex-col gap-4 group border-r border-gray-100 last:border-r-0 px-8 first:pl-0">
-                                            <Link
-                                                href={section.href}
-                                                className="text-navy-900 font-black text-lg pb-2 border-b-2 border-transparent group-hover:border-sky-500 group-hover:text-sky-500 transition-all inline-block w-fit"
-                                                onClick={() => setIsDropdownOpen(false)}
-                                            >
-                                                {section.label}
-                                            </Link>
-                                            <div className="flex flex-col gap-2">
-                                                {section.subItems.map((sub) => (
-                                                    <Link
-                                                        key={sub.label}
-                                                        href={sub.href}
-                                                        className="text-gray-500 hover:text-navy-900 hover:translate-x-1 transition-all text-sm font-medium flex items-center gap-1"
-                                                        onClick={() => setIsDropdownOpen(false)}
-                                                    >
-                                                        <ChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity text-sky-400" />
-                                                        {sub.label}
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
                                 </div>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
 
+                                {/* Accordion Menu */}
+                                <div className="flex-1 overflow-y-auto w-full px-6 py-2 pb-8 scrollbar-hide">
+                                    {MENU_STRUCTURE.map((section, index) => {
+                                        const isExpanded = expandedMenu === index;
+                                        return (
+                                            <div key={section.label} className="border-b border-white/10 last:border-0">
+                                                <button
+                                                    onClick={() => setExpandedMenu(isExpanded ? null : index)}
+                                                    className="w-full flex items-center justify-between py-4 text-left"
+                                                >
+                                                    <span className={clsx(
+                                                        "font-bold text-lg tracking-tight transition-colors",
+                                                        isExpanded ? "text-sky-400" : "text-white"
+                                                    )}>
+                                                        {section.label}
+                                                    </span>
+                                                    <ChevronRight
+                                                        size={20}
+                                                        className={clsx(
+                                                            "transition-transform duration-300",
+                                                            isExpanded ? "rotate-90 text-sky-400" : "text-gray-500"
+                                                        )}
+                                                    />
+                                                </button>
+
+                                                <AnimatePresence>
+                                                    {isExpanded && (
+                                                        <motion.div
+                                                            initial={{ height: 0, opacity: 0 }}
+                                                            animate={{ height: 'auto', opacity: 1 }}
+                                                            exit={{ height: 0, opacity: 0 }}
+                                                            transition={{ duration: 0.2 }}
+                                                            className="overflow-hidden"
+                                                        >
+                                                            <div className="flex flex-col space-y-1 pb-4 pl-2">
+                                                                {section.subItems.map(sub => (
+                                                                    <Link
+                                                                        key={sub.label}
+                                                                        href={sub.href}
+                                                                        className="text-gray-400 hover:text-white text-[15px] py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors flex items-center gap-2"
+                                                                        onClick={() => setIsMobileMenuOpen(false)}
+                                                                    >
+                                                                        <div className="w-1 h-1 rounded-full bg-sky-500/50" />
+                                                                        {sub.label}
+                                                                    </Link>
+                                                                ))}
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Mobile Footer */}
+                                <div className="p-6 border-t border-white/10 bg-navy-900/50 shrink-0 text-center">
+                                    <p className="text-gray-400 text-sm font-medium mb-1">상담/문의</p>
+                                    <p className="text-white text-xl font-black tracking-wider mb-4">02 - 1234 - 5678</p>
+                                    <div className="flex justify-center gap-4">
+                                        <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+                                            <span className="text-xs font-bold">IG</span>
+                                        </a>
+                                        <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+                                            <span className="text-xs font-bold">BL</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </header>
+
+            {/* Modal rendered outside of header containing block to prevent layout shift & clipping */}
             <TrialClassModal
                 isOpen={isTrialModalOpen}
                 onClose={() => setIsTrialModalOpen(false)}
             />
-        </header>
+        </>
     );
 }

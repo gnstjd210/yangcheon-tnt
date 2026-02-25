@@ -126,34 +126,32 @@ export async function submitTrialRegistration(formData: FormData) {
 
     const name = formData.get("name") as string;
     const phone = formData.get("phone") as string;
-    const age = formData.get("age") as string;
+    const childAge = formData.get("age") as string; // Maps to childAge
     const desiredClass = formData.get("desiredClass") as string;
     const consultationMethod = formData.get("consultationMethod") as string;
     const awarenessPath = formData.get("awarenessPath") as string;
 
-    console.log("Received Data:", { name, phone, age, desiredClass, consultationMethod, awarenessPath });
+    console.log("Received Data:", { name, phone, childAge, desiredClass, consultationMethod, awarenessPath });
 
-    if (!name || !phone || !age) {
+    if (!name || !phone || !childAge) {
         console.log("Validation Failed: Missing required fields");
         return { success: false, message: "필수 입력 항목이 누락되었습니다." };
     }
 
     try {
-        const result = await prisma.registration.create({
+        const result = await prisma.trialRegistration.create({
             data: {
                 name,
                 phone,
-                age, // Stored as String in DB
-                desiredClass: desiredClass || "미정", // Handle empty string
-                consultationMethod,
+                childAge,
+                desiredClass: desiredClass || "미정",
+                consultationMethod: consultationMethod || "미정",
                 awarenessPath,
-                type: "Trial",
-                status: "pending",
             },
         });
-        console.log("Registration Created:", result);
+        console.log("Trial Registration Created:", result);
 
-        revalidatePath("/admin/registrations");
+        revalidatePath("/admin/trials");
         return { success: true, message: "신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다." };
     } catch (error) {
         console.error("Trial Registration failed:", error);

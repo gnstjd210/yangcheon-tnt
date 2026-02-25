@@ -30,6 +30,17 @@ export default function TrialClassModal({ isOpen, onClose }: TrialClassModalProp
 
     useEffect(() => {
         if (isOpen) {
+            // Measure scrollbar width to prevent layout shift
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            if (scrollbarWidth > 0) {
+                document.body.style.paddingRight = `${scrollbarWidth}px`;
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.paddingRight = `${scrollbarWidth}px`;
+                }
+            }
+
             // Fetch classes when modal opens
             getAvailableClasses().then(classes => {
                 setAvailableClasses(classes);
@@ -39,8 +50,17 @@ export default function TrialClassModal({ isOpen, onClose }: TrialClassModalProp
                     setFormData(prev => ({ ...prev, desiredClass: '상담 후 결정' }));
                 }
             });
-
         }
+
+        return () => {
+            // Cleanup on close
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            const header = document.querySelector('header');
+            if (header) {
+                header.style.paddingRight = '';
+            }
+        };
     }, [isOpen]);
 
     const handleSubmit = async (e: React.FormEvent) => {
