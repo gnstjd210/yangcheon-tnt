@@ -3,7 +3,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import AuthProvider from '@/components/providers/AuthProvider';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import KakaoFloatingBtn from "@/components/layout/KakaoFloatingBtn";
+import ChannelTalkProvider from "@/components/providers/ChannelTalkProvider";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
@@ -28,12 +28,12 @@ export default function RootLayout({
         className={`${notoSansKr.variable} antialiased`}
       >
         <AuthProvider>
+          <ChannelTalkProvider />
           <Header />
           <main className="min-h-screen pt-20">
             {children}
           </main>
           <Footer />
-          <KakaoFloatingBtn />
         </AuthProvider>
       </body>
     </html>
