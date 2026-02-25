@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { MapPin, Navigation, Car, Bus } from "lucide-react";
-import NaverMap from "@/components/about/NaverMap";
+import NaverMapWrapper from "@/components/about/NaverMapWrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +22,7 @@ export default async function LocationPage() {
             </div>
 
             <div className="relative w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl bg-gray-100">
-                <NaverMap
+                <NaverMapWrapper
                     lat={location?.lat || 37.5332}
                     lng={location?.lng || 126.8643}
                 />
