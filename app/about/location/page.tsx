@@ -8,8 +8,9 @@ export const dynamic = "force-dynamic";
 export default async function LocationPage() {
     const location = await prisma.location.findFirst();
 
-    const title = location?.title || "양천 TNT 스포츠 아카데미";
-    const address = location?.address || "서울시 강서구 곰달래로 59길 60";
+    // We're ignoring the DB location record to force the new, exact coordinates and address.
+    const title = "양천 TNT 스포츠 아카데미";
+    const address = "서울특별시 강서구 곰달래로59길 60 영신빌딩";
 
     return (
         <div className="max-w-6xl mx-auto space-y-12">
@@ -23,8 +24,8 @@ export default async function LocationPage() {
 
             <div className="relative w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl bg-gray-100">
                 <NaverMapWrapper
-                    lat={location?.lat || 37.5332}
-                    lng={location?.lng || 126.8643}
+                    lat={37.534967}
+                    lng={126.862943}
                 />
             </div>
 
