@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
+import Script from "next/script";
 import AuthProvider from '@/components/providers/AuthProvider';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -24,6 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <Script
+          strategy="beforeInteractive"
+          src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=46ybnu6qg3"
+        />
+      </head>
       <body
         className={`${notoSansKr.variable} antialiased`}
       >
