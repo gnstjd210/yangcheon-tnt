@@ -164,7 +164,10 @@ export default function GreetingManager({ initialGreetings }: { initialGreetings
 
                         <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">이미지</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-1">이미지</label>
+                                <p className="text-xs text-gray-500 mb-3">
+                                    권장 비율 3:4 또는 1:1 | 고해상도(1200px↑) 권장 | 용량 1MB 이하
+                                </p>
                                 <ImageUpload
                                     value={imageUrl}
                                     onChange={(url) => setImageUrl(url)}

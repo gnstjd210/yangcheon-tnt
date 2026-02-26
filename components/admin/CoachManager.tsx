@@ -134,9 +134,9 @@ export default function CoachManager({ initialCoaches }: { initialCoaches: Coach
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {coaches.map((coach) => (
                     <div key={coach.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-                        <div className="relative w-full h-48 bg-gray-100">
+                        <div className="relative w-full aspect-[3/4] bg-gray-100">
                             {coach.imageUrl ? (
-                                <Image src={coach.imageUrl} alt={coach.name} fill className="object-cover" />
+                                <Image src={coach.imageUrl} alt={coach.name} fill className="object-cover object-center" />
                             ) : (
                                 <div className="flex items-center justify-center h-full text-gray-400">No Image</div>
                             )}
@@ -191,12 +191,20 @@ export default function CoachManager({ initialCoaches }: { initialCoaches: Coach
                         </div>
 
                         <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
-                            <div className="flex justify-center mb-4">
-                                <ImageUpload
-                                    value={imageUrl}
-                                    onChange={(url) => setImageUrl(url)}
-                                    onRemove={() => setImageUrl("")}
-                                />
+                            <div className="flex flex-col items-center mb-4">
+                                <div className="self-start w-full mb-3">
+                                    <label className="block text-sm font-bold text-gray-700 mb-1">이미지 (필수)</label>
+                                    <p className="text-xs text-gray-500">
+                                        권장 비율 3:4 고정 | 해상도 800x1066px 최적 | 용량 500KB 이하
+                                    </p>
+                                </div>
+                                <div className="w-[180px] aspect-[3/4]">
+                                    <ImageUpload
+                                        value={imageUrl}
+                                        onChange={(url) => setImageUrl(url)}
+                                        onRemove={() => setImageUrl("")}
+                                    />
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">

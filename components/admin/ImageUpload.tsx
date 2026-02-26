@@ -27,12 +27,27 @@ export default function ImageUpload({ value, onChange, onRemove }: ImageUploadPr
                 body: formData,
             });
 
+            if (!response.ok) {
+                const text = await response.text();
+                // 413 Body exceeded 4MB limit
+                if (response.status === 413) {
+                    alert("업로드 실패: 파일 용량이 너무 큽니다 (최대 4MB).");
+                } else {
+                    alert(`업로드 실패 (${response.status}). 관리자에게 문의하세요.`);
+                    console.error("Upload HTTP error", response.status, text);
+                }
+                return;
+            }
+
             const data = await response.json();
             if (data.success) {
                 onChange(data.url);
+            } else {
+                alert(data.message || "업로드에 실패했습니다.");
             }
         } catch (error) {
             console.error("Upload failed", error);
+            alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
         } finally {
             setIsUploading(false);
         }

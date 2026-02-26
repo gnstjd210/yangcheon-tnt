@@ -40,7 +40,7 @@ export default function CoachGrid({ coaches }: { coaches: Coach[] }) {
                                     src={coach.imageUrl}
                                     alt={coach.name}
                                     fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                                 />
                             ) : (
                                 <div className="flex items-center justify-center h-full text-gray-400">No Image</div>
