@@ -54,6 +54,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <Users size={20} />
                         회원 관리
                     </Link>
+
+                    {/* TSA 소개 관리 Section */}
+                    <div className="mt-4 mb-2">
+                        <span className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider">TSA 소개 관리</span>
+                    </div>
+                    <Link href="/admin/greeting" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
+                        <FileText size={20} />
+                        인사말 관리
+                    </Link>
+                    <Link href="/admin/coach" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
+                        <Users size={20} />
+                        코치진 관리
+                    </Link>
+
                     <div className="my-2 border-t border-navy-800"></div>
                     <Link href="/admin/gallery" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
                         <Camera size={20} />

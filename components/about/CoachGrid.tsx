@@ -27,31 +27,34 @@ export default function CoachGrid({ coaches }: { coaches: Coach[] }) {
 
     return (
         <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10">
                 {coaches.map((coach) => (
                     <div
                         key={coach.id}
                         onClick={() => setSelectedCoach(coach)}
-                        className="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 transform hover:-translate-y-1"
+                        className="group cursor-pointer bg-white rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-transparent hover:border-gray-100 flex flex-col"
                     >
-                        <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden">
+                        <div className="relative aspect-[3/4] bg-gray-100 rounded-3xl overflow-hidden m-4 mb-0 isolate">
                             {coach.imageUrl ? (
                                 <Image
                                     src={coach.imageUrl}
                                     alt={coach.name}
                                     fill
-                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                             ) : (
                                 <div className="flex items-center justify-center h-full text-gray-400">No Image</div>
                             )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                                <span className="text-white font-bold">상세 프로필 보기</span>
+
+                            {/* Position Badge at top-left */}
+                            <div className="absolute top-0 left-0 bg-[#8c1c20] text-white px-5 py-2 text-sm font-bold z-10 rounded-br-2xl">
+                                {coach.position}
                             </div>
                         </div>
                         <div className="p-6 text-center">
-                            <h3 className="text-xl font-black text-navy-900 mb-1">{coach.name}</h3>
-                            <p className="text-sky-500 font-bold text-sm tracking-wide uppercase">{coach.position}</p>
+                            <h3 className="text-xl md:text-2xl font-black text-gray-900">
+                                {coach.name}
+                            </h3>
                         </div>
                     </div>
                 ))}

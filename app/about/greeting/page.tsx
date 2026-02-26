@@ -13,13 +13,13 @@ export default async function GreetingPage() {
         <div className="max-w-6xl mx-auto">
             <div className="flex flex-col md:flex-row gap-12 items-start">
                 {/* Left: Large Vertical Image */}
-                <div className="w-full md:w-1/2 relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
+                <div className="w-full md:w-1/2 relative aspect-[4/5] md:aspect-[3/4] rounded-3xl overflow-hidden bg-gray-100">
                     {greeting?.imageUrl ? (
                         <Image
                             src={greeting.imageUrl}
                             alt="Greeting"
                             fill
-                            className="object-cover"
+                            className="object-cover object-top"
                             priority
                         />
                     ) : (
@@ -30,12 +30,11 @@ export default async function GreetingPage() {
                 </div>
 
                 {/* Right: Majestic Text */}
-                <div className="w-full md:w-1/2 pt-8 md:pt-12">
-                    <h2 className="text-3xl md:text-5xl font-black text-navy-900 mb-8 leading-tight">
+                <div className="w-full md:w-1/2 pt-4 md:pt-20 flex flex-col justify-center">
+                    <h2 className="text-3xl md:text-4xl font-black text-navy-900 mb-12 leading-snug whitespace-pre-wrap shrink-0">
                         {greeting?.title || "인사말 제목이 없습니다."}
                     </h2>
-                    <div className="w-20 h-1 bg-sky-500 mb-10"></div>
-                    <div className="prose prose-lg text-gray-600 whitespace-pre-wrap leading-loose">
+                    <div className="text-base md:text-lg text-gray-700 whitespace-pre-wrap leading-[2] font-medium tracking-wide">
                         {greeting?.content || "인사말 내용이 없습니다."}
                     </div>
                 </div>
