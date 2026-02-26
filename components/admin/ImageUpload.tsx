@@ -3,8 +3,11 @@
 import { useState, useCallback } from "react";
 import Image from "next/image";
 import { Upload, X, Check } from "lucide-react";
-import Cropper, { Area } from "react-easy-crop";
+import dynamic from "next/dynamic";
+import type { Area } from "react-easy-crop";
 import getCroppedImg from "@/lib/cropImage";
+
+const Cropper = dynamic(() => import("react-easy-crop"), { ssr: false });
 
 interface ImageUploadProps {
     value?: string | null;
@@ -101,6 +104,7 @@ export default function ImageUpload({ value, onChange, onRemove }: ImageUploadPr
                     </div>
 
                     <div className="relative flex-1 bg-black min-h-0 w-full overflow-hidden">
+                        {/* @ts-expect-error - dynamic import typing mismatch */}
                         <Cropper
                             image={imageSrc}
                             crop={crop}
