@@ -1,9 +1,14 @@
-import { getFacilities } from "@/app/actions/misc_about";
+import { getFacilities } from "@/app/actions/facility";
 import FacilityManager from "@/components/admin/FacilityManager";
 
 export const dynamic = "force-dynamic";
 
-export default async function FacilityPage() {
+export default async function AdminFacilityPage() {
     const facilities = await getFacilities();
-    return <FacilityManager initialFacilities={facilities} />;
+
+    return (
+        <div className="w-full h-full p-6">
+            <FacilityManager initialFacilities={facilities} />
+        </div>
+    );
 }

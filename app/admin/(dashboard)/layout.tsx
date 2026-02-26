@@ -4,7 +4,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Megaphone, Star, LogOut, Users, Camera, FileText } from 'lucide-react';
+import { LayoutDashboard, Megaphone, Star, LogOut, Users, Camera, FileText, Building2 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const { data: session, status } = useSession();
@@ -66,6 +66,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <Link href="/admin/coach" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
                         <Users size={20} />
                         코치진 관리
+                    </Link>
+                    <Link href="/admin/facility" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-navy-800 text-gray-300 hover:text-white transition-all">
+                        <Building2 size={20} />
+                        시설 관리
                     </Link>
 
                     <div className="my-2 border-t border-navy-800"></div>

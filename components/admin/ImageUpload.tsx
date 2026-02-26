@@ -13,9 +13,10 @@ interface ImageUploadProps {
     value?: string | null;
     onChange: (url: string) => void;
     onRemove: () => void;
+    aspectRatio?: number;
 }
 
-export default function ImageUpload({ value, onChange, onRemove }: ImageUploadProps) {
+export default function ImageUpload({ value, onChange, onRemove, aspectRatio = 3 / 4 }: ImageUploadProps) {
     const [isUploading, setIsUploading] = useState(false);
 
     // Cropper states
@@ -96,7 +97,7 @@ export default function ImageUpload({ value, onChange, onRemove }: ImageUploadPr
                 <div className="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col h-[80vh] max-h-[800px]">
                     <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 shrink-0">
                         <h3 className="text-xl font-bold text-navy-900">
-                            이미지 자르기 (3:4 비율)
+                            이미지 자르기
                         </h3>
                         <button onClick={() => setImageSrc(null)} className="text-gray-400 hover:text-gray-600">
                             <X size={24} />
@@ -109,7 +110,7 @@ export default function ImageUpload({ value, onChange, onRemove }: ImageUploadPr
                             image={imageSrc}
                             crop={crop}
                             zoom={zoom}
-                            aspect={3 / 4}
+                            aspect={aspectRatio}
                             onCropChange={setCrop}
                             onCropComplete={onCropComplete}
                             onZoomChange={setZoom}

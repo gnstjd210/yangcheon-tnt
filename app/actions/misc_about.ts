@@ -3,37 +3,6 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 
-// Facility Actions
-export async function getFacilities() {
-    return await prisma.facility.findMany({ orderBy: { order: "asc" } });
-}
-
-export async function createFacility(formData: FormData) {
-    const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-    const imageUrl = formData.get("imageUrl") as string;
-    const order = parseInt(formData.get("order") as string || "0");
-    await prisma.facility.create({ data: { title, content, imageUrl, order } });
-    revalidatePath("/admin/facility");
-    revalidatePath("/about/facility");
-}
-
-export async function updateFacility(id: string, formData: FormData) {
-    const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-    const imageUrl = formData.get("imageUrl") as string;
-    const order = parseInt(formData.get("order") as string || "0");
-    await prisma.facility.update({ where: { id }, data: { title, content, imageUrl, order } });
-    revalidatePath("/admin/facility");
-    revalidatePath("/about/facility");
-}
-
-export async function deleteFacility(id: string) {
-    await prisma.facility.delete({ where: { id } });
-    revalidatePath("/admin/facility");
-    revalidatePath("/about/facility");
-}
-
 // Location Actions
 export async function getLocation() {
     return await prisma.location.findFirst();
