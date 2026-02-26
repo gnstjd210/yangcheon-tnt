@@ -161,11 +161,18 @@ export default function Header() {
 
     // Determine context coloring
     const isDarkThemeActive = isScrolled || isHoverMenuOpen || isMobileMenuOpen;
-    const headerBgClass = isDarkThemeActive
-        ? 'bg-navy-900/95 backdrop-blur-md shadow-lg border-b border-white/10'
-        : 'bg-transparent border-b border-transparent';
+    let headerBgClass = 'bg-transparent border-b border-transparent';
+    let headerShadowClass = '';
 
-    const headerHeightClass = isScrolled ? 'h-20' : 'h-28';
+    if (isHoverMenuOpen) {
+        headerBgClass = 'bg-navy-900';
+        headerShadowClass = ''; // No shadow when open to merge seamlessly with mega menu
+    } else if (isScrolled || isMobileMenuOpen) {
+        headerBgClass = 'bg-navy-900/95 backdrop-blur-md border-b border-white/10';
+        headerShadowClass = 'shadow-lg';
+    }
+
+    const headerHeightClass = isScrolled ? 'h-[90px]' : 'h-[120px]';
     const textColorClass = isDarkThemeActive ? 'text-white' : 'text-navy-900';
     const logoSrc = '/logo.png';
 
@@ -177,6 +184,7 @@ export default function Header() {
                 className={clsx(
                     'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
                     headerBgClass,
+                    headerShadowClass,
                     headerHeightClass
                 )}
             >
@@ -188,7 +196,7 @@ export default function Header() {
                             "flex items-center justify-center transition-all duration-300",
                             isScrolled ? "scale-90" : "scale-100"
                         )}>
-                            <div className="relative w-[60px] h-[60px] md:w-[70px] md:h-[70px]">
+                            <div className="relative w-[70px] h-[70px] md:w-[90px] md:h-[90px]">
                                 <NextImage
                                     src={logoSrc}
                                     alt="TSA Emblem"
@@ -356,13 +364,13 @@ export default function Header() {
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                className="absolute top-full left-0 right-0 w-full bg-navy-900/95 backdrop-blur-xl border-t border-white/10 shadow-2xl overflow-hidden z-30 hidden xl:block"
+                                className="absolute top-full left-0 right-0 w-full bg-navy-900 shadow-[0_30px_50px_-10px_rgba(0,0,0,0.5)] overflow-hidden z-30 hidden xl:block"
                                 onMouseEnter={() => setIsHoverMenuOpen(true)}
                                 onMouseLeave={() => setIsHoverMenuOpen(false)}
                             >
                                 <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex items-start h-full">
                                     {/* Exact dummy width for Logo to match Header flex layout perfectly */}
-                                    <div className="w-[60px] md:w-[70px] shrink-0" />
+                                    <div className="w-[70px] md:w-[90px] shrink-0" />
 
                                     <div className="grid grid-cols-6 flex-1 max-w-[1200px] mx-10 2xl:mx-16 py-10 justify-items-center">
                                         {MENU_STRUCTURE.map((section) => (
@@ -386,7 +394,7 @@ export default function Header() {
                                     </div>
 
                                     {/* Exact dummy space for 'justify-between' to perfectly center flex-1 */}
-                                    <div className="w-[60px] md:w-[70px] shrink-0" />
+                                    <div className="w-[70px] md:w-[90px] shrink-0" />
                                 </div>
                             </motion.div>
                         )}

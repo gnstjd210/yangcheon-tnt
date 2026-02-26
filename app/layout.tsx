@@ -31,7 +31,7 @@ export default function RootLayout({
         <AuthProvider>
           <ChannelTalkProvider />
           <Header />
-          <main className="min-h-screen pt-20">
+          <main className="min-h-screen pt-[120px]">
             {children}
           </main>
           <Footer />
