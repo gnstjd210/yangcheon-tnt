@@ -46,6 +46,7 @@ model Review {
 
 model Greeting {
   id        String   @id @default(cuid())
+  role      String   @unique // 'PRESIDENT'(김진국), 'CEO'(김훈성)
   title     String
   content   String
   imageUrl  String?
