@@ -203,6 +203,8 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                         center: "title",
                         right: "dayGridMonth,dayGridWeek"
                     }}
+                    showNonCurrentDates={false}
+                    fixedWeekCount={false}
                     events={schedules.map(schedule => {
                         const evtColor = COLORS.find(c => c.value === schedule.color)?.hex || "#3b82f6";
                         if (schedule.isRecurring) {
