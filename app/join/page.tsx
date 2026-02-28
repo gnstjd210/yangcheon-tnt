@@ -26,7 +26,7 @@ export default function JoinPage() {
         setAgreements({ ...newAgreements, all: allChecked });
     };
 
-    const handleSocialLogin = (provider: 'naver' | 'kakao' | 'google') => {
+    const handleSocialLogin = (provider: 'naver' | 'google') => {
         if (!agreements.terms || !agreements.privacy) {
             alert("약관 및 개인정보처리방침에 동의해주세요.");
             return;
@@ -49,15 +49,7 @@ export default function JoinPage() {
                     >
                         <span className="text-white font-black text-xs">N</span>
                     </button>
-                    <button
-                        onClick={() => handleSocialLogin('kakao')}
-                        className="w-14 h-14 rounded-full bg-[#FEE500] flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                        title="카카오 로그인"
-                    >
-                        <svg className="w-6 h-6 text-[#3C1E1E]" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 3C5.9 3 1 7.2 1 12.4C1 15.6 3 18.5 6 20.3C5.9 20.8 5.6 22.4 5.5 22.8C5.5 23 5.7 23.2 5.9 23.1C6.4 22.8 8.8 21.2 9.4 20.8C10.2 20.9 11.1 21 12 21C18.1 21 23 16.8 23 11.6C23 6.4 18.1 3 12 3Z" />
-                        </svg>
-                    </button>
+
                     <button
                         onClick={() => handleSocialLogin('google')}
                         className="w-14 h-14 rounded-full bg-white border border-gray-100 flex items-center justify-center hover:scale-110 transition-transform shadow-md"

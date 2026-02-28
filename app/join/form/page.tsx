@@ -301,6 +301,7 @@ export default function RegisterFormPage() {
                             <span className="text-sm text-gray-500 font-medium">로봇이 아닙니다 (Design Only)</span>
                         </div>
                         <div className="ml-4 flex flex-col items-center">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="recaptcha" className="w-8 opacity-50" />
                             <span className="text-[8px] text-gray-400">reCAPTCHA</span>
                         </div>

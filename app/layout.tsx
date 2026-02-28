@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
-import Script from "next/script";
 import AuthProvider from '@/components/providers/AuthProvider';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";

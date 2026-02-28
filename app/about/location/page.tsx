@@ -1,13 +1,10 @@
 import prisma from "@/lib/prisma";
-import Image from "next/image";
 import { MapPin, Navigation, Car, Bus } from "lucide-react";
 import NaverMapWrapper from "@/components/about/NaverMapWrapper";
 
 export const dynamic = "force-dynamic";
 
 export default async function LocationPage() {
-    const location = await prisma.location.findFirst();
-
     // We're ignoring the DB location record to force the new, exact coordinates and address.
     const title = "양천 TNT 스포츠 아카데미";
     const address = "서울특별시 강서구 곰달래로59길 60 영신빌딩";

@@ -12,7 +12,7 @@ interface FacilityManagerProps {
 }
 
 export default function FacilityManager({ initialFacilities }: FacilityManagerProps) {
-    const [facilities, setFacilities] = useState<Facility[]>(initialFacilities);
+    const [facilities] = useState<Facility[]>(initialFacilities);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingFacility, setEditingFacility] = useState<Facility | null>(null);
     const [isLoading, setIsLoading] = useState(false);

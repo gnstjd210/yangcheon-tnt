@@ -31,6 +31,7 @@ export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DE
             nextSlide();
         }, 5000);
         return () => clearInterval(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

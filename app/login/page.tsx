@@ -25,7 +25,7 @@ export default function LoginPage() {
         setIsLoading(false);
     };
 
-    const handleSocialLogin = (provider: 'naver' | 'kakao' | 'google') => {
+    const handleSocialLogin = (provider: 'naver' | 'google') => {
         setIsLoading(true);
         signIn(provider, { callbackUrl: "/" });
     };
@@ -92,15 +92,7 @@ export default function LoginPage() {
                     >
                         <span className="font-black">N</span> 네이버 로그인
                     </button>
-                    <button
-                        onClick={() => handleSocialLogin('kakao')}
-                        className="w-full bg-[#FEE500] text-[#3C1E1E] font-bold py-3.5 rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
-                    >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 3C5.9 3 1 7.2 1 12.4C1 15.6 3 18.5 6 20.3C5.9 20.8 5.6 22.4 5.5 22.8C5.5 23 5.7 23.2 5.9 23.1C6.4 22.8 8.8 21.2 9.4 20.8C10.2 20.9 11.1 21 12 21C18.1 21 23 16.8 23 11.6C23 6.4 18.1 3 12 3Z" />
-                        </svg>
-                        카카오 로그인
-                    </button>
+
                     <button
                         onClick={() => handleSocialLogin('google')}
                         className="w-full bg-white border border-gray-200 text-gray-700 font-bold py-3.5 rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
