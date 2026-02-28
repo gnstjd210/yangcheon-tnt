@@ -1,14 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
-import { getProgramImage } from "@/app/actions/program";
-
-// We keep it as a server component to fetch the image easily,
-// then use a regular layout (framer-motion removed to simplify or kept in a wrapper if needed, but since we can't easily add a whole new client file, we'll just use regular CSS animations or Tailwind to avoid client boundaries if possible, OR just keep it server side without framer-motion since it's just fade-ins).
-// Wait, to keep framer-motion, I will just use 'use client' and useEffect to fetch. It's perfectly fine. But let's actually just make it a Server component and use straightforward Tailwind fade-in.
+import { getProgramData } from "@/app/actions/program";
 
 export default async function AdultIntroPage() {
-    const mainImageUrl = await getProgramImage("/program/adult/curriculum") || "https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000&auto=format&fit=crop";
+    const data = await getProgramData("/program/adult/curriculum");
+    const mainImageUrl = data?.imageUrl || "https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000&auto=format&fit=crop";
+    const image2Url = data?.image2Url || "https://images.unsplash.com/photo-1526232761682-d26e03ac148e?q=80&w=800&auto=format&fit=crop";
+    const image3Url = data?.image3Url || "https://images.unsplash.com/photo-1551966775-84c4f09d8e35?q=80&w=800&auto=format&fit=crop";
+    const image4Url = data?.image4Url || "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?q=80&w=800&auto=format&fit=crop";
+
+    // Default Texts
+    const title = data?.title || "기본기가";
+    const subtitle = data?.subtitle || "실력이다.";
 
     return (
         <div className="min-h-screen bg-white">
@@ -16,18 +20,15 @@ export default async function AdultIntroPage() {
             <div className="relative py-20 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
-                        {/* Left: 4:3 Rectangle Image instead of Round */}
-                        <div className="w-full md:w-1/2 flex justify-center md:justify-end animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                            <div
-                                className="relative w-full max-w-[500px] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-50"
-                            >
+                        {/* Left: Round Image */}
+                        <div className="w-full md:w-1/2 flex justify-center md:justify-end animate-in zoom-in duration-700">
+                            <div className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full overflow-hidden border-[8px] border-gray-100 shadow-2xl">
                                 <Image
                                     src={mainImageUrl}
                                     alt="Adult Training"
                                     fill
                                     className="object-cover"
                                     priority
-                                    unoptimized
                                 />
                             </div>
                         </div>
@@ -36,9 +37,9 @@ export default async function AdultIntroPage() {
                         <div className="w-full md:w-1/2 text-center md:text-left animate-in fade-in slide-in-from-right-8 duration-1000 delay-200">
                             <div>
                                 <h4 className="text-navy-900 font-extrabold tracking-widest text-sm mb-4">ADULT TRAINING</h4>
-                                <h1 className="text-4xl md:text-6xl font-black text-navy-900 mb-8 leading-tight">
-                                    기본기가<br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-600">실력이다.</span>
+                                <h1 className="text-4xl md:text-6xl font-black text-navy-900 mb-8 leading-tight whitespace-pre-wrap">
+                                    {title}<br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-600">{subtitle}</span>
                                 </h1>
                                 <div className="space-y-6 text-gray-600 font-medium leading-relaxed max-w-lg mx-auto md:mx-0">
                                     <p className="text-xl text-navy-900 font-bold border-l-4 border-sky-500 pl-4">
@@ -153,7 +154,7 @@ export default async function AdultIntroPage() {
                         </div>
                         <div className="relative h-[240px] overflow-hidden">
                             <Image
-                                src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?q=80&w=800&auto=format&fit=crop"
+                                src={image2Url}
                                 alt="Male Class"
                                 fill
                                 className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -176,7 +177,7 @@ export default async function AdultIntroPage() {
                         </div>
                         <div className="relative h-[240px] overflow-hidden">
                             <Image
-                                src="https://images.unsplash.com/photo-1551966775-84c4f09d8e35?q=80&w=800&auto=format&fit=crop"
+                                src={image3Url}
                                 alt="Female Class"
                                 fill
                                 className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -199,7 +200,7 @@ export default async function AdultIntroPage() {
                         </div>
                         <div className="relative h-[240px] overflow-hidden">
                             <Image
-                                src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?q=80&w=800&auto=format&fit=crop"
+                                src={image4Url}
                                 alt="Mixed Class"
                                 fill
                                 className="object-cover group-hover:scale-110 transition-transform duration-700"

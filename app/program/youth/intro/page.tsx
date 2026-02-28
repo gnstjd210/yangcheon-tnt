@@ -1,28 +1,26 @@
 import Image from "next/image";
-import { getProgramImage } from "@/app/actions/program";
+import { getProgramData } from "@/app/actions/program";
 
 export default async function YouthIntroPage() {
-    const mainImageUrl = await getProgramImage("/program/youth/intro") || "https://images.unsplash.com/photo-1516731237713-fc8888a37f4e?q=80&w=1000&auto=format&fit=crop";
+    const data = await getProgramData("/program/youth/intro");
+    // Fallback to original image if not set
+    const mainImageUrl = data?.imageUrl || "https://images.unsplash.com/photo-1516731237713-fc8888a37f4e?q=80&w=1000&auto=format&fit=crop";
+    
+    // Default Texts for dual title (Navy + Sky Blue)
+    const title = data?.title || "축구를 통해 더 큰 가치를";
+    const subtitle = data?.subtitle || "배우는 시간";
 
     return (
         <div className="w-full bg-white">
-            {/* 21:9 Ratio Top Box */}
+            {/* Compact Top Box (Reduced Padding & Rounded) */}
             <div className="bg-white pt-4 pb-8">
-                <div className="relative aspect-[21/9] max-h-[600px] max-w-[1920px] mx-auto md:w-[95%] bg-navy-900 flex items-center justify-center overflow-hidden rounded-3xl mx-4">
+                <div className="relative h-48 max-w-[1920px] mx-auto md:w-[95%] bg-navy-900 flex items-center justify-center overflow-hidden rounded-3xl mx-4">
                     <div className="absolute inset-0 bg-black/50 z-10" />
-                    <Image
-                        src={mainImageUrl}
-                        alt="Youth Academy Background"
-                        fill
-                        className="object-cover opacity-60"
-                        priority
-                        unoptimized
-                    />
                     <div className="relative z-20 text-center">
-                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-2">
+                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
                             YOUTH ACADEMY
                         </h1>
-                        <p className="text-sky-400 font-bold tracking-widest text-sm md:text-lg mt-2">
+                        <p className="text-sky-400 font-bold tracking-widest text-sm">
                             유소년 아카데미
                         </p>
                     </div>
@@ -37,7 +35,7 @@ export default async function YouthIntroPage() {
                     <div className="w-full md:w-1/2 relative min-h-[400px]">
                         <div className="relative h-full w-full rounded-3xl overflow-hidden shadow-2xl">
                             <Image
-                                src="https://images.unsplash.com/photo-1516731237713-fc8888a37f4e?q=80&w=1000&auto=format&fit=crop"
+                                src={mainImageUrl}
                                 alt="Youth Soccer Training"
                                 fill
                                 className="object-cover hover:scale-105 transition-transform duration-700"
@@ -53,10 +51,9 @@ export default async function YouthIntroPage() {
 
                     {/* RIGHT: Text Content */}
                     <div className="w-full md:w-1/2 flex flex-col justify-center">
-                        <h2 className="text-3xl md:text-5xl font-black text-navy-900 mb-8 leading-tight">
-                            축구를 통해<br />
-                            <span className="text-sky-600">더 큰 가치</span>를<br />
-                            배우는 시간
+                        <h2 className="text-3xl md:text-5xl font-black text-navy-900 mb-8 leading-tight whitespace-pre-wrap">
+                            {title}<br />
+                            <span className="text-sky-600">{subtitle}</span>
                         </h2>
 
                         <div className="w-16 h-1.5 bg-navy-900 mb-8"></div>

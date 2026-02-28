@@ -186,8 +186,14 @@ model MainPageData {
 }
 
 model ProgramData {
-  id        String   @id @default(cuid())
-  path      String   @unique // The exact URL path, e.g., '/program/youth/intro'
-  imageUrl  String?
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  path        String   @unique // The exact URL path, e.g., '/program/youth/intro'
+  title       String?
+  subtitle    String?
+  description String?
+  imageUrl    String?
+  image2Url   String?
+  image3Url   String?
+  image4Url   String?
+  updatedAt   DateTime @updatedAt
 }

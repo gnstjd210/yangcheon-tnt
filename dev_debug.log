@@ -1,0 +1,19 @@
+
+> yangcheon-tnt@0.1.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use by process 10313, using available port 3009 instead.
+   ▲ Next.js 15.5.12
+   - Local:        http://localhost:3009
+   - Network:      http://192.168.219.81:3009
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 1559ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 690ms (244 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 5.3s (1975 modules)
+ GET / 200 in 6770ms
+ ✓ Compiled in 4.6s (736 modules)
+[?25h

@@ -33,6 +33,15 @@ const MENU_STRUCTURE = [
         ]
     },
     {
+        label: '피지컬 트레이닝',
+        href: '/program/physical/intro',
+        subItems: [
+            { label: '프로그램 소개', href: '/program/physical/intro' },
+            { label: '시설 안내', href: '/program/physical/facility' },
+            { label: '상담 절차', href: '/program/physical/process' }
+        ]
+    },
+    {
         label: '성인 트레이닝',
         href: '/program/adult/curriculum',
         subItems: [
@@ -78,6 +87,8 @@ const UTILITY_ITEMS = [
 
 const SEARCH_DATA = [
     { label: '유소년 입단신청', href: '/program/youth/join', keywords: ['입단', '유소년', '가입', '신청'] },
+    { label: '피지컬 트레이닝 프로그램', href: '/program/physical/intro', keywords: ['피지컬', '자세교정', '통증케어', '기능개선', '재활'] },
+    { label: '피지컬 트레이닝 시설안내', href: '/program/physical/facility', keywords: ['피지컬', '시설', '센터'] },
     { label: '성인 트레이닝 입단신청', href: '/program/adult/join', keywords: ['입단', '성인', '가입', '신청'] },
     { label: 'TNT W 입단신청', href: '/program/tntw/join', keywords: ['입단', '여자', '여성', 'tnt w', '가입', '축구', '풋살'] },
     { label: '레슨 후기', href: '/community/reviews', keywords: ['레슨', '후기', '리뷰', '반응'] },
@@ -96,6 +107,7 @@ export default function Header() {
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
+    const [isDesktopMegaMenuOpen, setIsDesktopMegaMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [expandedMenu, setExpandedMenu] = useState<number | null>(null);
     const [isHoveringHeader, setIsHoveringHeader] = useState(false);
@@ -109,6 +121,8 @@ export default function Header() {
     // Refs for Outside Click
     const searchRef = useRef<HTMLDivElement>(null);
     const searchButtonRef = useRef<HTMLButtonElement>(null);
+    const desktopMegaButtonRef = useRef<HTMLButtonElement>(null);
+    const desktopMegaMenuRef = useRef<HTMLDivElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
     const hamburgerRef = useRef<HTMLButtonElement>(null);
 
@@ -119,6 +133,7 @@ export default function Header() {
     };
 
     useOutsideClick(searchRef, closeSearch, [searchButtonRef]);
+    useOutsideClick(desktopMegaMenuRef, () => setIsDesktopMegaMenuOpen(false), [desktopMegaButtonRef]);
     useOutsideClick(mobileMenuRef, () => setIsMobileMenuOpen(false), [hamburgerRef]);
 
     useEffect(() => {
@@ -134,6 +149,7 @@ export default function Header() {
         const timeout = setTimeout(() => {
             setIsMobileMenuOpen(false);
             setIsHoverMenuOpen(false);
+            setIsDesktopMegaMenuOpen(false);
             closeSearch();
         }, 0);
         return () => clearTimeout(timeout);
@@ -160,19 +176,19 @@ export default function Header() {
     if (pathname?.startsWith('/admin')) return null;
 
     // Determine context coloring
-    const isDarkThemeActive = isScrolled || isHoverMenuOpen || isMobileMenuOpen;
+    const isDarkThemeActive = isScrolled || isHoverMenuOpen || isMobileMenuOpen || isDesktopMegaMenuOpen;
     let headerBgClass = 'bg-transparent border-b border-transparent';
     let headerShadowClass = '';
 
     if (isHoverMenuOpen) {
         headerBgClass = 'bg-navy-900';
         headerShadowClass = ''; // No shadow when open to merge seamlessly with mega menu
-    } else if (isScrolled || isMobileMenuOpen) {
+    } else if (isScrolled || isMobileMenuOpen || isDesktopMegaMenuOpen) {
         headerBgClass = 'bg-navy-900/95 backdrop-blur-md border-b border-white/10';
         headerShadowClass = 'shadow-lg';
     }
 
-    const headerHeightClass = isScrolled ? 'h-[90px]' : 'h-[120px]';
+    const headerHeightClass = isScrolled ? 'h-[70px]' : 'h-[90px]';
     const textColorClass = isDarkThemeActive ? 'text-white' : 'text-navy-900';
     const logoSrc = '/logo.png';
 
@@ -208,25 +224,44 @@ export default function Header() {
                         </div>
                     </Link>
 
-                    {/* CENTER: Main Menu (Desktop Hover Triggers) */}
-                    <nav className="hidden xl:grid grid-cols-6 flex-1 max-w-[1200px] mx-10 2xl:mx-16 h-full items-center">
+                    {/* CENTER: Main Menu */}
+                    <nav className="hidden xl:grid grid-cols-7 flex-1 max-w-[1200px] mx-6 2xl:mx-10 h-full items-center justify-items-center z-30">
                         {MENU_STRUCTURE.map((item) => (
                             <div key={item.href} className="relative group h-full flex items-center justify-center w-full border-b-2 border-transparent">
-                                <Link
-                                    href={item.href}
-                                    className={clsx(
-                                        "font-bold tracking-tight transition-all duration-300 block text-center",
-                                        isScrolled ? "text-[16px]" : "text-[18px]",
-                                        textColorClass,
-                                        "hover:text-sky-400"
-                                    )}
-                                >
-                                    {item.label}
-                                </Link>
-                                <span className={clsx(
-                                    "absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-sky-500 transition-all duration-300 group-hover:w-[60%]",
-                                    isHoveringHeader ? "opacity-100" : "opacity-0"
-                                )}></span>
+                                {/* The Anchor Container */}
+                                <div className="relative flex flex-col items-center justify-center h-full w-full">
+                                    <Link
+                                        href={item.href}
+                                        className={clsx(
+                                            "font-bold tracking-tight transition-all duration-300 block text-center whitespace-nowrap",
+                                            isScrolled ? "text-[15px]" : "text-[16px]",
+                                            textColorClass,
+                                            "hover:text-sky-400"
+                                        )}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                    <span className="absolute bottom-[35%] left-1/2 -translate-x-1/2 h-[3px] bg-sky-500 transition-all duration-300 w-0 opacity-0 group-hover:w-[40%] group-hover:opacity-100"></span>
+
+                                    {/* INDIVIDUAL DROPDOWN MENU (Hover Default) */}
+                                    <div className={clsx(
+                                        "absolute top-[80%] left-1/2 -translate-x-1/2 pt-0 transition-all duration-300 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto",
+                                        isHoverMenuOpen ? "block" : "hidden"
+                                    )}>
+                                        <div className="bg-navy-900 shadow-xl border border-white/10 border-t-0 rounded-b-xl overflow-hidden min-w-[140px] w-max flex flex-col items-center py-4 px-2">
+                                            {item.subItems.map((sub) => (
+                                                <Link
+                                                    key={sub.label}
+                                                    href={sub.href}
+                                                    className="text-gray-400 hover:text-white transition-all text-[14px] font-medium block w-full px-6 py-2.5 text-center hover:bg-white/5 whitespace-nowrap rounded-lg"
+                                                    onClick={() => setIsHoverMenuOpen(false)}
+                                                >
+                                                    {sub.label}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </nav>
@@ -281,6 +316,27 @@ export default function Header() {
                             )}
                         >
                             {isSearchOpen ? <X size={18} className="transition-colors duration-300" /> : <Search size={18} className="transition-colors duration-300" />}
+                        </button>
+
+                        {/* Desktop Mega Menu Trigger */}
+                        <button
+                            ref={desktopMegaButtonRef}
+                            onClick={() => {
+                                if (isDesktopMegaMenuOpen) setIsDesktopMegaMenuOpen(false);
+                                else {
+                                    setIsDesktopMegaMenuOpen(true);
+                                    setIsSearchOpen(false);
+                                    setIsHoverMenuOpen(false);
+                                }
+                            }}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            className={clsx(
+                                "hidden xl:flex items-center justify-center rounded-md transition-all duration-300 shadow-sm ml-2 border group",
+                                isHoverMenuOpen || isDesktopMegaMenuOpen ? "bg-white text-navy-900 border-transparent hover:bg-gray-100" : "bg-navy-900 border-transparent text-white hover:bg-white hover:text-slate-900 hover:border-slate-900",
+                                isScrolled ? "w-8 h-8" : "w-10 h-10"
+                            )}
+                        >
+                            {isDesktopMegaMenuOpen ? <X size={20} className="transition-colors duration-300" /> : <AlignJustify size={20} className="transition-colors duration-300" />}
                         </button>
 
                         {/* Mobile Hamburger Drawer Trigger */}
@@ -355,36 +411,39 @@ export default function Header() {
                     </AnimatePresence>
 
                     {/* =========================================
-                    DESKTOP: Hover Mega Menu
+                    DESKTOP: Full Mega Menu (Triggered by Hamburger)
                     ========================================= */}
                     <AnimatePresence>
-                        {isHoverMenuOpen && (
+                        {isDesktopMegaMenuOpen && (
                             <motion.div
+                                ref={desktopMegaMenuRef}
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                className="absolute top-full left-0 right-0 w-full bg-navy-900 shadow-[0_30px_50px_-10px_rgba(0,0,0,0.5)] overflow-hidden z-30 hidden xl:block"
-                                onMouseEnter={() => setIsHoverMenuOpen(true)}
-                                onMouseLeave={() => setIsHoverMenuOpen(false)}
+                                className="absolute top-full left-0 right-0 w-full bg-navy-900 shadow-[0_30px_50px_-10px_rgba(0,0,0,0.5)] overflow-hidden z-30 hidden xl:block border-t border-white/10"
                             >
-                                <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex items-start h-full">
-                                    {/* Exact dummy width for Logo to match Header flex layout perfectly */}
-                                    <div className="w-[70px] md:w-[90px] shrink-0" />
+                                <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex items-start justify-between py-10 relative">
 
-                                    <div className="grid grid-cols-6 flex-1 max-w-[1200px] mx-10 2xl:mx-16 py-10 justify-items-center">
-                                        {MENU_STRUCTURE.map((section) => (
-                                            <div key={section.label} className="flex flex-col justify-start items-center">
-                                                {/* Space out items according to user request, text-left ensures words align straight down */}
-                                                <div className="flex flex-col space-y-3 text-left w-max">
-                                                    {section.subItems.map((sub) => (
+                                    {/* LEFT CLONE (Invisible) */}
+                                    <div className="relative shrink-0 flex items-center opacity-0 pointer-events-none select-none">
+                                        <div className={clsx("flex items-center justify-center transition-all duration-300", isScrolled ? "scale-90" : "scale-100")}>
+                                            <div className="relative w-[70px] h-[70px] md:w-[90px] md:h-[90px]"></div>
+                                        </div>
+                                    </div>
+
+                                    {/* CENTER: 7-Column Grid aligned exactly to Header */}
+                                    <div className="hidden xl:grid grid-cols-7 flex-1 max-w-[1200px] mx-6 2xl:mx-10 justify-items-center z-30 w-full">
+                                        {MENU_STRUCTURE.map((item) => (
+                                            <div key={item.label} className="w-full flex flex-col items-center">
+                                                <div className="flex flex-col space-y-4 text-center mt-2">
+                                                    {item.subItems.map((sub) => (
                                                         <Link
                                                             key={sub.label}
                                                             href={sub.href}
-                                                            className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-[15px] font-medium flex items-center gap-2 group/sub py-1"
-                                                            onClick={() => setIsHoverMenuOpen(false)}
+                                                            className="text-gray-400 hover:text-white transition-all text-[15px] font-medium block hover:-translate-y-0.5 whitespace-nowrap"
+                                                            onClick={() => setIsDesktopMegaMenuOpen(false)}
                                                         >
-                                                            <ChevronRight size={14} className="opacity-0 group-hover/sub:opacity-100 transition-opacity text-sky-400 shrink-0" />
                                                             {sub.label}
                                                         </Link>
                                                     ))}
@@ -393,28 +452,42 @@ export default function Header() {
                                         ))}
                                     </div>
 
-                                    {/* Exact dummy space for 'justify-between' to perfectly center flex-1 */}
-                                    <div className="w-[70px] md:w-[90px] shrink-0" />
+                                    {/* RIGHT CLONE (Invisible) */}
+                                    <div className="flex items-center shrink-0 gap-2 xl:gap-3 justify-end opacity-0 pointer-events-none select-none" aria-hidden="true">
+                                        {UTILITY_ITEMS.map((item) => (
+                                            <div key={item.label} className={clsx("hidden 2xl:block rounded-md px-4 py-2 border font-bold", isScrolled ? "text-[11px] px-3 py-1.5" : "text-[12px] px-4 py-2")}>
+                                                {item.label}
+                                            </div>
+                                        ))}
+                                        {/* Matches search button */}
+                                        <div className={clsx("ml-2 border", isScrolled ? "w-8 h-8" : "w-10 h-10")}></div>
+                                        {/* Matches menu trigger */}
+                                        <div className={clsx("hidden xl:flex ml-2 border", isScrolled ? "w-8 h-8" : "w-10 h-10")}></div>
+                                    </div>
+
                                 </div>
                             </motion.div>
-                        )}
-                    </AnimatePresence>
+                        )
+                        }
+                    </AnimatePresence >
 
                     {/* =========================================
                     MOBILE/TABLET: Hamburger Drawer
                     ========================================= */}
                     <AnimatePresence>
-                        {isMobileMenuOpen && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="fixed inset-0 bg-black/60 z-30 xl:hidden top-0"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            />
-                        )}
-                    </AnimatePresence>
+                        {
+                            isMobileMenuOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="fixed inset-0 bg-black/60 z-30 xl:hidden top-0"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                />
+                            )
+                        }
+                    </AnimatePresence >
 
                     <AnimatePresence>
                         {isMobileMenuOpen && (
@@ -558,11 +631,11 @@ export default function Header() {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                </div>
-            </header>
+                </div >
+            </header >
 
             {/* Modal rendered outside of header containing block to prevent layout shift & clipping */}
-            <TrialClassModal
+            < TrialClassModal
                 isOpen={isTrialModalOpen}
                 onClose={() => setIsTrialModalOpen(false)}
             />

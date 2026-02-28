@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getProgramImage, upsertProgramImage } from "@/app/actions/program";
+import { getProgramData, upsertProgramData } from "@/app/actions/program";
 import ImageUpload from "@/components/admin/ImageUpload";
 import { Camera, Save, Loader2, Info } from "lucide-react";
 
@@ -10,54 +10,79 @@ const PROGRAMS = [
         id: "youth",
         title: "아카데미 소개 (Youth)",
         path: "/program/youth/intro",
-        ratio: 21 / 9,
-        ratioText: "21:9",
-        desc: "유소년 아카데미 메인 배너 이미지입니다. (와이드 비율)"
+        ratio: 4 / 3,
+        ratioText: "4:3",
+        desc: "유소년 아카데미 본문 이미지 1개 및 텍스트를 관리합니다."
     },
     {
         id: "adult",
         title: "성인 트레이닝 커리큘럼",
         path: "/program/adult/curriculum",
-        ratio: 4 / 3,
-        ratioText: "4:3",
-        desc: "성인 커리큘럼 메인 인포그래픽/설명 이미지입니다."
+        ratio: 1, // 1:1 for the main circular hero image
+        ratioText: "1:1 (본문 메인), 4:3 (하단 클래스 3종)",
+        desc: "성인 커리큘럼 본문 원형 이미지 1개와 하단 3개의 클래스 사진, 및 텍스트를 관리합니다."
     },
     {
         id: "tntw",
         title: "TNT W 브랜드 소개",
         path: "/program/tntw/intro",
-        ratio: 16 / 9,
-        ratioText: "16:9",
-        desc: "TNT W 여성팀 소개 메인 뷰 이미지입니다. (시네마틱 비율)"
+        ratio: 4 / 3,
+        ratioText: "4:3",
+        desc: "TNT W 본문 이미지 1개 및 텍스트를 관리합니다."
     }
 ];
 
-export default function ProgramImageManager() {
-    const [images, setImages] = useState<Record<string, string>>({});
+type ProgramDataState = {
+    imageUrl: string;
+    image2Url: string;
+    image3Url: string;
+    image4Url: string;
+    title: string;
+    subtitle: string;
+    description: string;
+};
+
+export default function ProgramDataManager() {
+    const [dataState, setDataState] = useState<Record<string, ProgramDataState>>({});
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
-        const fetchImages = async () => {
-            const fetchedImages: Record<string, string> = {};
+        const fetchData = async () => {
+            const fetchedData: Record<string, ProgramDataState> = {};
             for (const prog of PROGRAMS) {
-                const url = await getProgramImage(prog.path);
-                if (url) {
-                    fetchedImages[prog.path] = url;
-                }
+                const data = await getProgramData(prog.path);
+                fetchedData[prog.path] = {
+                    imageUrl: data?.imageUrl || "",
+                    image2Url: data?.image2Url || "",
+                    image3Url: data?.image3Url || "",
+                    image4Url: data?.image4Url || "",
+                    title: data?.title || "",
+                    subtitle: data?.subtitle || "",
+                    description: data?.description || ""
+                };
             }
-            setImages(fetchedImages);
+            setDataState(fetchedData);
             setIsLoading(false);
         };
-        fetchImages();
+        fetchData();
     }, []);
+
+    const handleChange = (path: string, field: keyof ProgramDataState, value: string) => {
+        setDataState(prev => ({
+            ...prev,
+            [path]: {
+                ...prev[path],
+                [field]: value
+            }
+        }));
+    };
 
     const handleSave = async () => {
         setIsSaving(true);
         try {
             for (const prog of PROGRAMS) {
-                const currentUrl = images[prog.path] || "";
-                await upsertProgramImage(prog.path, currentUrl);
+                await upsertProgramData(prog.path, dataState[prog.path]);
             }
             alert("저장되었습니다.");
         } catch (error) {
@@ -82,9 +107,9 @@ export default function ProgramImageManager() {
                 <div>
                     <h1 className="text-3xl font-black text-navy-900 flex items-center gap-3">
                         <Camera size={32} className="text-sky-500" />
-                        프로그램 이미지 관리
+                        프로그램 통합 관리
                     </h1>
-                    <p className="text-gray-500 mt-2">각 프로그램 페이지의 메인 이미지를 독립적인 비율로 관리합니다.</p>
+                    <p className="text-gray-500 mt-2">각 프로그램 페이지의 메인 이미지와 텍스트(제목, 상세 설명)를 관리합니다.</p>
                 </div>
                 <button
                     onClick={handleSave}
@@ -116,22 +141,87 @@ export default function ProgramImageManager() {
                             </div>
                         </div>
 
-                        <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex justify-center">
-                            {/* The container size adjusts based on aspect ratio to look reasonable in admin */}
-                            <div
-                                className="relative bg-gray-200 rounded-[24px] overflow-hidden shadow-md"
-                                style={{
-                                    width: '100%',
-                                    maxWidth: prog.ratio > 1.5 ? '800px' : '500px',
-                                    aspectRatio: prog.ratio
-                                }}
-                            >
-                                <ImageUpload
-                                    value={images[prog.path] || ""}
-                                    onChange={(url) => setImages(prev => ({ ...prev, [prog.path]: url }))}
-                                    onRemove={() => setImages(prev => ({ ...prev, [prog.path]: "" }))}
-                                    aspectRatio={prog.ratio}
-                                />
+                        <div className="flex flex-col xl:flex-row gap-8">
+                            {/* Left: Image Cropper */}
+                            <div className="w-full xl:w-1/2">
+                                <label className="block text-sm font-bold text-navy-900 mb-2">
+                                    {prog.id === 'adult' ? '메인 이미지 (1:1)' : '메인 이미지'}
+                                </label>
+                                <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col justify-center items-center min-h-[300px] h-auto">
+                                    <div
+                                        className={`relative bg-gray-200 overflow-hidden shadow-md w-full max-w-[400px] ${prog.id === 'adult' ? 'rounded-full aspect-square' : 'rounded-[24px]'}`}
+                                        style={prog.id !== 'adult' ? { aspectRatio: prog.ratio } : undefined}
+                                    >
+                                        <ImageUpload
+                                            value={dataState[prog.path]?.imageUrl || ""}
+                                            onChange={(url) => handleChange(prog.path, "imageUrl", url)}
+                                            onRemove={() => handleChange(prog.path, "imageUrl", "")}
+                                            aspectRatio={prog.ratio}
+                                        />
+                                    </div>
+                                </div>
+
+                                {prog.id === 'adult' && (
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                                        <div>
+                                            <label className="block text-xs font-bold text-navy-900 mb-2">하단 이미지 1 (남성)</label>
+                                            <div className="relative bg-gray-200 rounded-xl overflow-hidden shadow-sm aspect-[4/3] w-full">
+                                                <ImageUpload
+                                                    value={dataState[prog.path]?.image2Url || ""}
+                                                    onChange={(url) => handleChange(prog.path, "image2Url", url)}
+                                                    onRemove={() => handleChange(prog.path, "image2Url", "")}
+                                                    aspectRatio={4 / 3}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-navy-900 mb-2">하단 이미지 2 (여성)</label>
+                                            <div className="relative bg-gray-200 rounded-xl overflow-hidden shadow-sm aspect-[4/3] w-full">
+                                                <ImageUpload
+                                                    value={dataState[prog.path]?.image3Url || ""}
+                                                    onChange={(url) => handleChange(prog.path, "image3Url", url)}
+                                                    onRemove={() => handleChange(prog.path, "image3Url", "")}
+                                                    aspectRatio={4 / 3}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-navy-900 mb-2">하단 이미지 3 (혼성)</label>
+                                            <div className="relative bg-gray-200 rounded-xl overflow-hidden shadow-sm aspect-[4/3] w-full">
+                                                <ImageUpload
+                                                    value={dataState[prog.path]?.image4Url || ""}
+                                                    onChange={(url) => handleChange(prog.path, "image4Url", url)}
+                                                    onRemove={() => handleChange(prog.path, "image4Url", "")}
+                                                    aspectRatio={4 / 3}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Right: Text Fields */}
+                            <div className="w-full xl:w-1/2 space-y-4">
+                                <div>
+                                    <label className="block text-sm font-bold text-navy-900 mb-2">본문 메인 제목 (Navy 적용)</label>
+                                    <input
+                                        type="text"
+                                        className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                                        placeholder="예: 실전 압박 상황에서도"
+                                        value={dataState[prog.path]?.title || ""}
+                                        onChange={(e) => handleChange(prog.path, "title", e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-navy-900 mb-2">본문 포인트 제목 (Sky Blue 적용)</label>
+                                    <input
+                                        type="text"
+                                        className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                                        placeholder="예: 흔들리지 않는 개인 기량"
+                                        value={dataState[prog.path]?.subtitle || ""}
+                                        onChange={(e) => handleChange(prog.path, "subtitle", e.target.value)}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
