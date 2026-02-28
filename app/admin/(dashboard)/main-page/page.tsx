@@ -161,7 +161,7 @@ export default function MainPageAdmin() {
                             <ImageIcon className="text-sky-500" />
                             우측 4개 퀵 카테고리 관리
                         </h2>
-                        <p className="text-xs text-gray-500 mt-1 pl-8">(권장: 4:3 또는 1:1 비율, 600x450px, 파일당 500KB 미만)</p>
+                        <p className="text-xs text-gray-500 mt-1 pl-8">(권장: 3:1 가로 비율, 600x200px, 파일당 500KB 미만)</p>
                     </div>
                     <button
                         onClick={handleSaveQuick}
@@ -175,7 +175,7 @@ export default function MainPageAdmin() {
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     {quickMenu.map((item, idx) => (
                         <div key={idx} className="p-4 border rounded-xl bg-gray-50 space-y-4">
-                            <div className="relative w-full aspect-square md:w-40 md:h-40 bg-gray-200 rounded-lg overflow-hidden group shrink-0">
+                            <div className="relative w-full aspect-[3/1] bg-gray-200 rounded-[24px] overflow-hidden group shrink-0 shadow-md">
                                 <ImageUpload
                                     value={item.image}
                                     onChange={(url) => {
@@ -188,7 +188,7 @@ export default function MainPageAdmin() {
                                         newArr[idx].image = "";
                                         setQuickMenu(newArr);
                                     }}
-                                    aspectRatio={1 / 1}
+                                    aspectRatio={3 / 1}
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-4">

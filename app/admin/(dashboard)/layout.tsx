@@ -54,10 +54,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <LayoutDashboard size={20} />
                         메인 페이지 관리
                     </Link>
-                    <Link href="/admin/schedule" className={`${linkBaseClass} ${isActive('/admin/schedule') ? activeClass : inactiveClass}`}>
-                        <FileText size={20} />
-                        월간 스케줄 관리
-                    </Link>
                     <Link href="/admin/notices" className={`${linkBaseClass} ${isActive('/admin/notices') ? activeClass : inactiveClass}`}>
                         <Megaphone size={20} />
                         공지사항 관리
@@ -86,6 +82,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <Link href="/admin/facility" className={`${linkBaseClass} ${isActive('/admin/facility') ? activeClass : inactiveClass}`}>
                         <Building2 size={20} />
                         시설 관리
+                    </Link>
+                    <Link href="/admin/schedule" className={`${linkBaseClass} ${isActive('/admin/schedule') ? activeClass : inactiveClass}`}>
+                        <FileText size={20} />
+                        월간 스케줄 관리
                     </Link>
 
                     <div className="my-2 border-t border-navy-800"></div>

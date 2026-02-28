@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Repeat, Calendar } from "lucide-react";
-import { createSchedule, updateSchedule, deleteSchedule } from "@/app/actions/schedule";
+import { createSchedule, updateSchedule, deleteSchedule, createBatchSchedules } from "@/app/actions/schedule";
 import { format } from "date-fns";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 
 interface Schedule {
     id: string;
@@ -34,8 +37,8 @@ const COLORS = [
     { value: "green", label: "초록", bg: "bg-green-500" },
     { value: "yellow", label: "노랑", bg: "bg-yellow-500" },
     { value: "purple", label: "보라", bg: "bg-purple-500" },
-    { value: "pink", label: "분홍", bg: "bg-pink-500" },
-    { value: "gray", label: "회색", bg: "bg-gray-500" },
+    { value: "pink", label: "분홍", bg: "bg-pink-500", hex: "#ec4899" },
+    { value: "gray", label: "회색", bg: "bg-gray-500", hex: "#6b7280" },
 ];
 
 export default function ScheduleManager({ initialSchedules }: { initialSchedules: Schedule[] }) {
@@ -118,6 +121,31 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
         }
     };
 
+    const handleBatchSubmit = async () => {
+        if (!confirm("4주치 일정을 일괄 등록하시겠습니까?")) return;
+        setIsLoading(true);
+
+        const formData = new FormData();
+        formData.append("isRecurring", "false");
+        formData.append("date", date);
+        formData.append("startTime", startTime);
+        formData.append("endTime", endTime);
+        formData.append("className", className);
+        formData.append("color", color);
+        formData.append("maxUsers", maxUsers.toString());
+
+        try {
+            await createBatchSchedules(formData);
+            window.location.reload();
+            closeModal();
+        } catch (error) {
+            console.error("Failed to save batch schedules", error);
+            alert("일괄 등록에 실패했습니다.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const handleDelete = async (id: string) => {
         if (!confirm("정말 삭제하시겠습니까?")) return;
         try {
@@ -141,67 +169,83 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                 </button>
             </div>
 
-            {/* List View */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-sm text-left">
-                    <thead className="bg-gray-50 text-gray-500 font-bold border-b border-gray-100">
-                        <tr>
-                            <th className="p-4">유형</th>
-                            <th className="p-4">일시</th>
-                            <th className="p-4">시간</th>
-                            <th className="p-4">수업명</th>
-                            <th className="p-4">정원</th>
-                            <th className="p-4 text-right">관리</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {schedules.map((schedule) => (
-                            <tr key={schedule.id} className="hover:bg-gray-50">
-                                <td className="p-4">
-                                    {schedule.isRecurring ? (
-                                        <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">
-                                            <Repeat size={12} /> 매주
-                                        </span>
-                                    ) : (
-                                        <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">
-                                            <Calendar size={12} /> 날짜
-                                        </span>
-                                    )}
-                                </td>
-                                <td className="p-4 font-medium text-navy-900">
-                                    {schedule.isRecurring
-                                        ? DAYS.find(d => d.value === schedule.day)?.label
-                                        : schedule.date ? format(new Date(schedule.date), "yyyy-MM-dd") : "-"}
-                                </td>
-                                <td className="p-4 text-gray-600">
-                                    {schedule.startTime} - {schedule.endTime}
-                                </td>
-                                <td className="p-4 font-bold">
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full ${COLORS.find(c => c.value === schedule.color)?.bg}`} />
-                                        {schedule.className}
-                                    </div>
-                                </td>
-                                <td className="p-4 text-gray-600">
-                                    {schedule.maxUsers}명
-                                </td>
-                                <td className="p-4 text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <button onClick={() => openModal(schedule)} className="p-1 text-gray-400 hover:text-sky-500 bg-gray-100 rounded">
-                                            <Pencil size={14} />
-                                        </button>
-                                        <button onClick={() => handleDelete(schedule.id)} className="p-1 text-gray-400 hover:text-red-500 bg-gray-100 rounded">
-                                            <Trash2 size={14} />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {schedules.length === 0 && (
-                    <div className="p-12 text-center text-gray-400">등록된 수업이 없습니다.</div>
-                )}
+            {/* Calendar View */}
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <style jsx global>{`
+                    .fc .fc-toolbar-title {
+                        font-size: 1.25rem !important;
+                        font-weight: 800;
+                        color: #1e293b;
+                    }
+                    .fc-button-primary {
+                        background-color: #0f172a !important;
+                        border-color: #0f172a !important;
+                    }
+                    .fc-event {
+                        cursor: pointer;
+                        border: none;
+                        border-radius: 4px;
+                        padding: 2px 4px;
+                        margin-bottom: 2px;
+                    }
+                    .fc-daygrid-day-number {
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                        color: #475569;
+                    }
+                `}</style>
+                <FullCalendar
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    initialView="dayGridMonth"
+                    locale="ko"
+                    headerToolbar={{
+                        left: "prev,next today",
+                        center: "title",
+                        right: "dayGridMonth,dayGridWeek"
+                    }}
+                    events={schedules.map(schedule => {
+                        const evtColor = COLORS.find(c => c.value === schedule.color)?.hex || "#3b82f6";
+                        if (schedule.isRecurring) {
+                            const dayMap: { [key: string]: number } = { "Sun": 0, "Mon": 1, "Tue": 2, "Wed": 3, "Thu": 4, "Fri": 5, "Sat": 6 };
+                            return {
+                                id: schedule.id,
+                                title: `${schedule.startTime} ${schedule.className}`,
+                                daysOfWeek: [dayMap[schedule.day || "Mon"]],
+                                startTime: schedule.startTime,
+                                endTime: schedule.endTime,
+                                backgroundColor: evtColor,
+                                borderColor: evtColor,
+                                extendedProps: { ...schedule }
+                            };
+                        } else {
+                            const d = schedule.date ? format(new Date(schedule.date), "yyyy-MM-dd") : "";
+                            return {
+                                id: schedule.id,
+                                title: `${schedule.startTime} ${schedule.className}`,
+                                start: `${d}T${schedule.startTime}`,
+                                end: `${d}T${schedule.endTime}`,
+                                backgroundColor: evtColor,
+                                borderColor: evtColor,
+                                extendedProps: { ...schedule }
+                            };
+                        }
+                    })}
+                    dateClick={(info) => {
+                        setEditingSchedule(null);
+                        setIsRecurring(false);
+                        setDate(info.dateStr);
+                        setStartTime("10:00");
+                        setEndTime("11:00");
+                        setClassName("");
+                        setColor("blue");
+                        setMaxUsers(12);
+                        setIsModalOpen(true);
+                    }}
+                    eventClick={(info) => {
+                        openModal(info.event.extendedProps as Schedule);
+                    }}
+                    height="auto"
+                />
             </div>
 
             {/* Modal */}
@@ -212,6 +256,11 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                             <h3 className="text-xl font-bold text-navy-900">
                                 {editingSchedule ? "수업 수정" : "새 수업 추가"}
                             </h3>
+                            {editingSchedule && (
+                                <button type="button" onClick={() => handleDelete(editingSchedule.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors ml-4 justify-start mr-auto flex items-center gap-1 text-sm font-bold">
+                                    <Trash2 size={16} /> 삭제
+                                </button>
+                            )}
                             <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
                                 <X size={24} />
                             </button>
@@ -334,21 +383,36 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                                 />
                             </div>
 
-                            <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
-                                <button
-                                    type="button"
-                                    onClick={closeModal}
-                                    className="px-5 py-3 rounded-lg text-gray-600 font-bold hover:bg-gray-100 transition"
-                                >
-                                    취소
-                                </button>
-                                <button
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className="px-5 py-3 rounded-lg bg-navy-900 text-white font-bold hover:bg-sky-600 transition disabled:opacity-50"
-                                >
-                                    {isLoading ? "저장 중..." : "저장하기"}
-                                </button>
+                            <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
+                                <div className="flex gap-2">
+                                    {!editingSchedule && !isRecurring && (
+                                        <button
+                                            type="button"
+                                            onClick={handleBatchSubmit}
+                                            disabled={isLoading}
+                                            className="px-4 py-3 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition disabled:opacity-50 text-sm flex items-center gap-1"
+                                        >
+                                            <Calendar size={16} />
+                                            한 달 일괄 등록 (4주)
+                                        </button>
+                                    )}
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={closeModal}
+                                        className="px-5 py-3 rounded-lg text-gray-600 font-bold hover:bg-gray-100 transition"
+                                    >
+                                        취소
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className="px-5 py-3 rounded-lg bg-navy-900 text-white font-bold hover:bg-sky-600 transition disabled:opacity-50"
+                                    >
+                                        {isLoading ? "저장 중..." : "저장하기"}
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>

@@ -40,6 +40,50 @@ export async function createSchedule(formData: FormData) {
     revalidatePath("/about/schedule");
 }
 
+export async function createBatchSchedules(formData: FormData) {
+    const isRecurring = formData.get("isRecurring") === "true";
+    const day = formData.get("day") as string;
+    const startDateStr = formData.get("date") as string; // YYYY-MM-DD
+    const startTime = formData.get("startTime") as string;
+    const endTime = formData.get("endTime") as string;
+    const className = formData.get("className") as string;
+    const color = formData.get("color") as string;
+    const maxUsers = parseInt(formData.get("maxUsers") as string || "12");
+
+    if (isRecurring) {
+        // Fallback to normal create if someone tries to batch a weekly recurring via API
+        return createSchedule(formData);
+    }
+
+    const startDate = new Date(startDateStr);
+    const schedulesToCreate = [];
+
+    // Create 4 records (+0, +7, +14, +21 days)
+    for (let i = 0; i < 4; i++) {
+        const targetDate = new Date(startDate);
+        targetDate.setDate(startDate.getDate() + (i * 7));
+
+        schedulesToCreate.push({
+            isRecurring: false,
+            day: null,
+            date: targetDate,
+            startTime,
+            endTime,
+            className,
+            color,
+            maxUsers,
+            currentUsers: 0,
+        });
+    }
+
+    await prisma.schedule.createMany({
+        data: schedulesToCreate
+    });
+
+    revalidatePath("/admin/schedule");
+    revalidatePath("/about/schedule");
+}
+
 export async function updateSchedule(id: string, formData: FormData) {
     const isRecurring = formData.get("isRecurring") === "true";
     const day = formData.get("day") as string;
