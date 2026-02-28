@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Plus, Pencil, Trash2, X, Repeat, Calendar } from "lucide-react";
 import { createSchedule, updateSchedule, deleteSchedule, createBatchSchedules } from "@/app/actions/schedule";
 import { format } from "date-fns";
@@ -56,6 +56,23 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
     const [className, setClassName] = useState("");
     const [color, setColor] = useState("blue");
     const [maxUsers, setMaxUsers] = useState(12);
+
+    const calendarRef = useRef<FullCalendar>(null);
+
+    const handleTodayClick = () => {
+        const calendarApi = calendarRef.current?.getApi();
+        if (calendarApi) {
+            calendarApi.today();
+            setTimeout(() => {
+                const todayCell = document.querySelector('.fc-day-today') as HTMLElement;
+                if (todayCell) {
+                    todayCell.classList.remove('animate-pulse-fast');
+                    void todayCell.offsetWidth;
+                    todayCell.classList.add('animate-pulse-fast');
+                }
+            }, 50);
+        }
+    };
 
     const openModal = (schedule?: Schedule) => {
         if (schedule) {
@@ -170,36 +187,58 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
             </div>
 
             {/* Calendar View */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden calendar-wrapper">
                 <style jsx global>{`
-                    .fc .fc-toolbar-title {
-                        font-size: 1.25rem !important;
-                        font-weight: 800;
-                        color: #1e293b;
+                    .fc-toolbar-title { font-size: 1.5rem !important; font-weight: 800 !important; color: #1B254B; }
+                    .fc-button-primary { background-color: #1B254B !important; border-color: #1B254B !important; padding: 0.5rem 1rem !important; font-weight: 700 !important; }
+                    .fc-button-primary:hover { background-color: #0F172A !important; border-color: #0F172A !important; }
+                    
+                    /* Today Highlight - Yellow Theme */
+                    .fc-day-today { 
+                        background-color: rgba(253, 224, 71, 0.15) !important;
+                        border: 2px solid #EAB308 !important;
                     }
-                    .fc-button-primary {
-                        background-color: #0f172a !important;
-                        border-color: #0f172a !important;
+                    .fc-day-today .fc-daygrid-day-number { color: #854D0E !important; font-weight: 900 !important; font-size: 1.1rem !important; }
+
+                    /* Pulse Animation */
+                    @keyframes pulse-fast {
+                        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7); }
+                        50% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
+                        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
                     }
-                    .fc-event {
-                        cursor: pointer;
-                        border: none;
-                        border-radius: 4px;
-                        padding: 2px 4px;
-                        margin-bottom: 2px;
+                    .animate-pulse-fast {
+                        animation: pulse-fast 0.6s ease-in-out 3;
+                        z-index: 20;
+                        position: relative;
                     }
-                    .fc-daygrid-day-number {
-                        font-size: 0.875rem;
-                        font-weight: 500;
-                        color: #475569;
-                    }
+
+                    /* Clean Month View - Hide other month days completely */
+                    .fc-day-other { visibility: hidden !important; height: 0 !important; border: none !important; }
+                    .fc-scrollgrid-sync-table { height: auto !important; }
+                    .fc-view-harness { height: auto !important; }
+
+                    /* Cell Height & Spacing */
+                    .fc-daygrid-day-frame { min-height: 150px !important; }
+                    .fc-daygrid-day-top { flex-direction: row; padding: 4px !important; }
+                    .fc-col-header-cell-cushion { color: #4B5563; font-weight: 800; font-size: 1rem; padding: 12px 0 !important; }
+                    .fc-daygrid-day-number { color: #6B7280; font-weight: 600; font-size: 0.9rem; padding: 8px !important; }
+
+                    /* Event Styling */
+                    .fc-event { border-radius: 6px; padding: 4px 6px; border: none; margin-bottom: 4px !important; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
                 `}</style>
                 <FullCalendar
+                    ref={calendarRef}
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
                     locale="ko"
+                    customButtons={{
+                        myToday: {
+                            text: '오늘',
+                            click: handleTodayClick
+                        }
+                    }}
                     headerToolbar={{
-                        left: "prev,next today",
+                        left: "prev,next myToday",
                         center: "title",
                         right: "dayGridMonth,dayGridWeek"
                     }}
@@ -246,7 +285,19 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                     eventClick={(info) => {
                         openModal(info.event.extendedProps as Schedule);
                     }}
+                    eventContent={(eventInfo) => (
+                        <div className="flex flex-col overflow-hidden">
+                            <div className="font-bold text-sm truncate leading-snug">{eventInfo.event.title}</div>
+                            <div className="text-[11px] opacity-90 flex justify-between items-center mt-1">
+                                <span>{eventInfo.timeText}</span>
+                                <span className="bg-black/10 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                                    {eventInfo.event.extendedProps.currentUsers}/{eventInfo.event.extendedProps.maxUsers}
+                                </span>
+                            </div>
+                        </div>
+                    )}
                     height="auto"
+                    contentHeight="auto"
                 />
             </div>
 
