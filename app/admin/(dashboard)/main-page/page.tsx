@@ -12,8 +12,8 @@ import type {
     QuickMenu,
     ProgramPreview
 } from '@/lib/mainPageConstants';
-import { Save, Upload, Trash2, Plus, Image as ImageIcon } from 'lucide-react';
-import Image from 'next/image';
+import { Save, Plus, Image as ImageIcon, Trash2 } from 'lucide-react';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 export default function MainPageAdmin() {
     const [heroImages, setHeroImages] = useState<HeroImage[]>([]);
@@ -35,42 +35,7 @@ export default function MainPageAdmin() {
         loadData();
     }, []);
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, section: string, index: number) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await res.json();
-
-            if (data.success) {
-                if (section === 'hero') {
-                    const newHero = [...heroImages];
-                    newHero[index].image = data.url;
-                    setHeroImages(newHero);
-                } else if (section === 'quick') {
-                    const newQuick = [...quickMenu];
-                    newQuick[index].image = data.url;
-                    setQuickMenu(newQuick);
-                } else if (section === 'program') {
-                    const newProg = [...programs];
-                    newProg[index].img = data.url;
-                    setPrograms(newProg);
-                }
-            } else {
-                alert('이미지 업로드에 실패했습니다.');
-            }
-        } catch (error) {
-            console.error(error);
-            alert('이미지 업로드 중 오류가 발생했습니다.');
-        }
-    };
+    // handleFileUpload is replaced by ImageUpload component internally
 
     const handleSaveHero = async () => {
         setIsSaving(true);
@@ -124,15 +89,21 @@ export default function MainPageAdmin() {
                 <div className="p-6 space-y-6">
                     {heroImages.map((hero, idx) => (
                         <div key={idx} className="flex gap-6 p-4 border rounded-xl bg-gray-50 flex-col lg:flex-row">
-                            <div className="relative w-full lg:w-1/3 aspect-video bg-gray-200 rounded-lg overflow-hidden group">
-                                {hero.image && (
-                                    <Image src={hero.image} alt={`Hero ${idx}`} fill className="object-cover" />
-                                )}
-                                <label className="absolute inset-0 bg-black/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity z-10">
-                                    <Upload className="mb-2" />
-                                    <span>이미지 변경</span>
-                                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'hero', idx)} />
-                                </label>
+                            <div className="relative w-full lg:w-1/3 aspect-[21/9] bg-gray-200 rounded-lg overflow-hidden group">
+                                <ImageUpload
+                                    value={hero.image}
+                                    onChange={(url) => {
+                                        const newHero = [...heroImages];
+                                        newHero[idx].image = url;
+                                        setHeroImages(newHero);
+                                    }}
+                                    onRemove={() => {
+                                        const newHero = [...heroImages];
+                                        newHero[idx].image = "";
+                                        setHeroImages(newHero);
+                                    }}
+                                    aspectRatio={21 / 9}
+                                />
                             </div>
                             <div className="flex-1 space-y-4">
                                 <div>
@@ -204,15 +175,21 @@ export default function MainPageAdmin() {
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     {quickMenu.map((item, idx) => (
                         <div key={idx} className="p-4 border rounded-xl bg-gray-50 space-y-4">
-                            <div className="relative w-full h-40 bg-gray-200 rounded-lg overflow-hidden group">
-                                {item.image && (
-                                    <Image src={item.image} alt={item.label} fill className="object-cover" />
-                                )}
-                                <label className="absolute inset-0 bg-black/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity z-10">
-                                    <Upload className="mb-1" size={20} />
-                                    <span className="text-sm">배경 이미지 변경</span>
-                                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'quick', idx)} />
-                                </label>
+                            <div className="relative w-full aspect-square md:w-40 md:h-40 bg-gray-200 rounded-lg overflow-hidden group shrink-0">
+                                <ImageUpload
+                                    value={item.image}
+                                    onChange={(url) => {
+                                        const newArr = [...quickMenu];
+                                        newArr[idx].image = url;
+                                        setQuickMenu(newArr);
+                                    }}
+                                    onRemove={() => {
+                                        const newArr = [...quickMenu];
+                                        newArr[idx].image = "";
+                                        setQuickMenu(newArr);
+                                    }}
+                                    aspectRatio={1 / 1}
+                                />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
@@ -282,15 +259,21 @@ export default function MainPageAdmin() {
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {programs.map((item, idx) => (
                         <div key={idx} className="p-4 border rounded-xl bg-gray-50 space-y-4">
-                            <div className="relative w-full h-48 bg-gray-200 rounded-lg overflow-hidden group">
-                                {item.img && (
-                                    <Image src={item.img} alt={item.title} fill className="object-cover" />
-                                )}
-                                <label className="absolute inset-0 bg-black/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity z-10">
-                                    <Upload className="mb-1" size={20} />
-                                    <span className="text-sm">카드 이미지 변경</span>
-                                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'program', idx)} />
-                                </label>
+                            <div className="relative w-full aspect-square bg-gray-200 rounded-lg overflow-hidden group">
+                                <ImageUpload
+                                    value={item.img}
+                                    onChange={(url) => {
+                                        const newArr = [...programs];
+                                        newArr[idx].img = url;
+                                        setPrograms(newArr);
+                                    }}
+                                    onRemove={() => {
+                                        const newArr = [...programs];
+                                        newArr[idx].img = "";
+                                        setPrograms(newArr);
+                                    }}
+                                    aspectRatio={1 / 1}
+                                />
                             </div>
                             <div className="space-y-3">
                                 <div>
