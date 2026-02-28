@@ -1,17 +1,28 @@
 import Image from "next/image";
+import { getProgramImage } from "@/app/actions/program";
 
-export default function YouthIntroPage() {
+export default async function YouthIntroPage() {
+    const mainImageUrl = await getProgramImage("/program/youth/intro") || "https://images.unsplash.com/photo-1516731237713-fc8888a37f4e?q=80&w=1000&auto=format&fit=crop";
+
     return (
         <div className="w-full bg-white">
-            {/* Compact Top Box (Reduced Padding & Rounded) */}
+            {/* 21:9 Ratio Top Box */}
             <div className="bg-white pt-4 pb-8">
-                <div className="relative h-48 max-w-[1920px] mx-auto md:w-[95%] bg-navy-900 flex items-center justify-center overflow-hidden rounded-3xl mx-4">
+                <div className="relative aspect-[21/9] max-h-[600px] max-w-[1920px] mx-auto md:w-[95%] bg-navy-900 flex items-center justify-center overflow-hidden rounded-3xl mx-4">
                     <div className="absolute inset-0 bg-black/50 z-10" />
+                    <Image
+                        src={mainImageUrl}
+                        alt="Youth Academy Background"
+                        fill
+                        className="object-cover opacity-60"
+                        priority
+                        unoptimized
+                    />
                     <div className="relative z-20 text-center">
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
+                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-2">
                             YOUTH ACADEMY
                         </h1>
-                        <p className="text-sky-400 font-bold tracking-widest text-sm">
+                        <p className="text-sky-400 font-bold tracking-widest text-sm md:text-lg mt-2">
                             유소년 아카데미
                         </p>
                     </div>

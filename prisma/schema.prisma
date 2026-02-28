@@ -184,3 +184,10 @@ model MainPageData {
   programs       String   // JSON string of { title, desc, img, href }[]
   updatedAt      DateTime @updatedAt
 }
+
+model ProgramData {
+  id        String   @id @default(cuid())
+  path      String   @unique // The exact URL path, e.g., '/program/youth/intro'
+  imageUrl  String?
+  updatedAt DateTime @updatedAt
+}

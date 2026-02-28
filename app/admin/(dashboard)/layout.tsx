@@ -83,6 +83,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <Building2 size={20} />
                         시설 관리
                     </Link>
+                    <Link href="/admin/program" className={`${linkBaseClass} ${isActive('/admin/program') ? activeClass : inactiveClass}`}>
+                        <Camera size={20} />
+                        프로그램 이미지 관리
+                    </Link>
                     <Link href="/admin/schedule" className={`${linkBaseClass} ${isActive('/admin/schedule') ? activeClass : inactiveClass}`}>
                         <FileText size={20} />
                         월간 스케줄 관리

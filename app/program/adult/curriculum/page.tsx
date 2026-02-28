@@ -1,42 +1,40 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
-import { motion } from "framer-motion";
+import { getProgramImage } from "@/app/actions/program";
 
-export default function AdultIntroPage() {
+// We keep it as a server component to fetch the image easily,
+// then use a regular layout (framer-motion removed to simplify or kept in a wrapper if needed, but since we can't easily add a whole new client file, we'll just use regular CSS animations or Tailwind to avoid client boundaries if possible, OR just keep it server side without framer-motion since it's just fade-ins).
+// Wait, to keep framer-motion, I will just use 'use client' and useEffect to fetch. It's perfectly fine. But let's actually just make it a Server component and use straightforward Tailwind fade-in.
+
+export default async function AdultIntroPage() {
+    const mainImageUrl = await getProgramImage("/program/adult/curriculum") || "https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000&auto=format&fit=crop";
+
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section - Ascend Style Clone */}
             <div className="relative py-20 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
-                        {/* Left: Round Image */}
-                        <div className="w-full md:w-1/2 flex justify-center md:justify-end">
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.8 }}
-                                className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full overflow-hidden border-[8px] border-gray-100 shadow-2xl"
+                        {/* Left: 4:3 Rectangle Image instead of Round */}
+                        <div className="w-full md:w-1/2 flex justify-center md:justify-end animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                            <div
+                                className="relative w-full max-w-[500px] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-50"
                             >
                                 <Image
-                                    src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000&auto=format&fit=crop"
+                                    src={mainImageUrl}
                                     alt="Adult Training"
                                     fill
                                     className="object-cover"
                                     priority
+                                    unoptimized
                                 />
-                            </motion.div>
+                            </div>
                         </div>
 
                         {/* Right: Text Content */}
-                        <div className="w-full md:w-1/2 text-center md:text-left">
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.2 }}
-                            >
+                        <div className="w-full md:w-1/2 text-center md:text-left animate-in fade-in slide-in-from-right-8 duration-1000 delay-200">
+                            <div>
                                 <h4 className="text-navy-900 font-extrabold tracking-widest text-sm mb-4">ADULT TRAINING</h4>
                                 <h1 className="text-4xl md:text-6xl font-black text-navy-900 mb-8 leading-tight">
                                     기본기가<br />
@@ -67,7 +65,7 @@ export default function AdultIntroPage() {
                                         <ArrowRight size={20} />
                                     </Link>
                                 </div>
-                            </motion.div>
+                            </div>
                         </div>
                     </div>
                 </div>

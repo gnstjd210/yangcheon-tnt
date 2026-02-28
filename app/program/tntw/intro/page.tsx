@@ -1,23 +1,28 @@
 import Image from "next/image";
+import { getProgramImage } from "@/app/actions/program";
 
-export default function TNTWIntroPage() {
+export default async function TNTWIntroPage() {
+    const mainImageUrl = await getProgramImage("/program/tntw/intro") || "https://images.unsplash.com/photo-1516731237713-fc8888a37f4e?q=80&w=1000&auto=format&fit=crop";
+
     return (
         <div className="w-full bg-white">
-            {/* Compact Top Box (Reduced Padding & Rounded) */}
+            {/* 16:9 Ratio Top Box */}
             <div className="bg-white pt-4 pb-8">
-                <div className="relative h-48 max-w-[1920px] mx-auto md:w-[95%] bg-navy-900 flex items-center justify-center overflow-hidden rounded-3xl mx-4">
+                <div className="relative aspect-[16/9] max-h-[700px] max-w-[1920px] mx-auto md:w-[95%] bg-navy-900 flex items-center justify-center overflow-hidden rounded-3xl mx-4">
                     <div className="absolute inset-0 bg-black/50 z-10" />
                     <Image
-                        src="https://images.unsplash.com/photo-1516731237713-fc8888a37f4e?q=80&w=1000&auto=format&fit=crop" // Placeholder
+                        src={mainImageUrl}
                         alt="TNT W Background"
                         fill
-                        className="object-cover opacity-50"
+                        className="object-cover opacity-60"
+                        priority
+                        unoptimized
                     />
                     <div className="relative z-20 text-center">
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight mb-4 drop-shadow-lg">
                             TNT W
                         </h1>
-                        <p className="text-sky-400 font-bold tracking-widest text-sm">
+                        <p className="text-sky-400 font-bold tracking-widest text-sm md:text-lg pt-2 border-t border-white/20 inline-block px-12">
                             Women&apos;s Football Team
                         </p>
                     </div>
