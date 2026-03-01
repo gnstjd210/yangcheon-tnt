@@ -3,10 +3,10 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 
 declare global {
     interface Window {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ChannelIO?: (...args: any[]) => void;
         ChannelIOInitialized?: boolean;
     }
@@ -14,14 +14,27 @@ declare global {
 
 export default function ChannelTalkProvider() {
     const pathname = usePathname();
-    const isChannelLoaded = useRef(false);
+    const isBooted = useRef(false);
 
     useEffect(() => {
-        // Prevent execution globally in React Strict mode twice
-        if (isChannelLoaded.current) return;
+        const pluginKey = process.env.NEXT_PUBLIC_CHANNEL_IO_PLUGIN_KEY;
 
-        isChannelLoaded.current = true;
-        const pluginKey = "67395b52-765d-406a-9795-469174f873ce";
+        if (!pluginKey) {
+            console.error("🚨 [ChannelTalk Error] NEXT_PUBLIC_CHANNEL_IO_PLUGIN_KEY is missing or undefined! Please check your Vercel Environment Variables or local .env file.");
+            return;
+        }
+
+        // Initialize stub if it doesn't exist
+        if (typeof window !== "undefined" && !window.ChannelIO) {
+            const ch = function (...args: any[]) {
+                ch.c(args);
+            } as any;
+            ch.q = [] as any[];
+            ch.c = function (args: any) {
+                ch.q.push(args);
+            };
+            window.ChannelIO = ch;
+        }
 
         if (pathname?.startsWith("/admin")) {
             if (window.ChannelIO) {
@@ -30,65 +43,25 @@ export default function ChannelTalkProvider() {
             return;
         }
 
-        // Only inject if window.ChannelIO does not exist
-        if (!window.ChannelIO) {
-            (function () {
-                const w = window;
-                if (w.ChannelIO) {
-                    return; // Additional safety net
-                }
-
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const ch = function (...args: any[]) {
-                    ch.c(args);
-                } as any;
-
-                ch.q = [] as any[];
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ch.c = function (args: any) {
-                    ch.q.push(args);
-                };
-                w.ChannelIO = ch;
-
-                function l() {
-                    if (w.ChannelIOInitialized) {
-                        return;
-                    }
-                    w.ChannelIOInitialized = true;
-                    // Double check by DOM id
-                    if (document.getElementById("ch-plugin-script")) {
-                        return;
-                    }
-
-                    const s = document.createElement("script");
-                    s.id = "ch-plugin-script";
-                    s.type = "text/javascript";
-                    s.async = true;
-                    s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
-                    const x = document.getElementsByTagName("script")[0];
-                    if (x && x.parentNode) {
-                        x.parentNode.insertBefore(s, x);
-                    }
-                }
-
-                if (document.readyState === "complete") {
-                    l();
-                } else {
-                    w.addEventListener("DOMContentLoaded", l);
-                    w.addEventListener("load", l);
-                }
-            })();
+        // Boot ChannelIO only once
+        if (window.ChannelIO && !isBooted.current) {
+            window.ChannelIO('boot', {
+                "pluginKey": pluginKey,
+                "zIndex": 99999 // 강제 최상위 고정
+            });
+            isBooted.current = true;
         }
 
-        // Boot ChannelIO
         if (window.ChannelIO) {
-            window.ChannelIO('boot', {
-                "pluginKey": pluginKey
-            });
             window.ChannelIO('showBubble');
         }
 
     }, [pathname]);
 
-    return null;
+    return (
+        <Script
+            src="https://cdn.channel.io/plugin/ch-plugin-web.js"
+            strategy="afterInteractive"
+        />
+    );
 }
