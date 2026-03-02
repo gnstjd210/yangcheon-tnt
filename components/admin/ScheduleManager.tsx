@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Plus, Pencil, Trash2, X, Repeat, Calendar } from "lucide-react";
+import { Plus, Trash2, X, Repeat, Calendar } from "lucide-react";
 import { createSchedule, updateSchedule, deleteSchedule, createBatchSchedules } from "@/app/actions/schedule";
 import { format } from "date-fns";
 import FullCalendar from "@fullcalendar/react";

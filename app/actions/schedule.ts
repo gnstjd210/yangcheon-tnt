@@ -42,7 +42,6 @@ export async function createSchedule(formData: FormData) {
 
 export async function createBatchSchedules(formData: FormData) {
     const isRecurring = formData.get("isRecurring") === "true";
-    const day = formData.get("day") as string;
     const startDateStr = formData.get("date") as string; // YYYY-MM-DD
     const startTime = formData.get("startTime") as string;
     const endTime = formData.get("endTime") as string;

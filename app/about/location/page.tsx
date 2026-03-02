@@ -1,4 +1,3 @@
-import prisma from "@/lib/prisma";
 import { MapPin, Navigation, Car, Bus } from "lucide-react";
 import NaverMapWrapper from "@/components/about/NaverMapWrapper";
 

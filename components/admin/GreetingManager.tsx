@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import ImageUpload from "@/components/admin/ImageUpload";
 import { upsertGreeting } from "@/app/actions/greeting";
-import { Edit, Save, Globe, EyeOff, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {

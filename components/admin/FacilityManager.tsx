@@ -26,7 +26,7 @@ export default function FacilityManager({ initialFacilities, fixedCategory }: Fa
     const [image2, setImage2] = useState("");
     const [order, setOrder] = useState(0);
 
-    const filteredFacilities = facilities.filter(f => (f as any).category === activeTab);
+    const filteredFacilities = facilities.filter(f => f.category === activeTab);
 
     const resetForm = () => {
         setTitle("");
@@ -63,7 +63,7 @@ export default function FacilityManager({ initialFacilities, fixedCategory }: Fa
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
-        formData.append("category", (editingFacility as any)?.category || activeTab);
+        formData.append("category", editingFacility?.category || activeTab);
         formData.append("image1", image1);
         formData.append("image2", image2);
         formData.append("order", String(order));

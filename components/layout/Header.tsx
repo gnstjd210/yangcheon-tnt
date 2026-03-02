@@ -110,7 +110,6 @@ export default function Header() {
     const [isDesktopMegaMenuOpen, setIsDesktopMegaMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [expandedMenu, setExpandedMenu] = useState<number | null>(null);
-    const [isHoveringHeader, setIsHoveringHeader] = useState(false);
     const [isTrialModalOpen, setIsTrialModalOpen] = useState(false);
 
     // Search State
@@ -195,8 +194,8 @@ export default function Header() {
     return (
         <>
             <header
-                onMouseEnter={() => { setIsHoverMenuOpen(true); setIsHoveringHeader(true); }}
-                onMouseLeave={() => { setIsHoverMenuOpen(false); setIsHoveringHeader(false); }}
+                onMouseEnter={() => { setIsHoverMenuOpen(true); }}
+                onMouseLeave={() => { setIsHoverMenuOpen(false); }}
                 className={clsx(
                     'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
                     headerBgClass,
