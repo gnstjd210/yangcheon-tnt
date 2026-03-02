@@ -6,7 +6,7 @@ import { Check, X, Edit2, Trash2 } from "lucide-react";
 
 interface User {
     id: string;
-    username: string;
+    username: string | null;
     name: string | null;
     email: string | null;
     phone: string | null;
@@ -180,7 +180,7 @@ export default function UserManager({ initialUsers }: { initialUsers: User[] }) 
                                 <tr key={user.id} className="hover:bg-gray-50/50">
                                     <td className="p-4">
                                         <div className="font-bold text-navy-900">{user.name || "이름없음"}</div>
-                                        <div className="text-xs text-gray-500">@{user.username}</div>
+                                        <div className="text-xs text-gray-500">@{user.username || "SNS 로그인"}</div>
                                     </td>
                                     <td className="p-4">
                                         <div className="text-sm text-gray-700">{user.phone || "-"}</div>

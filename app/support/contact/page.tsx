@@ -12,20 +12,17 @@ export default function ContactPage() {
                 <p className="text-gray-500 text-lg mb-8">
                     궁금한 점이 있으시면 언제든지 문의해주세요.
                 </p>
-                <button
-                    onClick={() => {
-                        const w = window as { ChannelIO?: (cmd: string) => void };
-                        if (typeof window !== 'undefined' && w.ChannelIO) {
-                            w.ChannelIO('show');
-                        } else {
-                            alert("오른쪽 아래 톡상담 버튼을 이용해주세요.");
-                        }
-                    }}
-                    className="inline-flex items-center gap-3 bg-navy-900 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-navy-800 transition shadow-lg hover:-translate-y-1"
+                <a
+                    href="https://pf.kakao.com/_vxdkcG/chat"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 bg-[#FEE500] text-[#000000] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#E6CF00] transition shadow-lg hover:-translate-y-1"
                 >
-                    <span className="text-xl">💬</span>
-                    실시간 상담하기
-                </button>
+                    <svg className="w-6 h-6 fill-[#000000]" viewBox="0 0 24 24">
+                        <path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.7 1.7 5.1 4.3 6.4-.3 1.2-1.1 3.8-1.1 4 0 .2.2.3.4.2 1.9-1.3 4.5-3.1 4.5-3.1.6.1 1.2.2 1.9.2 5.5 0 10-3.5 10-7.8S17.5 3 12 3z" />
+                    </svg>
+                    카카오톡 실시간 상담하기
+                </a>
             </div>
 
             <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-4xl mx-auto">
