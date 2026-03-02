@@ -81,16 +81,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     </Link>
                     <Link href="/admin/facility" className={`${linkBaseClass} ${isActive('/admin/facility') ? activeClass : inactiveClass}`}>
                         <Building2 size={20} />
-                        TSA 시설 관리
-                    </Link>
-
-                    {/* 피지컬 트레이닝 관리 Section */}
-                    <div className="mt-4 mb-2">
-                        <span className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider">피지컬 트레이닝 관리</span>
-                    </div>
-                    <Link href="/admin/physical-facility" className={`${linkBaseClass} ${isActive('/admin/physical-facility') ? activeClass : inactiveClass}`}>
-                        <Building2 size={20} />
-                        피지컬 시설 특화 관리
+                        시설 관리
                     </Link>
                     <Link href="/admin/program" className={`${linkBaseClass} ${isActive('/admin/program') ? activeClass : inactiveClass}`}>
                         <Camera size={20} />

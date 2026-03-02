@@ -8,7 +8,7 @@ export default async function AdminFacilityPage() {
 
     return (
         <div className="w-full h-full p-6">
-            <FacilityManager initialFacilities={facilities} fixedCategory="TSA" />
+            <FacilityManager initialFacilities={facilities} />
         </div>
     );
 }
