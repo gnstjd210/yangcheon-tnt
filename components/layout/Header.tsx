@@ -82,7 +82,7 @@ const UTILITY_ITEMS = [
     { label: '로그인', href: '/login' },
     { label: '회원가입', href: '/join' },
     { label: '체험수업신청', href: '/trial' },
-    { label: '상담신청', href: '/consult' },
+    { label: '상담신청', href: '/support/contact' },
 ];
 
 const SEARCH_DATA = [
@@ -455,12 +455,12 @@ export default function Header() {
                                     {/* RIGHT CLONE (Invisible) */}
                                     <div className="flex items-center shrink-0 gap-2 xl:gap-3 justify-end opacity-0 pointer-events-none select-none" aria-hidden="true">
                                         {UTILITY_ITEMS.map((item) => (
-                                            <div key={item.label} className={clsx("hidden 2xl:block rounded-md px-4 py-2 border font-bold", isScrolled ? "text-[11px] px-3 py-1.5" : "text-[12px] px-4 py-2")}>
+                                            <div key={item.label} className={clsx("hidden 2xl:block rounded-md border font-bold shadow-sm", isScrolled ? "text-[11px] px-3 py-1.5" : "text-[12px] px-4 py-2")}>
                                                 {item.label}
                                             </div>
                                         ))}
                                         {/* Matches search button */}
-                                        <div className={clsx("ml-2 border", isScrolled ? "w-8 h-8" : "w-10 h-10")}></div>
+                                        <div className={clsx("ml-2 border shadow-sm", isScrolled ? "w-8 h-8" : "w-10 h-10")}></div>
                                         {/* Matches menu trigger */}
                                         <div className={clsx("hidden xl:flex ml-2 border", isScrolled ? "w-8 h-8" : "w-10 h-10")}></div>
                                     </div>
@@ -516,7 +516,7 @@ export default function Header() {
                                         체험수업 신청
                                     </button>
                                     <Link
-                                        href="/consult"
+                                        href="/support/contact"
                                         onClick={() => setIsMobileMenuOpen(false)}
                                         className="block w-full bg-navy-800 border border-white/20 text-white text-center font-bold py-3.5 rounded-xl transition text-[15px] hover:bg-white/10"
                                     >

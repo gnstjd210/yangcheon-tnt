@@ -4,7 +4,7 @@ import FacilitySection from "@/components/about/FacilitySection";
 export const dynamic = "force-dynamic";
 
 export default async function FacilityPage() {
-    const facilities = await getFacilities();
+    const facilities = await getFacilities("TSA");
 
     return (
         <div className="w-full bg-white py-12 md:py-20 animate-fade-in">

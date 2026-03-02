@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import { getProgramData, upsertProgramData } from "@/app/actions/program";
 import ImageUpload from "@/components/admin/ImageUpload";
 import { Camera, Save, Loader2, Info } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {
+    ssr: false,
+    loading: () => <div className="h-[300px] w-full bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-center text-gray-400">에디터 로딩중...</div>
+});
 
 const PROGRAMS = [
     {
@@ -29,6 +35,14 @@ const PROGRAMS = [
         ratio: 4 / 3,
         ratioText: "4:3",
         desc: "TNT W 본문 이미지 1개 및 텍스트를 관리합니다."
+    },
+    {
+        id: "physical",
+        title: "피지컬 트레이닝 프로그램 소개",
+        path: "/program/physical/intro",
+        ratio: 4 / 3,
+        ratioText: "4:3",
+        desc: "피지컬 트레이닝 본문 메인 이미지 1개 및 텍스트를 관리합니다."
     }
 ];
 
@@ -149,7 +163,7 @@ export default function ProgramDataManager() {
                                 </label>
                                 <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col justify-center items-center min-h-[300px] h-auto">
                                     <div
-                                        className={`relative bg-gray-200 overflow-hidden shadow-md w-full max-w-[400px] ${prog.id === 'adult' ? 'rounded-full aspect-square' : 'rounded-[24px]'}`}
+                                        className={`relative bg-gray-200 shadow-md w-full max-w-[400px] ${prog.id === 'adult' ? 'rounded-full aspect-square' : 'rounded-[24px] overflow-hidden'}`}
                                         style={prog.id !== 'adult' ? { aspectRatio: prog.ratio } : undefined}
                                     >
                                         <ImageUpload
@@ -157,6 +171,7 @@ export default function ProgramDataManager() {
                                             onChange={(url) => handleChange(prog.path, "imageUrl", url)}
                                             onRemove={() => handleChange(prog.path, "imageUrl", "")}
                                             aspectRatio={prog.ratio}
+                                            isCircle={prog.id === 'adult'}
                                         />
                                     </div>
                                 </div>
@@ -220,6 +235,14 @@ export default function ProgramDataManager() {
                                         placeholder="예: 흔들리지 않는 개인 기량"
                                         value={dataState[prog.path]?.subtitle || ""}
                                         onChange={(e) => handleChange(prog.path, "subtitle", e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-navy-900 mb-2">본문 상세 설명</label>
+                                    <RichTextEditor
+                                        value={dataState[prog.path]?.description || ""}
+                                        onChange={(value) => handleChange(prog.path, "description", value)}
+                                        placeholder="본문에 들어갈 상세 내용을 입력하세요."
                                     />
                                 </div>
                             </div>

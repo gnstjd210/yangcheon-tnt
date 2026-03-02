@@ -4,6 +4,13 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import ImageUpload from "@/components/admin/ImageUpload";
 import { upsertGreeting } from "@/app/actions/greeting";
+import { Edit, Save, Globe, EyeOff, Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {
+    ssr: false,
+    loading: () => <div className="h-[300px] w-full bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-center text-gray-400">에디터 로딩중...</div>
+});
 
 interface Greeting {
     id: string;
@@ -81,8 +88,8 @@ export default function GreetingManager({ initialGreetings }: { initialGreetings
                 <button
                     onClick={() => setActiveTab("PRESIDENT")}
                     className={`flex-1 py-3 text-center font-bold text-sm rounded-lg transition-colors duration-200 ${activeTab === "PRESIDENT"
-                            ? "bg-navy-900 text-white shadow-md"
-                            : "text-gray-500 hover:bg-gray-50"
+                        ? "bg-navy-900 text-white shadow-md"
+                        : "text-gray-500 hover:bg-gray-50"
                         }`}
                 >
                     대표이사 김진국
@@ -90,8 +97,8 @@ export default function GreetingManager({ initialGreetings }: { initialGreetings
                 <button
                     onClick={() => setActiveTab("CEO")}
                     className={`flex-1 py-3 text-center font-bold text-sm rounded-lg transition-colors duration-200 ${activeTab === "CEO"
-                            ? "bg-navy-900 text-white shadow-md"
-                            : "text-gray-500 hover:bg-gray-50"
+                        ? "bg-navy-900 text-white shadow-md"
+                        : "text-gray-500 hover:bg-gray-50"
                         }`}
                 >
                     대표 김훈성
@@ -144,16 +151,14 @@ export default function GreetingManager({ initialGreetings }: { initialGreetings
 
                         <div className="flex-1 flex flex-col">
                             <label className="block text-sm font-bold text-gray-700 mb-2">인사말 본문</label>
-                            <textarea
+                            <RichTextEditor
                                 value={activeTab === "PRESIDENT" ? presContent : ceoContent}
-                                onChange={(e) =>
+                                onChange={(value) =>
                                     activeTab === "PRESIDENT"
-                                        ? setPresContent(e.target.value)
-                                        : setCeoContent(e.target.value)
+                                        ? setPresContent(value)
+                                        : setCeoContent(value)
                                 }
-                                className="w-full flex-1 min-h-[300px] px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition-all text-gray-700 leading-relaxed shadow-sm"
                                 placeholder="인사말 내용을 자유롭게 입력하세요"
-                                required
                             />
                         </div>
 

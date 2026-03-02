@@ -3,8 +3,9 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-export async function getFacilities() {
+export async function getFacilities(category?: "TSA" | "PHYSICAL") {
     return prisma.facility.findMany({
+        where: category ? { category } : undefined,
         orderBy: { order: "asc" },
     });
 }
@@ -12,6 +13,7 @@ export async function getFacilities() {
 export async function createFacility(formData: FormData) {
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
+    const category = formData.get("category") as string || "TSA";
     const image1 = formData.get("image1") as string | null;
     const image2 = formData.get("image2") as string | null;
     const order = parseInt(formData.get("order") as string || "0");
@@ -20,6 +22,7 @@ export async function createFacility(formData: FormData) {
         data: {
             title,
             description,
+            category,
             image1,
             image2,
             order,
@@ -33,6 +36,7 @@ export async function createFacility(formData: FormData) {
 export async function updateFacility(id: string, formData: FormData) {
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
+    const category = formData.get("category") as string || "TSA";
     const image1 = formData.get("image1") as string | null;
     const image2 = formData.get("image2") as string | null;
     const order = parseInt(formData.get("order") as string || "0");
@@ -42,6 +46,7 @@ export async function updateFacility(id: string, formData: FormData) {
         data: {
             title,
             description,
+            category,
             image1,
             image2,
             order,

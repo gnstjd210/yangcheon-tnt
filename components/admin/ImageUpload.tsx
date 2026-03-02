@@ -14,9 +14,10 @@ interface ImageUploadProps {
     onChange: (url: string) => void;
     onRemove: () => void;
     aspectRatio?: number;
+    isCircle?: boolean;
 }
 
-export default function ImageUpload({ value, onChange, onRemove, aspectRatio = 3 / 4 }: ImageUploadProps) {
+export default function ImageUpload({ value, onChange, onRemove, aspectRatio = 3 / 4, isCircle = false }: ImageUploadProps) {
     const [isUploading, setIsUploading] = useState(false);
 
     // Cropper states
@@ -115,6 +116,7 @@ export default function ImageUpload({ value, onChange, onRemove, aspectRatio = 3
                             onCropComplete={onCropComplete}
                             onZoomChange={setZoom}
                             objectFit="contain"
+                            cropShape={isCircle ? "round" : "rect"}
                         />
                     </div>
 
@@ -164,8 +166,9 @@ export default function ImageUpload({ value, onChange, onRemove, aspectRatio = 3
 
     if (value) {
         return (
-            <div className="relative w-full h-full rounded-xl overflow-hidden border border-gray-200 group">
-                <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className={`relative w-full h-full group ${isCircle ? "rounded-full" : "rounded-xl"}`}>
+                {/* Delete Button (Outside overflow-hidden so it's not clipped by the circle) */}
+                <div className={`absolute z-20 opacity-0 group-hover:opacity-100 transition-opacity ${isCircle ? "top-[10%] right-[10%] -translate-y-1/2 translate-x-1/2" : "top-2 right-2"}`}>
                     <button
                         type="button"
                         onClick={onRemove}
@@ -174,12 +177,16 @@ export default function ImageUpload({ value, onChange, onRemove, aspectRatio = 3
                         <X size={16} />
                     </button>
                 </div>
-                <Image
-                    fill
-                    src={value}
-                    alt="Upload preview"
-                    className="object-cover object-center"
-                />
+
+                {/* Image Wrapper */}
+                <div className={`relative w-full h-full overflow-hidden border border-gray-200 ${isCircle ? "rounded-full" : "rounded-xl"}`}>
+                    <Image
+                        fill
+                        src={value}
+                        alt="Upload preview"
+                        className="object-cover object-center"
+                    />
+                </div>
             </div>
         );
     }

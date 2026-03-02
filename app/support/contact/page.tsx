@@ -9,9 +9,23 @@ export default function ContactPage() {
                 <h2 className="text-3xl font-black text-navy-900 mb-4">
                     문의하기
                 </h2>
-                <p className="text-gray-500 text-lg">
+                <p className="text-gray-500 text-lg mb-8">
                     궁금한 점이 있으시면 언제든지 문의해주세요.
                 </p>
+                <button
+                    onClick={() => {
+                        const w = window as { ChannelIO?: (cmd: string) => void };
+                        if (typeof window !== 'undefined' && w.ChannelIO) {
+                            w.ChannelIO('show');
+                        } else {
+                            alert("오른쪽 아래 톡상담 버튼을 이용해주세요.");
+                        }
+                    }}
+                    className="inline-flex items-center gap-3 bg-navy-900 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-navy-800 transition shadow-lg hover:-translate-y-1"
+                >
+                    <span className="text-xl">💬</span>
+                    실시간 상담하기
+                </button>
             </div>
 
             <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-4xl mx-auto">
@@ -86,6 +100,6 @@ export default function ContactPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

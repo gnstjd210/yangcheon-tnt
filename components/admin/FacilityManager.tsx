@@ -9,10 +9,12 @@ import ImageUpload from "@/components/admin/ImageUpload";
 
 interface FacilityManagerProps {
     initialFacilities: Facility[];
+    fixedCategory?: "TSA" | "PHYSICAL";
 }
 
-export default function FacilityManager({ initialFacilities }: FacilityManagerProps) {
+export default function FacilityManager({ initialFacilities, fixedCategory }: FacilityManagerProps) {
     const [facilities] = useState<Facility[]>(initialFacilities);
+    const [activeTab, setActiveTab] = useState<"TSA" | "PHYSICAL">(fixedCategory || "TSA");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingFacility, setEditingFacility] = useState<Facility | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -24,12 +26,14 @@ export default function FacilityManager({ initialFacilities }: FacilityManagerPr
     const [image2, setImage2] = useState("");
     const [order, setOrder] = useState(0);
 
+    const filteredFacilities = facilities.filter(f => (f as any).category === activeTab);
+
     const resetForm = () => {
         setTitle("");
         setDescription("");
         setImage1("");
         setImage2("");
-        setOrder(facilities.length);
+        setOrder(filteredFacilities.length);
         setEditingFacility(null);
     };
 
@@ -59,6 +63,7 @@ export default function FacilityManager({ initialFacilities }: FacilityManagerPr
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
+        formData.append("category", (editingFacility as any)?.category || activeTab);
         formData.append("image1", image1);
         formData.append("image2", image2);
         formData.append("order", String(order));
@@ -112,8 +117,26 @@ export default function FacilityManager({ initialFacilities }: FacilityManagerPr
                 </button>
             </div>
 
+            {/* Tabs (Hidden if fixedCategory is provided) */}
+            {!fixedCategory && (
+                <div className="flex bg-gray-100 p-1 rounded-xl w-fit">
+                    <button
+                        onClick={() => setActiveTab("TSA")}
+                        className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === "TSA" ? "bg-white text-navy-900 shadow-sm" : "text-gray-500 hover:text-navy-900"}`}
+                    >
+                        TSA 소개 시설
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("PHYSICAL")}
+                        className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === "PHYSICAL" ? "bg-white text-navy-900 shadow-sm" : "text-gray-500 hover:text-navy-900"}`}
+                    >
+                        피지컬 트레이닝 시설
+                    </button>
+                </div>
+            )}
+
             <div className="space-y-4">
-                {facilities.map((facility) => (
+                {filteredFacilities.map((facility) => (
                     <div key={facility.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-6 items-start">
                         {/* Drag Handle & Order */}
                         <div className="flex flex-col items-center gap-2 text-gray-400 self-center md:self-start">
@@ -170,9 +193,9 @@ export default function FacilityManager({ initialFacilities }: FacilityManagerPr
                     </div>
                 ))}
 
-                {facilities.length === 0 && (
+                {filteredFacilities.length === 0 && (
                     <div className="text-center py-12 bg-white rounded-xl border border-gray-200 text-gray-500">
-                        등록된 시설이 없습니다.
+                        {activeTab === "TSA" ? "등록된 TSA 시설이 없습니다." : "등록된 피지컬 트레이닝 시설이 없습니다."}
                     </div>
                 )}
             </div>
