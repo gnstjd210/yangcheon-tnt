@@ -4,7 +4,6 @@ import AuthProvider from '@/components/providers/AuthProvider';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ChannelTalkProvider from "@/components/providers/ChannelTalkProvider";
-import KakaoChatButton from "@/components/KakaoChatButton";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
@@ -35,9 +34,6 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-
-          {/* Floating Kakao SDK Channel Chat Button */}
-          <KakaoChatButton />
         </AuthProvider>
       </body>
     </html>
