@@ -21,8 +21,17 @@ model User {
   image         String?
   phone         String?
   address       String?
+  detailAddress String?
+  birthDate     DateTime?
+  marketingAgreed Boolean @default(false)
+  experience    String?
+  affiliation   String?
+  age           String?
+  team          String?
+  type          String?  // 'Youth', 'Adult', 'TNTW', etc.
   category      String?  // '유소년축구교실', '성인트레이닝', 'TNT W'
   subCategory   String?  // '남성', '여성', '혼성' (성인트레이닝의 경우), '축구팀', '풋살팀' (TNT W의 경우)
+  provider      String?  @default("local") // 'local', 'google', 'kakao', 'naver'
   accounts      Account[]
   sessions      Session[]
   Authenticator Authenticator[]

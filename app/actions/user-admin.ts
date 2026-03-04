@@ -13,8 +13,11 @@ export async function getUsers() {
                 name: true,
                 email: true,
                 phone: true,
-                category: true,
-                subCategory: true,
+                address: true,
+                detailAddress: true,
+                birthDate: true,
+                marketingAgreed: true,
+                provider: true,
                 createdAt: true,
             },
         });

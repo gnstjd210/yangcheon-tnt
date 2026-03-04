@@ -62,6 +62,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <Star size={20} />
                         레슨 후기 관리
                     </Link>
+                    <Link href="/admin/registrations" className={`${linkBaseClass} ${isActive('/admin/registrations') ? activeClass : inactiveClass}`}>
+                        <FileText size={20} />
+                        신청서 관리
+                    </Link>
                     <Link href="/admin/users" className={`${linkBaseClass} ${isActive('/admin/users') ? activeClass : inactiveClass}`}>
                         <Users size={20} />
                         회원 관리
