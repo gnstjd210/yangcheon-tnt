@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 
 import { Phone, Mail, Instagram, Clock, MessageCircle } from "lucide-react";

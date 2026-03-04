@@ -163,15 +163,14 @@ export default function ProgramDataManager() {
                                 </label>
                                 <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col justify-center items-center min-h-[300px] h-auto">
                                     <div
-                                        className={`relative bg-gray-200 shadow-md w-full max-w-[400px] ${prog.id === 'adult' ? 'rounded-full aspect-square' : 'rounded-[24px] overflow-hidden'}`}
-                                        style={prog.id !== 'adult' ? { aspectRatio: prog.ratio } : undefined}
+                                        className={`relative bg-gray-200 shadow-md w-full max-w-[400px] rounded-[24px] overflow-hidden`}
+                                        style={prog.id !== 'adult' ? { aspectRatio: prog.ratio } : { aspectRatio: 1 }}
                                     >
                                         <ImageUpload
                                             value={dataState[prog.path]?.imageUrl || ""}
                                             onChange={(url) => handleChange(prog.path, "imageUrl", url)}
                                             onRemove={() => handleChange(prog.path, "imageUrl", "")}
                                             aspectRatio={prog.ratio}
-                                            isCircle={prog.id === 'adult'}
                                         />
                                     </div>
                                 </div>

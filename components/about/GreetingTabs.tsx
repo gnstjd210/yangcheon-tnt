@@ -31,8 +31,8 @@ export default function GreetingTabs({ greetings }: { greetings: GreetingData[] 
                     <button
                         onClick={() => setActiveTab("PRESIDENT")}
                         className={`flex-1 py-3 text-center font-bold text-[15px] sm:text-base rounded-full transition-all duration-300 ${activeTab === "PRESIDENT"
-                                ? "bg-navy-900 text-white shadow-md transform scale-100"
-                                : "text-gray-500 hover:text-navy-900 hover:bg-white/50"
+                            ? "bg-navy-900 text-white shadow-md transform scale-100"
+                            : "text-gray-500 hover:text-navy-900 hover:bg-white/50"
                             }`}
                     >
                         대표이사 김진국
@@ -40,8 +40,8 @@ export default function GreetingTabs({ greetings }: { greetings: GreetingData[] 
                     <button
                         onClick={() => setActiveTab("CEO")}
                         className={`flex-1 py-3 text-center font-bold text-[15px] sm:text-base rounded-full transition-all duration-300 ${activeTab === "CEO"
-                                ? "bg-navy-900 text-white shadow-md transform scale-100"
-                                : "text-gray-500 hover:text-navy-900 hover:bg-white/50"
+                            ? "bg-navy-900 text-white shadow-md transform scale-100"
+                            : "text-gray-500 hover:text-navy-900 hover:bg-white/50"
                             }`}
                     >
                         대표 김훈성
@@ -60,8 +60,8 @@ export default function GreetingTabs({ greetings }: { greetings: GreetingData[] 
                         transition={{ duration: 0.4, ease: "easeOut" }}
                         className="flex flex-col md:flex-row gap-12 md:gap-20 items-start w-full"
                     >
-                        {/* Left: Large Vertical Image (Strict 3:4 aspect ratio from cropper) */}
-                        <div className="w-full md:w-[45%] lg:w-1/2 relative aspect-[3/4] rounded-3xl overflow-hidden bg-gray-100 shrink-0 shadow-lg">
+                        {/* Left: Standard Image Size (matching TNTW) */}
+                        <div className="w-full md:w-1/2 relative min-h-[400px] rounded-3xl overflow-hidden bg-gray-100 shadow-2xl">
                             {currentData?.imageUrl ? (
                                 <Image
                                     src={currentData.imageUrl}

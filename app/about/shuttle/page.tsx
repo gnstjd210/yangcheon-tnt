@@ -19,9 +19,9 @@ export default async function ShuttlePage() {
             </div>
 
             {shuttles.map((shuttle) => (
-                <div key={shuttle.id} className="flex flex-col md:flex-row gap-8 md:gap-12 bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
+                <div key={shuttle.id} className="flex flex-col md:flex-row gap-8 md:gap-12 bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-100">
                     {/* Image (Route Map) */}
-                    <div className="w-full md:w-5/12 relative min-h-[300px] bg-gray-100 border-r border-gray-100">
+                    <div className="w-full md:w-1/2 relative min-h-[400px] bg-gray-100 border-r border-gray-100">
                         {shuttle.imageUrl ? (
                             <Image
                                 src={shuttle.imageUrl}

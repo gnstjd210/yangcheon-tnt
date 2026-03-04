@@ -1,10 +1,33 @@
+/* eslint-disable */
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { getProgramData } from "@/app/actions/program";
+import { getAdultClassCards } from "@/app/actions/adult-class-card";
 
 export default async function AdultIntroPage() {
     const data = await getProgramData("/program/adult/curriculum");
+    const cardsData = await getAdultClassCards();
+    const cardsList = cardsData.success ? cardsData.cards : [];
+
+    // Helper to get card info or defaults
+    const getCard = (type: string, defTitle: string, defSub: string, defItems: string[]) => {
+        const c = cardsList?.find((card: any) => card.type === type);
+        if (c) {
+            try {
+                const parsed = JSON.parse(c.listItems);
+                return { title: c.title, subtitle: c.subtitle, listItems: Array.isArray(parsed) ? parsed : defItems };
+            } catch {
+                return { title: c.title, subtitle: c.subtitle, listItems: defItems };
+            }
+        }
+        return { title: defTitle, subtitle: defSub, listItems: defItems };
+    };
+
+    const maleCard = getCard("male", "남성 그룹레슨", "기본기부터 전술 훈련까지,\n실전 경기에 강한 축구를 배웁니다.", ["주 1회 / 주 2회 선택 가능", "포지션별 전문 전술 훈련", "High-Intensity 피지컬 세션"]);
+    const femaleCard = getCard("female", "여성 그룹레슨", "처음이어도 괜찮습니다.\n즐겁게 운동하며 실력을 키웁니다.", ["왕초보 환영 (볼 감각 훈련)", "기초 체력 및 코디네이션", "여자축구 전문 코칭 스태프"]);
+    const mixedCard = getCard("mixed", "혼성 그룹레슨", "남녀노소 누구나,\n함께 땀 흘리며 성장합니다.", ["미니게임 위주의 실전 훈련", "즐거운 커뮤니티 분위기", "팀워크 & 패스 플레이 중심"]);
+
     const mainImageUrl = data?.imageUrl || "https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000&auto=format&fit=crop";
     const image2Url = data?.image2Url || "https://images.unsplash.com/photo-1526232761682-d26e03ac148e?q=80&w=800&auto=format&fit=crop";
     const image3Url = data?.image3Url || "https://images.unsplash.com/photo-1551966775-84c4f09d8e35?q=80&w=800&auto=format&fit=crop";
@@ -19,25 +42,26 @@ export default async function AdultIntroPage() {
             {/* Hero Section - Ascend Style Clone */}
             <div className="relative py-20 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
-                        {/* Left: Round Image */}
-                        <div className="w-full md:w-1/2 flex justify-center md:justify-end animate-in zoom-in duration-700">
-                            <div className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full overflow-hidden border-[8px] border-gray-100 shadow-2xl">
+                    <div className="flex flex-col md:flex-row items-stretch gap-12">
+                        {/* Left: Standard Image Size (matching TNTW) */}
+                        <div className="w-full md:w-1/2 relative min-h-[400px]">
+                            <div className="relative h-full w-full rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-700">
                                 <Image
                                     src={mainImageUrl}
                                     alt="Adult Training"
                                     fill
-                                    className="object-cover"
+                                    className="object-cover hover:scale-105 transition-transform duration-700"
                                     priority
                                 />
+                                <div className="absolute inset-0 bg-gradient-to-t from-navy-900/40 to-transparent"></div>
                             </div>
                         </div>
 
                         {/* Right: Text Content */}
-                        <div className="w-full md:w-1/2 text-center md:text-left animate-in fade-in slide-in-from-right-8 duration-1000 delay-200">
+                        <div className="w-full md:w-1/2 flex flex-col justify-center animate-in fade-in slide-in-from-right-8 duration-1000 delay-200">
                             <div>
                                 <h4 className="text-navy-900 font-extrabold tracking-widest text-sm mb-4">ADULT TRAINING</h4>
-                                <h1 className="text-4xl md:text-6xl font-black text-navy-900 mb-8 leading-tight whitespace-pre-wrap">
+                                <h1 className="text-4xl md:text-5xl font-black text-navy-900 mb-8 leading-tight whitespace-pre-wrap">
                                     {title}<br />
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-600">{subtitle}</span>
                                 </h1>
@@ -144,12 +168,15 @@ export default async function AdultIntroPage() {
                     <div className="group relative bg-gray-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col h-[500px]">
                         <div className="p-8 flex-1">
                             <div className="w-12 h-1 bg-sky-500 mb-6" />
-                            <h3 className="text-2xl font-black text-navy-900 mb-2">남성 그룹레슨</h3>
-                            <p className="text-gray-600 text-sm mb-6">기본기부터 전술 훈련까지,<br />실전 경기에 강한 축구를 배웁니다.</p>
+                            <h3 className="text-2xl font-black text-navy-900 mb-2">{maleCard.title}</h3>
+                            <p className="text-gray-600 text-sm mb-6 whitespace-pre-wrap">{maleCard.subtitle}</p>
                             <ul className="space-y-3 text-sm text-gray-500">
-                                <li className="flex items-center gap-2"><Check size={16} className="text-sky-500" /> <b>주 1회 / 주 2회</b> 선택 가능</li>
-                                <li className="flex items-center gap-2"><Check size={16} className="text-sky-500" /> 포지션별 <b>전문 전술</b> 훈련</li>
-                                <li className="flex items-center gap-2"><Check size={16} className="text-sky-500" /> <b>High-Intensity</b> 피지컬 세션</li>
+                                {maleCard.listItems.map((item, idx) => (
+                                    <li key={idx} className="flex items-center gap-2">
+                                        <Check size={16} className="text-sky-500 shrink-0" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                         <div className="relative h-[240px] overflow-hidden">
@@ -167,12 +194,15 @@ export default async function AdultIntroPage() {
                     <div className="group relative bg-gray-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col h-[500px]">
                         <div className="p-8 flex-1">
                             <div className="w-12 h-1 bg-orange-500 mb-6" />
-                            <h3 className="text-2xl font-black text-navy-900 mb-2">여성 그룹레슨</h3>
-                            <p className="text-gray-600 text-sm mb-6">처음이어도 괜찮습니다.<br />즐겁게 운동하며 실력을 키웁니다.</p>
+                            <h3 className="text-2xl font-black text-navy-900 mb-2">{femaleCard.title}</h3>
+                            <p className="text-gray-600 text-sm mb-6 whitespace-pre-wrap">{femaleCard.subtitle}</p>
                             <ul className="space-y-3 text-sm text-gray-500">
-                                <li className="flex items-center gap-2"><Check size={16} className="text-orange-500" /> <b>왕초보</b> 환영 (볼 감각 훈련)</li>
-                                <li className="flex items-center gap-2"><Check size={16} className="text-orange-500" /> <b>기초 체력</b> 및 코디네이션</li>
-                                <li className="flex items-center gap-2"><Check size={16} className="text-orange-500" /> <b>여자축구</b> 전문 코칭 스태프</li>
+                                {femaleCard.listItems.map((item, idx) => (
+                                    <li key={idx} className="flex items-center gap-2">
+                                        <Check size={16} className="text-orange-500 shrink-0" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                         <div className="relative h-[240px] overflow-hidden">
@@ -190,12 +220,15 @@ export default async function AdultIntroPage() {
                     <div className="group relative bg-gray-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col h-[500px]">
                         <div className="p-8 flex-1">
                             <div className="w-12 h-1 bg-purple-500 mb-6" />
-                            <h3 className="text-2xl font-black text-navy-900 mb-2">혼성 그룹레슨</h3>
-                            <p className="text-gray-600 text-sm mb-6">남녀노소 누구나,<br />함께 땀 흘리며 성장합니다.</p>
+                            <h3 className="text-2xl font-black text-navy-900 mb-2">{mixedCard.title}</h3>
+                            <p className="text-gray-600 text-sm mb-6 whitespace-pre-wrap">{mixedCard.subtitle}</p>
                             <ul className="space-y-3 text-sm text-gray-500">
-                                <li className="flex items-center gap-2"><Check size={16} className="text-purple-500" /> <b>미니게임</b> 위주의 실전 훈련</li>
-                                <li className="flex items-center gap-2"><Check size={16} className="text-purple-500" /> 즐거운 <b>커뮤니티</b> 분위기</li>
-                                <li className="flex items-center gap-2"><Check size={16} className="text-purple-500" /> <b>팀워크</b> & 패스 플레이 중심</li>
+                                {mixedCard.listItems.map((item, idx) => (
+                                    <li key={idx} className="flex items-center gap-2">
+                                        <Check size={16} className="text-purple-500 shrink-0" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                         <div className="relative h-[240px] overflow-hidden">

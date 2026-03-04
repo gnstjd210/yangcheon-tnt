@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 declare global {
     interface Window {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ChannelIO?: (...args: any[]) => void;
         ChannelIOInitialized?: boolean;
     }
@@ -25,10 +26,14 @@ export default function ChannelTalkProvider() {
             if (w.ChannelIO) {
                 return;
             }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const ch = function (...args: any[]) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (ch as any).c(args);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any;
             ch.q = [];
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             ch.c = function (args: any) {
                 ch.q.push(args);
             };

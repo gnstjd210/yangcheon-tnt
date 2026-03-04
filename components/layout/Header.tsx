@@ -51,7 +51,7 @@ const MENU_STRUCTURE = [
         ]
     },
     {
-        label: 'TNT W 등록',
+        label: 'TNT W 입단',
         href: '/program/tntw/intro',
         subItems: [
             { label: '입단신청', href: '/program/tntw/join' },

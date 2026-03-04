@@ -21,10 +21,10 @@ export default function FacilitySection({ facility }: FacilitySectionProps) {
                 {facility.description}
             </div>
 
-            {/* Images Grid Section: 16:9 Aspect Ratio */}
+            {/* Images Grid Section: TNTW Style */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pl-0 md:pl-7">
                 {facility.image1 && (
-                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg group">
+                    <div className="relative w-full min-h-[400px] rounded-3xl overflow-hidden shadow-2xl group">
                         <Image
                             src={facility.image1}
                             alt={`${facility.title} 이미지 1`}
@@ -38,7 +38,7 @@ export default function FacilitySection({ facility }: FacilitySectionProps) {
                 )}
 
                 {facility.image2 && (
-                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg group">
+                    <div className="relative w-full min-h-[400px] rounded-3xl overflow-hidden shadow-2xl group">
                         <Image
                             src={facility.image2}
                             alt={`${facility.title} 이미지 2`}

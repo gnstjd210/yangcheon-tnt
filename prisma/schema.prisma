@@ -267,3 +267,22 @@ model ProgramData {
   image4Url   String?
   updatedAt   DateTime @updatedAt
 }
+
+model AdultClassCard {
+  id        String   @id @default(cuid())
+  type      String   @unique // 'male', 'female', 'mixed'
+  title     String
+  subtitle  String
+  listItems String   // JSON string of string[]
+  updatedAt DateTime @updatedAt
+}
+
+model AdminMenu {
+  id         String   @id @default(cuid())
+  label      String
+  href       String   @unique
+  iconName   String
+  group      String
+  orderIndex Int      @default(0)
+  isVisible  Boolean  @default(true)
+}

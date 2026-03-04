@@ -34,7 +34,7 @@ export default function CoachGrid({ coaches }: { coaches: Coach[] }) {
                         onClick={() => setSelectedCoach(coach)}
                         className="group cursor-pointer bg-white rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-transparent hover:border-gray-100 flex flex-col"
                     >
-                        <div className="relative aspect-[3/4] bg-gray-100 rounded-3xl overflow-hidden m-4 mb-0 isolate">
+                        <div className="relative min-h-[400px] bg-gray-100 rounded-3xl overflow-hidden m-4 mb-0 isolate">
                             {coach.imageUrl ? (
                                 <Image
                                     src={coach.imageUrl}
@@ -71,7 +71,7 @@ export default function CoachGrid({ coaches }: { coaches: Coach[] }) {
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Modal Image */}
-                        <div className="w-full md:w-1/3 relative aspect-[3/4] md:aspect-auto bg-gray-100">
+                        <div className="w-full md:w-1/2 relative min-h-[400px] bg-gray-100">
                             {selectedCoach.imageUrl ? (
                                 <Image
                                     src={selectedCoach.imageUrl}
