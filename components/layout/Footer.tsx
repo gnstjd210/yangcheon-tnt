@@ -82,11 +82,11 @@ export default function Footer() {
 
                     {/* TSA Text Logo (Ascend Style) */}
                     <div className="flex flex-col items-end">
-                        <h2 className="text-4xl font-black text-white tracking-widest italic" style={{ fontFamily: 'Georgia, serif' }}>
-                            TSA
+                        <h2 className="text-3xl font-black text-white tracking-widest italic" style={{ fontFamily: 'Georgia, serif' }}>
+                            김진국축구교실
                         </h2>
-                        <span className="text-sky-600 font-bold text-[10px] tracking-[0.3em]">
-                            SINCE 2016
+                        <span className="text-sky-600 font-bold text-[10px] tracking-[0.3em] mt-1">
+                            SINCE 1995
                         </span>
                     </div>
                 </div>
