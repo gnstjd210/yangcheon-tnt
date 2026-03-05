@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
-    const urlObj = new URL(req.url);
-    const BASE_URL = process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : `${urlObj.protocol}//${urlObj.host}`;
+    const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     return NextResponse.redirect(`${BASE_URL}/payment/fail?reason=error`);
 }

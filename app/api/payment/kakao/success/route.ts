@@ -7,8 +7,7 @@ export async function GET(req: Request) {
         const pgToken = searchParams.get('pg_token');
         const paymentId = searchParams.get('paymentId');
 
-        const urlObj = new URL(req.url);
-        const BASE_URL = `${urlObj.protocol}//${urlObj.host}`;
+        const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
         if (!pgToken || !paymentId) {
             return NextResponse.redirect(`${BASE_URL}/payment/fail?reason=missing_params`);
@@ -67,8 +66,7 @@ export async function GET(req: Request) {
     } catch (error) {
         console.error('Payment Approval Error:', error);
 
-        const urlObj = new URL(req.url);
-        const BASE_URL = `${urlObj.protocol}//${urlObj.host}`;
+        const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
         return NextResponse.redirect(`${BASE_URL}/payment/fail`);
     }
 }

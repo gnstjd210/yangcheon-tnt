@@ -29,8 +29,7 @@ export async function POST(req: Request) {
         });
 
         // Derive base URL for callbacks
-        const urlObj = new URL(req.url);
-        const BASE_URL = `${urlObj.protocol}//${urlObj.host}`;
+        const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
         const approvalUrl = `${BASE_URL}/api/payment/kakao/success?paymentId=${payment.id}`;
         const cancelUrl = `${BASE_URL}/api/payment/kakao/cancel`;
