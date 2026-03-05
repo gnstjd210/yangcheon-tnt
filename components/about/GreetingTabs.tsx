@@ -61,7 +61,7 @@ export default function GreetingTabs({ greetings }: { greetings: GreetingData[] 
                         className="flex flex-col md:flex-row gap-12 md:gap-20 items-start w-full"
                     >
                         {/* Left: Standard Image Size (matching TNTW) */}
-                        <div className="w-full md:w-1/2 relative min-h-[400px] rounded-3xl overflow-hidden bg-gray-100 shadow-2xl">
+                        <div className="w-full md:w-5/12 relative aspect-[3/4] rounded-3xl overflow-hidden bg-gray-100 shadow-2xl shrink-0">
                             {currentData?.imageUrl ? (
                                 <Image
                                     src={currentData.imageUrl}
@@ -79,13 +79,15 @@ export default function GreetingTabs({ greetings }: { greetings: GreetingData[] 
                         </div>
 
                         {/* Right: Majestic Text */}
-                        <div className="w-full md:w-[55%] lg:w-1/2 flex flex-col pt-4 md:pt-0">
-                            <h2 className="text-3xl md:text-[2.5rem] font-black text-navy-900 mb-8 md:mb-12 leading-[1.3] whitespace-pre-wrap tracking-tight md:-mt-2">
-                                {currentData?.title || "인사말 제목이 없습니다."}
-                            </h2>
-                            <div className="text-base md:text-lg text-gray-700 whitespace-pre-wrap leading-loose font-medium tracking-wide">
-                                {currentData?.content || "인사말 내용이 없습니다."}
-                            </div>
+                        <div className="w-full md:w-[55%] lg:w-7/12 flex flex-col pt-4 md:pt-0">
+                            <h2
+                                className="text-3xl md:text-[2.5rem] font-black text-navy-900 mb-8 md:mb-12 leading-[1.3] tracking-tight md:-mt-2 prose-headings:m-0"
+                                dangerouslySetInnerHTML={{ __html: currentData?.title || "인사말 제목이 없습니다." }}
+                            />
+                            <div
+                                className="text-base md:text-[1.05rem] text-gray-700 leading-[2.2] font-medium tracking-wide prose prose-p:my-2 prose-br:my-2"
+                                dangerouslySetInnerHTML={{ __html: currentData?.content || "인사말 내용이 없습니다." }}
+                            />
                         </div>
                     </motion.div>
                 </AnimatePresence>
