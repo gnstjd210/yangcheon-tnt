@@ -58,7 +58,7 @@ export const DEFAULT_QUICK_MENU: QuickMenu[] = [
     },
     {
         label: '갤러리',
-        href: '/youth/gallery',
+        href: '/program/youth/gallery',
         desc: 'Photo & Video',
         image: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?q=80&w=2670&auto=format&fit=crop'
     },
