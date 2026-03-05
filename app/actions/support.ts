@@ -8,7 +8,8 @@ export async function getNotices() {
             orderBy: { createdAt: "desc" },
         });
         return notices;
-    } catch {
+    } catch (error) {
+        console.error('getNotices error:', error);
         return [];
     }
 }

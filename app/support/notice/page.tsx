@@ -1,10 +1,13 @@
-import { getNotices } from "@/app/actions/support";
+import prisma from "@/lib/prisma";
 import { format } from "date-fns";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function NoticesPage() {
-    const notices = await getNotices();
+    const notices = await prisma.notice.findMany({
+        orderBy: { createdAt: 'desc' },
+    });
 
     return (
         <div className="space-y-8">
@@ -23,15 +26,15 @@ export default async function NoticesPage() {
                         </div>
                     ) : (
                         notices.map((notice) => (
-                            <div key={notice.id} className="grid grid-cols-12 p-4 text-sm hover:bg-gray-50 transition cursor-pointer group items-center">
+                            <Link href={`/support/notice/${notice.id}`} key={notice.id} className="grid grid-cols-12 p-4 text-sm hover:bg-gray-50 transition cursor-pointer group items-center">
                                 <div className="col-span-2 text-center text-gray-500">{notice.author}</div>
-                                <div className="col-span-8 font-bold text-navy-900 group-hover:text-rose-600 truncate pr-4">
+                                <div className="col-span-8 font-bold text-navy-900 group-hover:text-sky-600 truncate pr-4">
                                     {notice.title}
                                 </div>
-                                <div className="col-span-2 text-center text-gray-400 text-xs text-center">
+                                <div className="col-span-2 text-center text-gray-400 text-xs">
                                     {format(new Date(notice.createdAt), "yyyy.MM.dd")}
                                 </div>
-                            </div>
+                            </Link>
                         ))
                     )}
                 </div>
