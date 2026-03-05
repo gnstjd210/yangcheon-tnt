@@ -39,7 +39,7 @@ export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DE
     return (
         <section className="relative min-h-[calc(100vh-128px)] w-full max-w-[1920px] mx-auto px-6 md:px-12 pt-36 pb-6 flex flex-col lg:flex-row gap-6">
             {/* LEFT: SLIDER (70%) */}
-            <div className="relative w-full lg:w-[70%] aspect-[21/9] h-auto rounded-[30px] overflow-hidden shadow-2xl group">
+            <div className="relative w-full lg:w-[70%] h-[600px] lg:h-[650px] rounded-[30px] overflow-hidden shadow-2xl group bg-navy-900 border border-gray-800">
                 <AnimatePresence mode='wait'>
                     <motion.div
                         key={currentSlide}
@@ -47,7 +47,7 @@ export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DE
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 1.2 }}
-                        className="absolute inset-0 bg-cover bg-center"
+                        className="absolute inset-0 bg-contain bg-center bg-no-repeat"
                         style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
                     >
                         <div className="absolute inset-0 bg-gradient-to-t from-navy-900/90 via-navy-900/20 to-transparent" />
@@ -101,7 +101,7 @@ export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DE
             </div>
 
             {/* RIGHT: QUICK MENU (30%) - Stronger Brightness Hover */}
-            <div className="w-full lg:w-[30%] flex flex-col gap-4">
+            <div className="w-full lg:w-[30%] h-[600px] lg:h-[650px] flex flex-col gap-4">
                 {quickMenu.map((item, idx) => {
                     if (item.href === '/trial') {
                         return (
