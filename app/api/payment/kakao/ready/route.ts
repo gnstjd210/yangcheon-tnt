@@ -10,8 +10,9 @@ export async function POST(req: Request) {
             return NextResponse.json({ success: false, error: '이름과 수강월을 입력해주세요.' }, { status: 400 });
         }
 
-        const SECRET_KEY = process.env.KAKAO_PAY_SECRET_KEY;
-        const CID = process.env.KAKAO_PAY_CID;
+        let SECRET_KEY = (process.env.KAKAO_PAY_SECRET_KEY || '').replace(/['"]/g, '').trim();
+        SECRET_KEY = SECRET_KEY.replace(/^SECRET_KEY\s+/i, '');
+        const CID = (process.env.KAKAO_PAY_CID || '').replace(/['"]/g, '').trim();
 
         const userId = studentName;
         // Accept dynamic amount, default to 100 if invalidly passed

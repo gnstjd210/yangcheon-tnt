@@ -21,8 +21,9 @@ export async function GET(req: Request) {
             return NextResponse.redirect(`${BASE_URL}/payment/fail?reason=payment_not_found`);
         }
 
-        const SECRET_KEY = process.env.KAKAO_PAY_SECRET_KEY;
-        const CID = process.env.KAKAO_PAY_CID;
+        let SECRET_KEY = (process.env.KAKAO_PAY_SECRET_KEY || '').replace(/['"]/g, '').trim();
+        SECRET_KEY = SECRET_KEY.replace(/^SECRET_KEY\s+/i, '');
+        const CID = (process.env.KAKAO_PAY_CID || '').replace(/['"]/g, '').trim();
 
         // 1. Approve Payment API
         const response = await fetch('https://open-api.kakaopay.com/online/v1/payment/approve', {
