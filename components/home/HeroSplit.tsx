@@ -8,6 +8,7 @@ import type { HeroImage, QuickMenu } from '@/lib/mainPageConstants';
 import { DEFAULT_HERO_IMAGES, DEFAULT_QUICK_MENU } from '@/lib/mainPageConstants';
 
 import TrialClassModal from '@/components/home/TrialClassModal';
+import ReRegistrationModal from '@/components/payment/ReRegistrationModal';
 
 interface HeroSplitProps {
     slides?: HeroImage[];
@@ -17,6 +18,7 @@ interface HeroSplitProps {
 export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DEFAULT_QUICK_MENU }: HeroSplitProps) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isTrialModalOpen, setIsTrialModalOpen] = useState(false);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -128,6 +130,33 @@ export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DE
                             </button>
                         );
                     }
+                    if (item.href === '/payment' || item.label === '재수강결제') {
+                        return (
+                            <button
+                                key={idx}
+                                onClick={() => setIsPaymentModalOpen(true)}
+                                className="group relative flex-1 flex items-center justify-between px-8 bg-gray-900 rounded-[24px] shadow-lg border border-gray-800 overflow-hidden w-full text-left"
+                            >
+                                <div
+                                    className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-100 group-hover:brightness-[1.1] transition-all duration-500 ease-out"
+                                    style={{ backgroundImage: `url(${item.image})` }}
+                                />
+                                <div className="absolute inset-0 transition-transform duration-300 group-hover:-translate-x-2 flex items-center justify-between px-8 w-full h-full z-10">
+                                    <div className="flex flex-col drop-shadow-md">
+                                        <span className="text-gray-300 group-hover:text-white text-[10px] font-bold tracking-widest uppercase mb-1 transition-colors">
+                                            {item.desc}
+                                        </span>
+                                        <span className="text-white text-2xl font-black tracking-tight transition-colors">
+                                            {item.label}
+                                        </span>
+                                    </div>
+                                    <div className="w-12 h-12 rounded-full bg-white/10 group-hover:bg-yellow-400 flex items-center justify-center transition-all">
+                                        <ChevronRight className="text-white w-6 h-6" />
+                                    </div>
+                                </div>
+                            </button>
+                        );
+                    }
                     return (
                         <Link
                             key={idx}
@@ -159,6 +188,11 @@ export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DE
             <TrialClassModal
                 isOpen={isTrialModalOpen}
                 onClose={() => setIsTrialModalOpen(false)}
+            />
+
+            <ReRegistrationModal
+                isOpen={isPaymentModalOpen}
+                onClose={() => setIsPaymentModalOpen(false)}
             />
         </section>
     );

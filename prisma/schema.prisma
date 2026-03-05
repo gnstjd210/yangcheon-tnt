@@ -286,3 +286,14 @@ model AdminMenu {
   orderIndex Int      @default(0)
   isVisible  Boolean  @default(true)
 }
+
+model Payment {
+  id          String   @id @default(cuid())
+  studentName String
+  classMonth  String
+  amount      Int
+  status      String   @default("pending") // 'pending', 'success', 'failed', 'cancelled'
+  tid         String?  // KakaoPay transaction ID
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
