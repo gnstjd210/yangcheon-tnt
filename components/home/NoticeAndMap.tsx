@@ -23,7 +23,9 @@ export default function NoticeAndMap({ notices = [] }: NoticeAndMapProps) {
                 {/* LEFT: NOTICE BOARD */}
                 <div className="flex flex-col">
                     <div className="flex items-center justify-between mb-8">
-                        <h3 className="text-3xl font-black text-navy-900 tracking-tight">공지사항</h3>
+                        <Link href="/support/notice" className="hover:opacity-80 transition-opacity">
+                            <h3 className="text-3xl font-black text-navy-900 tracking-tight">공지사항</h3>
+                        </Link>
                         <Link href="/support/notice" className="group flex items-center gap-1 text-sm font-bold text-gray-400 hover:text-sky-500 transition-colors">
                             더보기 <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
