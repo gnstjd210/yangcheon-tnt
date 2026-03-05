@@ -39,7 +39,7 @@ export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DE
     return (
         <section className="relative min-h-[calc(100vh-128px)] w-full max-w-[1920px] mx-auto px-6 md:px-12 pt-36 pb-6 flex flex-col lg:flex-row gap-6">
             {/* LEFT: SLIDER (70%) */}
-            <div className="relative w-full lg:w-[70%] h-[600px] lg:h-[650px] rounded-[30px] overflow-hidden shadow-2xl group">
+            <div className="relative w-full lg:w-[70%] aspect-[21/9] h-auto rounded-[30px] overflow-hidden shadow-2xl group">
                 <AnimatePresence mode='wait'>
                     <motion.div
                         key={currentSlide}
@@ -101,7 +101,7 @@ export default function HeroSplit({ slides = DEFAULT_HERO_IMAGES, quickMenu = DE
             </div>
 
             {/* RIGHT: QUICK MENU (30%) - Stronger Brightness Hover */}
-            <div className="w-full lg:w-[30%] h-[600px] lg:h-[650px] flex flex-col gap-4">
+            <div className="w-full lg:w-[30%] flex flex-col gap-4">
                 {quickMenu.map((item, idx) => {
                     if (item.href === '/trial') {
                         return (
