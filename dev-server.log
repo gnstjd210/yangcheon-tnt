@@ -59,3 +59,48 @@
  GET /favicon.ico 200 in 19ms
  POST /admin/schedule 200 in 130ms
  POST /admin/schedule 200 in 89ms
+ ✓ Compiled in 5.4s (5084 modules)
+ GET /admin/schedule 200 in 532ms
+ ✓ Compiled in 972ms (2418 modules)
+ GET /admin/schedule 200 in 143ms
+ GET /admin/schedule 200 in 947ms
+ ✓ Compiled /api/auth/[...nextauth] in 322ms (2827 modules)
+ GET /api/auth/session 200 in 663ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/session 200 in 14ms
+ POST /admin/schedule 200 in 163ms
+ POST /admin/schedule 200 in 75ms
+ POST /admin/schedule 200 in 888ms
+ GET /admin/schedule 200 in 1744ms
+ GET /api/auth/session 200 in 402ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 4s (2829 modules)
+ GET /favicon.ico 200 in 4407ms
+ GET /api/auth/session 200 in 5417ms
+ POST /admin/schedule 200 in 5078ms
+ GET /api/auth/session 200 in 223ms
+ POST /admin/schedule 200 in 162ms
+ POST /admin/schedule 200 in 459ms
+ GET /admin/schedule 200 in 768ms
+ GET /api/auth/session 200 in 23ms
+ GET /api/auth/session 200 in 28ms
+ GET /api/auth/session 200 in 22ms
+ POST /admin/schedule 200 in 90ms
+ GET /favicon.ico 200 in 42ms
+ POST /admin/schedule 200 in 92ms
+ POST /admin/schedule 200 in 289ms
+ GET /admin/schedule 200 in 341ms
+ GET /api/auth/session 200 in 33ms
+ GET /api/auth/session 200 in 26ms
+ GET /api/auth/session 200 in 21ms
+ GET /favicon.ico 200 in 59ms
+ POST /admin/schedule 200 in 152ms
+ POST /admin/schedule 200 in 150ms
+ POST /admin/schedule 200 in 429ms
+ GET /admin/schedule 200 in 127ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 15ms
+ POST /admin/schedule 200 in 90ms
+ GET /favicon.ico 200 in 53ms
+ POST /admin/schedule 200 in 75ms

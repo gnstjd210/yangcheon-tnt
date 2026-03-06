@@ -30,13 +30,14 @@ const DAY_MAP: Record<string, number> = {
 };
 
 const COLOR_MAP: Record<string, string> = {
-    blue: "#3B82F6",    // blue-500
-    red: "#EF4444",     // red-500
-    green: "#22C55E",   // green-500
-    yellow: "#EAB308",  // yellow-500
-    purple: "#A855F7",  // purple-500
-    pink: "#EC4899",    // pink-500
-    gray: "#6B7280",    // gray-500
+    pink: "#FFD1DC",
+    yellow: "#FFF9C4",
+    green: "#DCEDC8",
+    sky: "#E1F5FE",
+    purple: "#F3E5F5",
+    beige: "#F5F5DC",
+    apricot: "#FFE0B2",
+    gray: "#ECEFF1",
 };
 
 export default function ScheduleViewer({ schedules }: { schedules: Schedule[] }) {
@@ -46,9 +47,9 @@ export default function ScheduleViewer({ schedules }: { schedules: Schedule[] })
             title: s.className,
             startTime: s.startTime,
             endTime: s.endTime,
-            backgroundColor: COLOR_MAP[s.color] || "#6B7280",
-            borderColor: COLOR_MAP[s.color] || "#6B7280",
-            textColor: "#FFFFFF",
+            backgroundColor: COLOR_MAP[s.color] || "#ECEFF1",
+            borderColor: COLOR_MAP[s.color] || "#ECEFF1",
+            textColor: "#333333",
             extendedProps: {
                 maxUsers: s.maxUsers,
                 currentUsers: s.currentUsers,
@@ -152,11 +153,11 @@ export default function ScheduleViewer({ schedules }: { schedules: Schedule[] })
                 dayMaxEvents={3}
                 events={events as unknown as import("@fullcalendar/core").EventSourceInput}
                 eventContent={(eventInfo) => (
-                    <div className="flex flex-col overflow-hidden text-white drop-shadow-sm">
+                    <div className="flex flex-col overflow-hidden text-[#333333] drop-shadow-sm">
                         <div className="font-bold text-sm truncate leading-snug">{eventInfo.event.title}</div>
                         <div className="text-[11px] opacity-90 flex justify-between items-center mt-1">
                             <span>{eventInfo.timeText}</span>
-                            <span className="bg-black/30 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                            <span className="bg-black/10 px-1.5 py-0.5 rounded text-[10px] font-bold">
                                 {eventInfo.event.extendedProps.currentUsers}/{eventInfo.event.extendedProps.maxUsers}
                             </span>
                         </div>

@@ -32,13 +32,14 @@ const DAYS = [
 ];
 
 const COLORS = [
-    { value: "blue", label: "파랑", bg: "bg-blue-500" },
-    { value: "red", label: "빨강", bg: "bg-red-500" },
-    { value: "green", label: "초록", bg: "bg-green-500" },
-    { value: "yellow", label: "노랑", bg: "bg-yellow-500" },
-    { value: "purple", label: "보라", bg: "bg-purple-500" },
-    { value: "pink", label: "분홍", bg: "bg-pink-500", hex: "#ec4899" },
-    { value: "gray", label: "회색", bg: "bg-gray-500", hex: "#6b7280" },
+    { value: "pink", label: "연분홍", bg: "bg-[#FFD1DC]", hex: "#FFD1DC" },
+    { value: "yellow", label: "연노랑", bg: "bg-[#FFF9C4]", hex: "#FFF9C4" },
+    { value: "green", label: "연녹색", bg: "bg-[#DCEDC8]", hex: "#DCEDC8" },
+    { value: "sky", label: "연하늘", bg: "bg-[#E1F5FE]", hex: "#E1F5FE" },
+    { value: "purple", label: "연보라", bg: "bg-[#F3E5F5]", hex: "#F3E5F5" },
+    { value: "beige", label: "연베이지", bg: "bg-[#F5F5DC]", hex: "#F5F5DC" },
+    { value: "apricot", label: "살구색", bg: "bg-[#FFE0B2]", hex: "#FFE0B2" },
+    { value: "gray", label: "연회색", bg: "bg-[#ECEFF1]", hex: "#ECEFF1" },
 ];
 
 export default function ScheduleManager({ initialSchedules }: { initialSchedules: Schedule[] }) {
@@ -54,7 +55,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
     const [startTime, setStartTime] = useState("10:00");
     const [endTime, setEndTime] = useState("11:00");
     const [className, setClassName] = useState("");
-    const [color, setColor] = useState("blue");
+    const [color, setColor] = useState("pink");
     const [maxUsers, setMaxUsers] = useState(12);
     const [currentUsers, setCurrentUsers] = useState(0);
 
@@ -276,6 +277,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                                 endTime: schedule.endTime,
                                 backgroundColor: evtColor,
                                 borderColor: evtColor,
+                                textColor: "#333333",
                                 extendedProps: { ...schedule }
                             };
                         } else {
@@ -287,6 +289,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                                 end: `${d}T${schedule.endTime}`,
                                 backgroundColor: evtColor,
                                 borderColor: evtColor,
+                                textColor: "#333333",
                                 extendedProps: { ...schedule }
                             };
                         }
@@ -307,11 +310,11 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                         openModal(info.event.extendedProps as Schedule);
                     }}
                     eventContent={(eventInfo) => (
-                        <div className="flex flex-col overflow-hidden text-white drop-shadow-sm">
+                        <div className="flex flex-col overflow-hidden text-[#333333] drop-shadow-sm">
                             <div className="font-bold text-sm truncate leading-snug">{eventInfo.event.title}</div>
                             <div className="text-[11px] opacity-90 flex justify-between items-center mt-1">
                                 <span>{eventInfo.timeText}</span>
-                                <span className="bg-black/30 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                                <span className="bg-black/10 px-1.5 py-0.5 rounded text-[10px] font-bold">
                                     {eventInfo.event.extendedProps.currentUsers}/{eventInfo.event.extendedProps.maxUsers}
                                 </span>
                             </div>
