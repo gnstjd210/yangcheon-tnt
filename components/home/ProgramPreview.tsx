@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import type { ProgramPreview } from '@/lib/mainPageConstants';
 import { DEFAULT_PROGRAMS } from '@/lib/mainPageConstants';
 
@@ -29,10 +28,9 @@ export default function ProgramPreview({ programs = DEFAULT_PROGRAMS }: ProgramP
                 {/* Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {programs.map((program, idx) => (
-                        <Link
+                        <div
                             key={idx}
-                            href={program.href}
-                            className="group relative h-[400px] w-full overflow-hidden block rounded-[24px] shadow-sm hover:shadow-xl transition-shadow duration-300"
+                            className="group relative h-[400px] w-full overflow-hidden block rounded-[24px] shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-default"
                         >
                             {/* Image Background with Scale Animation */}
                             <div
@@ -55,7 +53,7 @@ export default function ProgramPreview({ programs = DEFAULT_PROGRAMS }: ProgramP
                                     {program.desc}
                                 </p>
                             </div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
             </div>
