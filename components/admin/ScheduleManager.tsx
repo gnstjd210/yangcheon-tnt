@@ -305,7 +305,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                                 extendedProps: { ...schedule }
                             };
                         }
-                    }).filter(Boolean) as any}
+                    }).filter(Boolean) as unknown as import("@fullcalendar/core").EventSourceInput}
                     dateClick={(info) => {
                         setEditingSchedule(null);
                         setIsRecurring(false);

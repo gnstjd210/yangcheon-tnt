@@ -141,3 +141,5 @@
  POST /admin/schedule 200 in 62ms
  GET /favicon.ico 200 in 28ms
  POST /admin/schedule 200 in 53ms
+ ✓ Compiled in 7.9s (5098 modules)
+ ✓ Compiled in 7s (5098 modules)

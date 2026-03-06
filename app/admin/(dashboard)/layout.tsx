@@ -1,9 +1,8 @@
 'use client';
 
 import { useSession, signOut } from 'next-auth/react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import Link from 'next/link';
 import { LogOut } from 'lucide-react';
 import SidebarMenuWrapper from '@/components/admin/layout/SidebarMenuWrapper';
 

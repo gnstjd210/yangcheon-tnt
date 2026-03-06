@@ -31,19 +31,14 @@ export default function UserManager({ initialUsers }: { initialUsers: User[] }) 
 
     const handleDelete = async (id: string) => {
         if (!confirm("정말 이 사용자를 삭제하시겠습니까? (이 작업은 되돌릴 수 없습니다.)")) return;
-        setIsLoading(true);
         try {
             await deleteUser(id);
             setUsers((prev) => prev.filter((u) => u.id !== id));
         } catch (error) {
             console.error(error);
             alert("삭제에 실패했습니다.");
-        } finally {
-            setIsLoading(false);
         }
     };
-
-    const [isLoading, setIsLoading] = useState(false);
 
     const formatProvider = (provider: string | null) => {
         if (provider === "google") return <span className="text-red-500 font-bold">Google</span>;
