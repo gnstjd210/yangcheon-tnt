@@ -115,6 +115,10 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
             alert("현재 신청 인원이 정원을 초과할 수 없습니다.");
             return;
         }
+        if (!isRecurring && !date) {
+            alert("정확한 날짜를 선택해주세요.");
+            return;
+        }
 
         setIsLoading(true);
 
@@ -152,6 +156,10 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
     const handleBatchSubmit = async () => {
         if (currentUsers > maxUsers) {
             alert("현재 신청 인원이 정원을 초과할 수 없습니다.");
+            return;
+        }
+        if (!date) {
+            alert("시작 날짜를 선택해주세요.");
             return;
         }
 
@@ -268,11 +276,12 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                     events={schedules.map(schedule => {
                         const evtColor = COLORS.find(c => c.value === schedule.color)?.hex || "#3b82f6";
                         if (schedule.isRecurring) {
+                            if (!schedule.day) return null;
                             const dayMap: { [key: string]: number } = { "Sun": 0, "Mon": 1, "Tue": 2, "Wed": 3, "Thu": 4, "Fri": 5, "Sat": 6 };
                             return {
                                 id: schedule.id,
                                 title: `${schedule.startTime} ${schedule.className}`,
-                                daysOfWeek: [dayMap[schedule.day || "Mon"]],
+                                daysOfWeek: [dayMap[schedule.day]],
                                 startTime: schedule.startTime,
                                 endTime: schedule.endTime,
                                 backgroundColor: evtColor,
@@ -281,7 +290,10 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                                 extendedProps: { ...schedule }
                             };
                         } else {
-                            const d = schedule.date ? format(new Date(schedule.date), "yyyy-MM-dd") : "";
+                            if (!schedule.date) return null;
+                            const d = format(new Date(schedule.date), "yyyy-MM-dd");
+                            if (d === "NaN-NaN-NaN" || !d) return null;
+
                             return {
                                 id: schedule.id,
                                 title: `${schedule.startTime} ${schedule.className}`,
@@ -293,7 +305,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                                 extendedProps: { ...schedule }
                             };
                         }
-                    })}
+                    }).filter(Boolean) as any}
                     dateClick={(info) => {
                         setEditingSchedule(null);
                         setIsRecurring(false);
