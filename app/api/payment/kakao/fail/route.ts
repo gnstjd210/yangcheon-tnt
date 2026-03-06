@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Request) {
-    const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    return NextResponse.redirect(`${BASE_URL}/payment/fail?reason=error`);
+export async function GET() {
+    console.error('KakaoPay payment failed by user or system');
+
+    // Redirect the user back to the payment page with a failure query param
+    // You can customize this redirect URL to where you want the user to end up
+    return NextResponse.redirect(new URL('/payment?status=failed', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'));
 }

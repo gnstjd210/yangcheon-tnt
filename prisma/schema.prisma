@@ -146,6 +146,7 @@ model Facility {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
 }
 
 model Location {
@@ -266,6 +267,7 @@ model ProgramData {
   image3Url   String?
   image4Url   String?
   updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
 }
 
 model AdultClassCard {
@@ -296,4 +298,5 @@ model Payment {
   tid         String?  // KakaoPay transaction ID
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
 }

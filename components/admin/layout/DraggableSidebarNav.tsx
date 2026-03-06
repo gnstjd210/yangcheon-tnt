@@ -52,7 +52,6 @@ function SortableMenuItem({ item, isActive }: { item: AdminMenu; isActive: boole
     };
 
     // Dynamically get the Icon component
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const IconComponent = (LucideIcons as any)[item.iconName] || LucideIcons.FileText;
 
     const linkBaseClass = "flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full select-none";
