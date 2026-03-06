@@ -127,6 +127,9 @@ export default function ScheduleViewer({ schedules }: { schedules: Schedule[] })
 
         /* Event Styling */
         .fc-event { border-radius: 6px; padding: 4px 6px; border: none; margin-bottom: 4px !important; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+
+        /* More Link Styling */
+        .fc-daygrid-more-link { font-weight: bold; color: #0284c7 !important; padding: 2px 4px; border-radius: 4px; background: #e0f2fe; display: inline-block; margin-top: 2px; }
       `}</style>
             <FullCalendar
                 ref={calendarRef}
@@ -146,14 +149,14 @@ export default function ScheduleViewer({ schedules }: { schedules: Schedule[] })
                     center: "title",
                     right: "dayGridMonth,dayGridWeek",
                 }}
-                dayMaxEvents={false}
+                dayMaxEvents={3}
                 events={events as unknown as import("@fullcalendar/core").EventSourceInput}
                 eventContent={(eventInfo) => (
-                    <div className="flex flex-col overflow-hidden">
+                    <div className="flex flex-col overflow-hidden text-white drop-shadow-sm">
                         <div className="font-bold text-sm truncate leading-snug">{eventInfo.event.title}</div>
                         <div className="text-[11px] opacity-90 flex justify-between items-center mt-1">
                             <span>{eventInfo.timeText}</span>
-                            <span className="bg-black/10 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                            <span className="bg-black/30 px-1.5 py-0.5 rounded text-[10px] font-bold">
                                 {eventInfo.event.extendedProps.currentUsers}/{eventInfo.event.extendedProps.maxUsers}
                             </span>
                         </div>

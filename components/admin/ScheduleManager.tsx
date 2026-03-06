@@ -56,6 +56,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
     const [className, setClassName] = useState("");
     const [color, setColor] = useState("blue");
     const [maxUsers, setMaxUsers] = useState(12);
+    const [currentUsers, setCurrentUsers] = useState(0);
 
     const calendarRef = useRef<FullCalendar>(null);
 
@@ -85,6 +86,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
             setClassName(schedule.className);
             setColor(schedule.color);
             setMaxUsers(schedule.maxUsers);
+            setCurrentUsers(schedule.currentUsers || 0);
         } else {
             setEditingSchedule(null);
             setIsRecurring(true);
@@ -95,6 +97,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
             setClassName("");
             setColor("blue");
             setMaxUsers(12);
+            setCurrentUsers(0);
         }
         setIsModalOpen(true);
     };
@@ -106,6 +109,12 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (currentUsers > maxUsers) {
+            alert("현재 신청 인원이 정원을 초과할 수 없습니다.");
+            return;
+        }
+
         setIsLoading(true);
 
         const formData = new FormData();
@@ -120,6 +129,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
         formData.append("className", className);
         formData.append("color", color);
         formData.append("maxUsers", maxUsers.toString());
+        formData.append("currentUsers", currentUsers.toString());
 
         try {
             if (editingSchedule) {
@@ -139,6 +149,11 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
     };
 
     const handleBatchSubmit = async () => {
+        if (currentUsers > maxUsers) {
+            alert("현재 신청 인원이 정원을 초과할 수 없습니다.");
+            return;
+        }
+
         if (!confirm("4주치 일정을 일괄 등록하시겠습니까?")) return;
         setIsLoading(true);
 
@@ -150,6 +165,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
         formData.append("className", className);
         formData.append("color", color);
         formData.append("maxUsers", maxUsers.toString());
+        formData.append("currentUsers", currentUsers.toString());
 
         try {
             await createBatchSchedules(formData);
@@ -225,12 +241,16 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
 
                     /* Event Styling */
                     .fc-event { border-radius: 6px; padding: 4px 6px; border: none; margin-bottom: 4px !important; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+
+                    /* More Link Styling */
+                    .fc-daygrid-more-link { font-weight: bold; color: #0284c7 !important; padding: 2px 4px; border-radius: 4px; background: #e0f2fe; display: inline-block; margin-top: 2px; }
                 `}</style>
                 <FullCalendar
                     ref={calendarRef}
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
                     locale="ko"
+                    dayMaxEvents={3}
                     customButtons={{
                         myToday: {
                             text: '오늘',
@@ -280,17 +300,18 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                         setClassName("");
                         setColor("blue");
                         setMaxUsers(12);
+                        setCurrentUsers(0);
                         setIsModalOpen(true);
                     }}
                     eventClick={(info) => {
                         openModal(info.event.extendedProps as Schedule);
                     }}
                     eventContent={(eventInfo) => (
-                        <div className="flex flex-col overflow-hidden">
+                        <div className="flex flex-col overflow-hidden text-white drop-shadow-sm">
                             <div className="font-bold text-sm truncate leading-snug">{eventInfo.event.title}</div>
                             <div className="text-[11px] opacity-90 flex justify-between items-center mt-1">
                                 <span>{eventInfo.timeText}</span>
-                                <span className="bg-black/10 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                                <span className="bg-black/30 px-1.5 py-0.5 rounded text-[10px] font-bold">
                                     {eventInfo.event.extendedProps.currentUsers}/{eventInfo.event.extendedProps.maxUsers}
                                 </span>
                             </div>
@@ -304,8 +325,8 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                    <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
-                        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl overflow-y-auto max-h-[90vh]">
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
                             <h3 className="text-xl font-bold text-navy-900">
                                 {editingSchedule ? "수업 수정" : "새 수업 추가"}
                             </h3>
@@ -424,17 +445,71 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">정원</label>
-                                <input
-                                    type="number"
-                                    value={maxUsers}
-                                    onChange={(e) => setMaxUsers(parseInt(e.target.value))}
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500"
-                                    min="1"
-                                    required
-                                />
+                            <div className="grid grid-cols-2 gap-4 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2 text-center">현재 신청 인원</label>
+                                    <div className="flex flex-col gap-1 items-center">
+                                        <div className="flex items-center w-full max-w-[120px] bg-white border border-gray-200 rounded-lg overflow-hidden shrink-0">
+                                            <button
+                                                type="button"
+                                                onClick={() => setCurrentUsers(Math.max(0, currentUsers - 1))}
+                                                className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold border-r border-gray-200 transition"
+                                            >
+                                                -
+                                            </button>
+                                            <input
+                                                type="number"
+                                                value={currentUsers}
+                                                onChange={(e) => setCurrentUsers(parseInt(e.target.value) || 0)}
+                                                className="w-full px-2 py-2 text-center text-sm font-bold text-blue-600 focus:outline-none"
+                                                min="0"
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setCurrentUsers(currentUsers + 1)}
+                                                className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold border-l border-gray-200 transition"
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="border-l border-blue-100 pl-4">
+                                    <label className="block text-sm font-bold text-gray-700 mb-2 text-center">정원 (Max)</label>
+                                    <div className="flex flex-col gap-1 items-center">
+                                        <div className="flex items-center w-full max-w-[120px] bg-white border border-gray-200 rounded-lg overflow-hidden shrink-0">
+                                            <button
+                                                type="button"
+                                                onClick={() => setMaxUsers(Math.max(1, maxUsers - 1))}
+                                                className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold border-r border-gray-200 transition"
+                                            >
+                                                -
+                                            </button>
+                                            <input
+                                                type="number"
+                                                value={maxUsers}
+                                                onChange={(e) => setMaxUsers(parseInt(e.target.value) || 1)}
+                                                className="w-full px-2 py-2 text-center text-sm font-bold text-gray-700 focus:outline-none"
+                                                min="1"
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setMaxUsers(maxUsers + 1)}
+                                                className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold border-l border-gray-200 transition"
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            {currentUsers > maxUsers && (
+                                <p className="text-red-500 text-xs font-bold text-center mt-[-8px]">
+                                    경고: 현재 신청 인원이 정원을 초과했습니다.
+                                </p>
+                            )}
 
                             <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
                                 <div className="flex gap-2">

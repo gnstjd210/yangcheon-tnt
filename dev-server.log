@@ -1,0 +1,61 @@
+
+> yangcheon-tnt@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.5.12
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.219.99:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 1899ms
+ ✓ Compiled /middleware in 219ms (244 modules)
+ ✓ Compiled in 35ms (244 modules)
+ ○ Compiling /admin/schedule ...
+ ✓ Compiled /admin/schedule in 7.8s (5092 modules)
+ GET /admin/schedule 200 in 10275ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1391ms (5245 modules)
+ GET /admin/schedule 200 in 151ms
+ GET /api/auth/session 200 in 2315ms
+ GET /api/auth/session 200 in 14ms
+ POST /admin/schedule 200 in 197ms
+ POST /admin/schedule 200 in 59ms
+ ✓ Compiled in 745ms (2910 modules)
+ POST /admin/schedule 200 in 720ms
+ GET /admin/schedule 200 in 734ms
+ ✓ Compiled /api/auth/[...nextauth] in 448ms (2827 modules)
+ GET /api/auth/session 200 in 692ms
+ GET /api/auth/session 200 in 13ms
+ POST /admin/schedule 200 in 195ms
+ ✓ Compiled /favicon.ico in 433ms (2829 modules)
+ GET /favicon.ico 200 in 693ms
+ POST /admin/schedule 200 in 732ms
+ POST /admin/schedule 200 in 593ms
+ GET /admin/schedule 200 in 420ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 27ms
+ POST /admin/schedule 200 in 79ms
+ GET /favicon.ico 200 in 17ms
+ POST /admin/schedule 200 in 67ms
+ POST /admin/schedule 200 in 219ms
+ GET /admin/schedule 200 in 183ms
+ GET /api/auth/session 200 in 20ms
+ GET /api/auth/session 200 in 48ms
+ POST /admin/schedule 200 in 82ms
+ GET /favicon.ico 200 in 79ms
+ POST /admin/schedule 200 in 79ms
+ POST /admin/schedule 200 in 357ms
+ GET /admin/schedule 200 in 178ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 15ms
+ GET /favicon.ico 200 in 16ms
+ POST /admin/schedule 200 in 96ms
+ POST /admin/schedule 200 in 105ms
+ POST /admin/schedule 200 in 540ms
+ GET /admin/schedule 200 in 220ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 21ms
+ GET /favicon.ico 200 in 19ms
+ POST /admin/schedule 200 in 130ms
+ POST /admin/schedule 200 in 89ms

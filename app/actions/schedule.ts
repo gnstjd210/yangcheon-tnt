@@ -21,6 +21,7 @@ export async function createSchedule(formData: FormData) {
     const className = formData.get("className") as string;
     const color = formData.get("color") as string;
     const maxUsers = parseInt(formData.get("maxUsers") as string || "12");
+    const currentUsers = parseInt(formData.get("currentUsers") as string || "0");
 
     await prisma.schedule.create({
         data: {
@@ -32,7 +33,7 @@ export async function createSchedule(formData: FormData) {
             className,
             color,
             maxUsers,
-            currentUsers: 0,
+            currentUsers,
         },
     });
 
@@ -48,19 +49,20 @@ export async function createBatchSchedules(formData: FormData) {
     const className = formData.get("className") as string;
     const color = formData.get("color") as string;
     const maxUsers = parseInt(formData.get("maxUsers") as string || "12");
+    const currentUsers = parseInt(formData.get("currentUsers") as string || "0");
 
     if (isRecurring) {
         // Fallback to normal create if someone tries to batch a weekly recurring via API
         return createSchedule(formData);
     }
 
-    const startDate = new Date(startDateStr);
+    const [year, month, dayStr] = startDateStr.split("-").map(Number);
     const schedulesToCreate = [];
 
-    // Create 4 records (+0, +7, +14, +21 days)
+    // Create 4 records (+0, +7, +14, +21 days) based on strict local parsing to avoid UTC drift
     for (let i = 0; i < 4; i++) {
-        const targetDate = new Date(startDate);
-        targetDate.setDate(startDate.getDate() + (i * 7));
+        // Build date accurately at 12:00 PM local to avoid timezone boundary jump bugs
+        const targetDate = new Date(year, month - 1, dayStr + (i * 7), 12, 0, 0);
 
         schedulesToCreate.push({
             isRecurring: false,
@@ -71,7 +73,7 @@ export async function createBatchSchedules(formData: FormData) {
             className,
             color,
             maxUsers,
-            currentUsers: 0,
+            currentUsers,
         });
     }
 
@@ -92,6 +94,7 @@ export async function updateSchedule(id: string, formData: FormData) {
     const className = formData.get("className") as string;
     const color = formData.get("color") as string;
     const maxUsers = parseInt(formData.get("maxUsers") as string || "12");
+    const currentUsers = parseInt(formData.get("currentUsers") as string || "0");
 
     await prisma.schedule.update({
         where: { id },
@@ -104,6 +107,7 @@ export async function updateSchedule(id: string, formData: FormData) {
             className,
             color,
             maxUsers,
+            currentUsers,
         },
     });
 
