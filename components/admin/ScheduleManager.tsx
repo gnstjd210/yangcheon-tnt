@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Plus, Trash2, X, Repeat, Calendar } from "lucide-react";
-import { createSchedule, updateSchedule, deleteSchedule, createBatchSchedules } from "@/app/actions/schedule";
+import { createSchedule, updateSchedule, deleteSchedule } from "@/app/actions/schedule";
 import { format } from "date-fns";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -153,40 +153,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
         }
     };
 
-    const handleBatchSubmit = async () => {
-        if (currentUsers > maxUsers) {
-            alert("현재 신청 인원이 정원을 초과할 수 없습니다.");
-            return;
-        }
-        if (!date) {
-            alert("시작 날짜를 선택해주세요.");
-            return;
-        }
 
-        if (!confirm("4주치 일정을 일괄 등록하시겠습니까?")) return;
-        setIsLoading(true);
-
-        const formData = new FormData();
-        formData.append("isRecurring", "false");
-        formData.append("date", date);
-        formData.append("startTime", startTime);
-        formData.append("endTime", endTime);
-        formData.append("className", className);
-        formData.append("color", color);
-        formData.append("maxUsers", maxUsers.toString());
-        formData.append("currentUsers", currentUsers.toString());
-
-        try {
-            await createBatchSchedules(formData);
-            window.location.reload();
-            closeModal();
-        } catch (error) {
-            console.error("Failed to save batch schedules", error);
-            alert("일괄 등록에 실패했습니다.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     const handleDelete = async (id: string) => {
         if (!confirm("정말 삭제하시겠습니까?")) return;
@@ -528,17 +495,7 @@ export default function ScheduleManager({ initialSchedules }: { initialSchedules
 
                             <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
                                 <div className="flex gap-2">
-                                    {!editingSchedule && !isRecurring && (
-                                        <button
-                                            type="button"
-                                            onClick={handleBatchSubmit}
-                                            disabled={isLoading}
-                                            className="px-4 py-3 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition disabled:opacity-50 text-sm flex items-center gap-1"
-                                        >
-                                            <Calendar size={16} />
-                                            한 달 일괄 등록 (4주)
-                                        </button>
-                                    )}
+
                                 </div>
                                 <div className="flex gap-3">
                                     <button

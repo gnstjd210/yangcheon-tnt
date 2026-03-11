@@ -12,9 +12,27 @@ interface ReRegistrationModalProps {
 export default function ReRegistrationModal({ isOpen, onClose }: ReRegistrationModalProps) {
     const [studentName, setStudentName] = useState('');
     const [classMonth, setClassMonth] = useState('');
-    const [amount, setAmount] = useState('100'); // Added default of 100
+
+    // Payment Options States
+    const [category, setCategory] = useState<'soccer' | 'physical'>('soccer');
+    const [soccerOption, setSoccerOption] = useState<'1' | '4'>('4');
+    const [soccerShuttle, setSoccerShuttle] = useState(false);
+    const [physicalOption, setPhysicalOption] = useState<'1' | '1.5'>('1.5');
+    const [physicalCount, setPhysicalCount] = useState<number>(1);
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+
+    const calculateTotalAmount = () => {
+        if (category === 'soccer') {
+            const base = soccerOption === '1' ? 25000 : 100000;
+            const shuttle = soccerShuttle ? 10000 : 0;
+            return base + shuttle;
+        } else {
+            const base = physicalOption === '1' ? 80000 : 100000;
+            return base * physicalCount;
+        }
+    };
 
     const handlePayment = async () => {
         if (!studentName.trim()) {
@@ -29,11 +47,13 @@ export default function ReRegistrationModal({ isOpen, onClose }: ReRegistrationM
         setError('');
         setIsLoading(true);
 
+        const calculatedAmount = calculateTotalAmount().toString();
+
         try {
             const res = await fetch('/api/payment/kakao/ready', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ studentName, classMonth, amount }),
+                body: JSON.stringify({ studentName, classMonth, amount: calculatedAmount }),
             });
 
             const data = await res.json();
@@ -106,16 +126,150 @@ export default function ReRegistrationModal({ isOpen, onClose }: ReRegistrationM
                                 />
                             </div>
 
+                            {/* Category Selection */}
                             <div>
-                                <label className="block text-sm font-bold text-navy-900 mb-2">결제 금액 (원)</label>
-                                <input
-                                    type="number"
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    placeholder="예: 150000"
-                                    disabled={isLoading}
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all text-navy-900"
-                                />
+                                <label className="block text-sm font-bold text-navy-900 mb-2">수강 종목</label>
+                                <div className="flex gap-4">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="category"
+                                            value="soccer"
+                                            checked={category === 'soccer'}
+                                            onChange={() => setCategory('soccer')}
+                                            disabled={isLoading}
+                                            className="w-4 h-4 text-sky-500 border-gray-300"
+                                        />
+                                        <span className="text-gray-700 font-medium">축구</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="category"
+                                            value="physical"
+                                            checked={category === 'physical'}
+                                            onChange={() => setCategory('physical')}
+                                            disabled={isLoading}
+                                            className="w-4 h-4 text-sky-500 border-gray-300"
+                                        />
+                                        <span className="text-gray-700 font-medium">피지컬</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Options based on category */}
+                            {category === 'soccer' ? (
+                                <div className="space-y-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <div>
+                                        <label className="block text-sm font-bold text-navy-900 mb-2">수강권 선택</label>
+                                        <div className="flex flex-col gap-2">
+                                            <label className="flex items-center justify-between cursor-pointer p-3 bg-white rounded-lg border border-gray-200 hover:border-sky-300 transition-colors">
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="radio"
+                                                        name="soccerOption"
+                                                        value="1"
+                                                        checked={soccerOption === '1'}
+                                                        onChange={() => setSoccerOption('1')}
+                                                        disabled={isLoading}
+                                                        className="w-4 h-4 text-sky-500 border-gray-300 relative select-none"
+                                                    />
+                                                    <span className="text-gray-700 font-medium">1회권</span>
+                                                </div>
+                                                <span className="font-bold text-navy-900">25,000원</span>
+                                            </label>
+                                            <label className="flex items-center justify-between cursor-pointer p-3 bg-white rounded-lg border border-gray-200 hover:border-sky-300 transition-colors">
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="radio"
+                                                        name="soccerOption"
+                                                        value="4"
+                                                        checked={soccerOption === '4'}
+                                                        onChange={() => setSoccerOption('4')}
+                                                        disabled={isLoading}
+                                                        className="w-4 h-4 text-sky-500 border-gray-300 relative select-none"
+                                                    />
+                                                    <span className="text-gray-700 font-medium">4회권</span>
+                                                </div>
+                                                <span className="font-bold text-navy-900">100,000원</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="pt-2 border-t border-gray-200">
+                                        <label className="flex items-center justify-between cursor-pointer p-3 bg-white rounded-lg border border-gray-200 hover:border-sky-300 transition-colors">
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={soccerShuttle}
+                                                    onChange={(e) => setSoccerShuttle(e.target.checked)}
+                                                    disabled={isLoading}
+                                                    className="w-4 h-4 text-sky-500 rounded border-gray-300 relative select-none"
+                                                />
+                                                <span className="text-gray-700 font-medium">차량 운행비 추가</span>
+                                            </div>
+                                            <span className="font-bold text-navy-900">+10,000원</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <div>
+                                        <label className="block text-sm font-bold text-navy-900 mb-2">수강 시간 (단가)</label>
+                                        <div className="flex flex-col gap-2">
+                                            <label className="flex items-center justify-between cursor-pointer p-3 bg-white rounded-lg border border-gray-200 hover:border-sky-300 transition-colors">
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="radio"
+                                                        name="physicalOption"
+                                                        value="1"
+                                                        checked={physicalOption === '1'}
+                                                        onChange={() => setPhysicalOption('1')}
+                                                        disabled={isLoading}
+                                                        className="w-4 h-4 text-sky-500 border-gray-300 relative select-none"
+                                                    />
+                                                    <span className="text-gray-700 font-medium">1시간</span>
+                                                </div>
+                                                <span className="font-bold text-navy-900">80,000원 <span className="text-xs text-gray-500 font-normal">/ 회</span></span>
+                                            </label>
+                                            <label className="flex items-center justify-between cursor-pointer p-3 bg-white rounded-lg border border-gray-200 hover:border-sky-300 transition-colors">
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="radio"
+                                                        name="physicalOption"
+                                                        value="1.5"
+                                                        checked={physicalOption === '1.5'}
+                                                        onChange={() => setPhysicalOption('1.5')}
+                                                        disabled={isLoading}
+                                                        className="w-4 h-4 text-sky-500 border-gray-300 relative select-none"
+                                                    />
+                                                    <span className="text-gray-700 font-medium">1.5시간</span>
+                                                </div>
+                                                <span className="font-bold text-navy-900">100,000원 <span className="text-xs text-gray-500 font-normal">/ 회</span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="pt-2 border-t border-gray-200">
+                                        <label className="block text-sm font-bold text-navy-900 mb-2">결제 횟수 (최대 10회)</label>
+                                        <select
+                                            value={physicalCount}
+                                            onChange={(e) => setPhysicalCount(Number(e.target.value))}
+                                            disabled={isLoading}
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all text-navy-900 font-medium cursor-pointer"
+                                        >
+                                            {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+                                                <option key={num} value={num}>
+                                                    {num}회
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Total Amount Display */}
+                            <div className="bg-navy-900 text-white p-4 rounded-xl flex items-center justify-between mb-4 shadow-inner">
+                                <span className="font-medium text-sky-200">총 결제 금액</span>
+                                <span className="text-xl font-black">{calculateTotalAmount().toLocaleString()}원</span>
                             </div>
 
                             {error && (
