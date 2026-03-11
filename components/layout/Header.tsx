@@ -10,10 +10,9 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import NextImage from 'next/image';
 
 // Detailed Sub-menu Structure
-const BANNER_MENUS = [
+const MENU_STRUCTURE = [
     {
         label: 'TSA 소개',
-        subText: 'ABOUT TSA',
         href: '/about/greeting',
         subItems: [
             { label: '인사말', href: '/about/greeting' },
@@ -25,8 +24,7 @@ const BANNER_MENUS = [
         ]
     },
     {
-        label: 'YOUTH ACADEMY',
-        subText: '유소년 아카데미',
+        label: '유소년 아카데미',
         href: '/program/youth/intro',
         subItems: [
             { label: '입단신청', href: '/program/youth/join' },
@@ -35,8 +33,7 @@ const BANNER_MENUS = [
         ]
     },
     {
-        label: 'PHYSICAL TRAINING',
-        subText: '피지컬 트레이닝',
+        label: '피지컬 트레이닝',
         href: '/program/physical/intro',
         subItems: [
             { label: '프로그램 소개', href: '/program/physical/intro' },
@@ -45,8 +42,16 @@ const BANNER_MENUS = [
         ]
     },
     {
-        label: 'TNT W',
-        subText: "Women's Football Team",
+        label: '성인 트레이닝',
+        href: '/program/adult/curriculum',
+        subItems: [
+            { label: '입단신청', href: '/program/adult/join' },
+            { label: '커리큘럼', href: '/program/adult/curriculum' },
+            { label: '갤러리', href: '/program/adult/gallery' }
+        ]
+    },
+    {
+        label: 'TNT W 입단',
         href: '/program/tntw/intro',
         subItems: [
             { label: '입단신청', href: '/program/tntw/join' },
@@ -55,8 +60,7 @@ const BANNER_MENUS = [
         ]
     },
     {
-        label: 'COMMUNITY',
-        subText: '소통과 나눔의 공간',
+        label: '커뮤니티',
         href: '/community/reviews',
         subItems: [
             { label: '레슨후기', href: '/community/reviews' },
@@ -64,8 +68,7 @@ const BANNER_MENUS = [
         ]
     },
     {
-        label: 'CUSTOMER SUPPORT',
-        subText: '무엇을 도와드릴까요?',
+        label: '고객지원',
         href: '/support/notice',
         subItems: [
             { label: '공지사항', href: '/support/notice' },
@@ -73,6 +76,15 @@ const BANNER_MENUS = [
             { label: '문의', href: '/support/contact' }
         ]
     },
+];
+
+const MEGA_BANNER_MENUS = [
+    { label: 'TSA 소개', href: '/about/greeting' },
+    { label: '유소년 아카데미', href: '/program/youth/intro' },
+    { label: '피지컬 트레이닝', href: '/program/physical/intro' },
+    { label: "TNT W\n(Women's Football Team)", href: '/program/tntw/intro' },
+    { label: 'COMMUNITY\n(소통과 나눔의 공간)', href: '/community/reviews' },
+    { label: 'CUSTOMER SUPPORT\n(무엇을 도와드릴까요?)', href: '/support/notice' }
 ];
 
 const UTILITY_ITEMS = [
@@ -220,70 +232,42 @@ export default function Header() {
                         </div>
                     </Link>
 
-                    {/* CENTER: Main Menu (Image Banner Layout) */}
-                    <nav className="hidden xl:flex flex-1 max-w-[1300px] mx-4 2xl:mx-8 h-[90%] py-2 items-center justify-between z-30 gap-3">
-                        {BANNER_MENUS.map((item) => (
-                            <div key={item.href} className="relative group h-full flex-1 flex items-center justify-center border-b-2 border-transparent">
-                                {/* IMAGE BANNER CSS COMPONENT */}
-                                <Link
-                                    href={item.href}
-                                    className="relative flex flex-col items-center justify-center w-full h-full rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.1)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-all duration-300 group-hover:-translate-y-1"
-                                >
-                                    {/* Background Container (Mint Green & Geometric Pattern) */}
-                                    <div className="absolute inset-0 bg-[#A0E8D5] overflow-hidden">
-                                        {/* Diagonal Dynamic Cuts */}
-                                        <div className="absolute top-[-50%] left-[-20%] w-[60%] h-[200%] bg-white/40 transform rotate-[35deg] origin-center -skew-x-[20deg]" />
-                                        <div className="absolute top-[-20%] right-[-10%] w-[35%] h-[150%] bg-[#5EE1C6]/60 transform rotate-[35deg] scale-110" />
-                                        {/* Soccer Field Lines Overlay (Visual detail) */}
-                                        <div className="absolute border-[1.5px] border-white/25 rounded-full w-[40px] h-[40px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-                                        <div className="absolute border-l-[1.5px] border-white/25 h-full w-[1.5px] top-0 left-1/2 -translate-x-1/2" />
-                                        <div className="absolute h-[30%] w-[15%] border-[1.5px] border-white/25 top-1/2 left-0 -translate-y-1/2 border-l-0" />
-                                        <div className="absolute h-[30%] w-[15%] border-[1.5px] border-white/25 top-1/2 right-0 -translate-y-1/2 border-r-0" />
-                                    </div>
+                    {/* CENTER: Main Menu */}
+                    <nav className="hidden xl:grid grid-cols-7 flex-1 max-w-[1200px] mx-6 2xl:mx-10 h-full items-center justify-items-center z-30">
+                        {MENU_STRUCTURE.map((item) => (
+                            <div key={item.href} className="relative group h-full flex items-center justify-center w-full border-b-2 border-transparent">
+                                {/* The Anchor Container */}
+                                <div className="relative flex flex-col items-center justify-center h-full w-full">
+                                    <Link
+                                        href={item.href}
+                                        className={clsx(
+                                            "font-bold tracking-tight transition-all duration-300 block text-center whitespace-nowrap",
+                                            isScrolled ? "text-[15px]" : "text-[16px]",
+                                            textColorClass,
+                                            "hover:text-sky-400"
+                                        )}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                    <span className="absolute bottom-[35%] left-1/2 -translate-x-1/2 h-[3px] bg-sky-500 transition-all duration-300 w-0 opacity-0 group-hover:w-[40%] group-hover:opacity-100"></span>
 
-                                    {/* Banner Content Container */}
-                                    <div className="relative z-10 w-full flex flex-col items-center justify-center px-1.5 h-full">
-                                        {/* Top Title Section */}
-                                        <div className="w-full relative flex items-center justify-center mb-1 drop-shadow-md">
-                                            {/* Tiny Emblem left side */}
-                                            <div className="absolute left-0.5 w-3 h-3 md:w-4 md:h-4 rounded-full bg-navy-900 border border-white/80 hidden lg:flex items-center justify-center overflow-hidden">
-                                                <span className="text-[5px] md:text-[6px] text-white">TNT</span>
-                                            </div>
-
-                                            <h3 className="text-[#0369a1] italic font-black text-[9px] 2xl:text-[10px] tracking-tighter leading-none">
-                                                TNT SPORTS ACADEMY
-                                            </h3>
-
-                                            {/* Fire Soccer Ball emerging on hover */}
-                                            <div className="absolute right-0 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 scale-75 xl:scale-90 hidden lg:block">
-                                                <span className="drop-shadow-lg text-xs md:text-sm">🔥⚽</span>
-                                            </div>
+                                    {/* INDIVIDUAL DROPDOWN MENU (Hover Default) */}
+                                    <div className={clsx(
+                                        "absolute top-[80%] left-1/2 -translate-x-1/2 pt-0 transition-all duration-300 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto",
+                                        isHoverMenuOpen ? "block" : "hidden"
+                                    )}>
+                                        <div className="bg-navy-900 shadow-xl border border-white/10 border-t-0 rounded-b-xl overflow-hidden min-w-[140px] w-max flex flex-col items-center py-4 px-2">
+                                            {item.subItems.map((sub) => (
+                                                <Link
+                                                    key={sub.label}
+                                                    href={sub.href}
+                                                    className="text-gray-400 hover:text-white transition-all text-[14px] font-medium block w-full px-6 py-2.5 text-center hover:bg-white/5 whitespace-nowrap rounded-lg"
+                                                    onClick={() => setIsHoverMenuOpen(false)}
+                                                >
+                                                    {sub.label}
+                                                </Link>
+                                            ))}
                                         </div>
-
-                                        {/* White Content Box */}
-                                        <div className="bg-white/95 backdrop-blur-sm px-2 py-1 rounded-md shadow-sm w-[96%] flex flex-col items-center justify-center border border-white group-hover:scale-105 transition-transform duration-300">
-                                            <span className="text-navy-900 font-extrabold text-[10px] 2xl:text-[11px] leading-tight text-center">{item.label}</span>
-                                            <span className="text-sky-500 font-bold text-[8.5px] 2xl:text-[9.5px] leading-[1.2] text-center w-full truncate">{item.subText}</span>
-                                        </div>
-                                    </div>
-                                </Link>
-
-                                {/* INDIVIDUAL DROPDOWN MENU (Hover Default) */}
-                                <div className={clsx(
-                                    "absolute top-full left-1/2 -translate-x-1/2 pt-1.5 transition-all duration-300 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto",
-                                    isHoverMenuOpen ? "block" : "hidden"
-                                )}>
-                                    <div className="bg-navy-900 shadow-xl border border-white/10 rounded-b-xl overflow-hidden min-w-[140px] w-max flex flex-col items-center py-4 px-2">
-                                        {item.subItems.map((sub) => (
-                                            <Link
-                                                key={sub.label}
-                                                href={sub.href}
-                                                className="text-gray-400 hover:text-white transition-all text-[14px] font-medium block w-full px-6 py-2.5 text-center hover:bg-white/5 whitespace-nowrap rounded-lg"
-                                                onClick={() => setIsHoverMenuOpen(false)}
-                                            >
-                                                {sub.label}
-                                            </Link>
-                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -456,23 +440,50 @@ export default function Header() {
                                         </div>
                                     </div>
 
-                                    {/* CENTER: 6-Column Grid aligned exactly to Header */}
-                                    <div className="hidden xl:grid grid-cols-6 flex-1 max-w-[1300px] mx-4 2xl:mx-8 justify-items-center z-30 w-full">
-                                        {BANNER_MENUS.map((item) => (
-                                            <div key={item.label} className="w-full flex flex-col items-center">
-                                                <div className="flex flex-col space-y-4 text-center mt-2">
-                                                    {item.subItems.map((sub) => (
-                                                        <Link
-                                                            key={sub.label}
-                                                            href={sub.href}
-                                                            className="text-gray-400 hover:text-white transition-all text-[15px] font-medium block hover:-translate-y-0.5 whitespace-nowrap"
-                                                            onClick={() => setIsDesktopMegaMenuOpen(false)}
-                                                        >
-                                                            {sub.label}
-                                                        </Link>
-                                                    ))}
+                                    {/* CENTER: 6-Column CSS Banner Grid aligned exactly to Center */}
+                                    <div className="hidden xl:grid grid-cols-6 flex-1 max-w-[1300px] mx-4 2xl:mx-8 gap-4 justify-items-center z-30 w-full">
+                                        {MEGA_BANNER_MENUS.map((item) => (
+                                            <Link
+                                                key={item.href}
+                                                href={item.href}
+                                                className="w-full flex-col relative group flex items-center justify-center py-6 px-1 rounded-xl transition-all duration-300"
+                                                onClick={() => setIsDesktopMegaMenuOpen(false)}
+                                            >
+                                                {/* Hover Highlight Background (Subtle Navy Glow) */}
+                                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300" />
+
+                                                <div className="w-full flex flex-col items-center justify-center gap-5 z-10">
+                                                    {/* Top Section with Visual Elements */}
+                                                    <div className="w-full relative flex items-center justify-center px-1">
+                                                        {/* Tiny Emblem left side */}
+                                                        <div className="absolute left-0 lg:w-5 lg:h-5 2xl:w-7 2xl:h-7 rounded-full bg-navy-900 border border-white/80 flex items-center justify-center overflow-hidden z-10 transition-transform group-hover:rotate-12">
+                                                            <span className="text-[5px] 2xl:text-[7px] text-white font-black">TNT</span>
+                                                        </div>
+
+                                                        <h3 className="text-[#38bdf8] italic font-black text-[12px] md:text-[14px] 2xl:text-[16px] tracking-tighter leading-none transition-colors group-hover:text-white drop-shadow-md z-0 text-center w-full">
+                                                            TNT SPORTS<br />ACADEMY
+                                                        </h3>
+
+                                                        {/* Fire Soccer Ball emerging on hover */}
+                                                        <div className="absolute right-0 opacity-80 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 group-hover:-translate-y-1 scale-[1.2] z-10 w-8 h-8 flex items-center justify-center">
+                                                            <span className="drop-shadow-lg text-xl md:text-2xl">🔥⚽</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* White Title Box */}
+                                                    <div className="w-full py-3.5 bg-white hover:bg-gray-50 rounded-lg border border-white shadow-[0_4px_10px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_20px_rgba(56,189,248,0.4)] group-hover:-translate-y-1 transition-all duration-300 overflow-hidden flex items-center justify-center px-2 min-h-[56px] relative">
+                                                        {/* Faint soccer field lines inside the white box to mimic pattern slightly */}
+                                                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none overflow-hidden">
+                                                            <div className="absolute border-[1.5px] border-black rounded-full w-24 h-24 -left-12 top-1/2 -translate-y-1/2" />
+                                                            <div className="absolute border-[1.5px] border-black rounded-full w-24 h-24 -right-12 top-1/2 -translate-y-1/2" />
+                                                            <div className="absolute border-l-[1.5px] border-black h-full w-[1.5px] top-0 left-1/2 -translate-x-1/2" />
+                                                        </div>
+                                                        <span className="block text-navy-900 font-extrabold text-[12px] md:text-[13px] 2xl:text-[14px] leading-tight text-center break-keep w-full whitespace-pre-line z-10">
+                                                            {item.label}
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         ))}
                                     </div>
 
@@ -586,7 +597,7 @@ export default function Header() {
 
                                 {/* Accordion Menu */}
                                 <div className="flex-1 overflow-y-auto w-full px-6 py-2 pb-8 scrollbar-hide">
-                                    {BANNER_MENUS.map((section, index) => {
+                                    {MENU_STRUCTURE.map((section, index) => {
                                         const isExpanded = expandedMenu === index;
                                         return (
                                             <div key={section.label} className="border-b border-white/10 last:border-0">
