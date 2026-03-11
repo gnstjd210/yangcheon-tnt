@@ -1,31 +1,24 @@
 import Image from "next/image";
 import { getProgramData } from "@/app/actions/program";
+import CustomPageHeader from "@/components/layout/CustomPageHeader";
 
 export default async function YouthIntroPage() {
     const data = await getProgramData("/program/youth/intro");
     // Fallback to original image if not set
     const mainImageUrl = data?.imageUrl || "https://images.unsplash.com/photo-1516731237713-fc8888a37f4e?q=80&w=1000&auto=format&fit=crop";
-    
+
     // Default Texts for dual title (Navy + Sky Blue)
     const title = data?.title || "축구를 통해 더 큰 가치를";
     const subtitle = data?.subtitle || "배우는 시간";
 
     return (
         <div className="w-full bg-white">
-            {/* Compact Top Box (Reduced Padding & Rounded) */}
-            <div className="bg-white pt-4 pb-8">
-                <div className="relative h-48 max-w-[1920px] mx-auto md:w-[95%] bg-navy-900 flex items-center justify-center overflow-hidden rounded-3xl mx-4">
-                    <div className="absolute inset-0 bg-black/50 z-10" />
-                    <div className="relative z-20 text-center">
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
-                            YOUTH ACADEMY
-                        </h1>
-                        <p className="text-sky-400 font-bold tracking-widest text-sm">
-                            유소년 아카데미
-                        </p>
-                    </div>
-                </div>
-            </div>
+            {/* Replaced Top Box with Customizer */}
+            <CustomPageHeader
+                pageKey="youth"
+                fallbackTitle="YOUTH ACADEMY"
+                fallbackSubtitle="유소년 아카데미"
+            />
 
             {/* Split Layout: Left Image + Right Text */}
             <div className="max-w-7xl mx-auto px-6 py-20">

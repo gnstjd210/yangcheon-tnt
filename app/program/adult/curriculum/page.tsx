@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { getProgramData } from "@/app/actions/program";
 import { getAdultClassCards } from "@/app/actions/adult-class-card";
+import CustomPageHeader from "@/components/layout/CustomPageHeader";
 
 export default async function AdultIntroPage() {
     const data = await getProgramData("/program/adult/curriculum");
@@ -38,9 +39,15 @@ export default async function AdultIntroPage() {
     const subtitle = data?.subtitle || "실력이다.";
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white flex flex-col">
+            {/* Replaced Top Box with Customizer */}
+            <CustomPageHeader
+                pageKey="adult"
+                fallbackTitle="ADULT TRAINING"
+                fallbackSubtitle="성인 트레이닝"
+            />
             {/* Hero Section - Ascend Style Clone */}
-            <div className="relative py-20 bg-white overflow-hidden">
+            <div className="relative py-20 bg-white overflow-hidden flex-1">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="flex flex-col md:flex-row items-stretch gap-12">
                         {/* Left: Standard Image Size (matching TNTW) */}

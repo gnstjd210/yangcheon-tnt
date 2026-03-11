@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getProgramData } from "@/app/actions/program";
+import CustomPageHeader from "@/components/layout/CustomPageHeader";
 
 export default async function TNTWIntroPage() {
     const data = await getProgramData("/program/tntw/intro");
@@ -12,28 +13,12 @@ export default async function TNTWIntroPage() {
 
     return (
         <div className="w-full bg-white">
-            {/* Compact Top Box (Reduced Padding & Rounded) */}
-            <div className="bg-white pt-4 pb-8">
-                <div className="relative h-48 max-w-[1920px] mx-auto md:w-[95%] bg-navy-900 flex items-center justify-center overflow-hidden rounded-3xl mx-4">
-                    <div className="absolute inset-0 bg-black/50 z-10" />
-                    <Image
-                        src="https://images.unsplash.com/photo-1516731237713-fc8888a37f4e?q=80&w=1000&auto=format&fit=crop" // Placeholder
-                        alt="TNT W Background"
-                        fill
-                        className="object-cover opacity-50"
-                        priority
-                        unoptimized
-                    />
-                    <div className="relative z-20 text-center">
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
-                            TNT W
-                        </h1>
-                        <p className="text-sky-400 font-bold tracking-widest text-sm">
-                            Women&apos;s Football Team
-                        </p>
-                    </div>
-                </div>
-            </div>
+            {/* Replaced Top Box with Customizer */}
+            <CustomPageHeader
+                pageKey="tntw"
+                fallbackTitle="TNT W"
+                fallbackSubtitle="Women's Football Team"
+            />
 
             {/* Content Section */}
             <div className="max-w-7xl mx-auto px-6 py-20">
