@@ -23,7 +23,7 @@ export async function GET(req: Request) {
 
         let SECRET_KEY = (process.env.KAKAO_PAY_SECRET_KEY || '').replace(/['"]/g, '').trim();
         SECRET_KEY = SECRET_KEY.replace(/^SECRET_KEY\s+/i, '');
-        const CID = (process.env.KAKAO_PAY_CID || '').replace(/['"]/g, '').trim();
+        const CID = (process.env.KAKAO_PAY_CLIENT_ID || '').replace(/['"]/g, '').trim();
 
         // 1. Approve Payment API
         const response = await fetch('https://open-api.kakaopay.com/online/v1/payment/approve', {

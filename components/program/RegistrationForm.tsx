@@ -6,7 +6,7 @@ import { ChevronDown, ChevronUp, Check, Search } from "lucide-react";
 import { submitRegistration } from "@/app/actions/registration";
 
 interface RegistrationFormProps {
-    type: "Youth" | "Adult" | "TNTW";
+    type: string;
     title: string;
     subtitle: string;
 }
@@ -25,9 +25,6 @@ export default function RegistrationForm({ type, title, subtitle }: Registration
         email: "",
         detailAddress: "",
         experience: "",
-        affiliation: "",
-        age: "",
-        team: "",
         agreed: false
     });
 
@@ -75,9 +72,6 @@ export default function RegistrationForm({ type, title, subtitle }: Registration
         form.append("address", address);
         form.append("detailAddress", formData.detailAddress);
         form.append("experience", formData.experience);
-        form.append("affiliation", formData.affiliation);
-        form.append("age", formData.age);
-        form.append("team", formData.team);
         form.append("type", type);
 
         try {
@@ -252,114 +246,15 @@ export default function RegistrationForm({ type, title, subtitle }: Registration
                         </div>
                     )}
 
-                    {type === "Adult" && (
-                        <div className="space-y-6">
-                            {/* Lesson Choice Toggle */}
-                            <div>
-                                <label className="block text-sm font-bold text-navy-900 mb-2">레슨 선택</label>
-                                <div className="grid grid-cols-3 gap-2">
-                                    {["남성", "여성", "혼성"].map((label) => (
-                                        <button
-                                            key={label}
-                                            type="button"
-                                            onClick={() => setFormData({ ...formData, experience: `${label} / ${formData.experience.split(' / ')[1] || ''}` })}
-                                            className={`py-3 rounded-lg font-bold text-sm border transition ${formData.experience.startsWith(label)
-                                                ? "bg-navy-900 text-white border-navy-900"
-                                                : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
-                                                }`}
-                                        >
-                                            {label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Experience Toggle */}
-                            <div>
-                                <label className="block text-sm font-bold text-navy-900 mb-2">축구 구력</label>
-                                <div className="grid grid-cols-5 gap-2">
-                                    {["1년 미만", "1~2년", "2~3년", "3~4년", "5년 이상"].map((label) => (
-                                        <button
-                                            key={label}
-                                            type="button"
-                                            onClick={() => {
-                                                const lesson = formData.experience.split(' / ')[0] || '';
-                                                setFormData({ ...formData, experience: `${lesson} / ${label}` });
-                                            }}
-                                            className={`py-3 rounded-lg font-bold text-xs border transition ${formData.experience.includes(label)
-                                                ? "bg-navy-900 text-white border-navy-900"
-                                                : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
-                                                }`}
-                                        >
-                                            {label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {type === "TNTW" && (
-                        <div className="space-y-6">
-                            {/* Team Selection Toggle */}
-                            <div>
-                                <label className="block text-sm font-bold text-navy-900 mb-2">팀 선택</label>
-                                <div className="grid grid-cols-2 gap-4">
-                                    {["풋살팀 (Futsal)", "축구팀 (Soccer)"].map((label) => (
-                                        <button
-                                            key={label}
-                                            type="button"
-                                            onClick={() => setFormData({ ...formData, team: label })}
-                                            className={`py-4 rounded-xl font-bold text-base border-2 transition ${formData.team === label
-                                                ? "bg-navy-900 text-white border-navy-900 shadow-md"
-                                                : "bg-white text-gray-500 border-gray-100 hover:border-gray-300 hover:bg-gray-50"
-                                                }`}
-                                        >
-                                            {label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {type === "Youth" && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* School/Kindergarten Name */}
-                            <div>
-                                <label className="block text-sm font-bold text-navy-900 mb-2">소속 (유치원/학교)</label>
-                                <input
-                                    type="text"
-                                    placeholder="예: 양천초등학교"
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500"
-                                    value={formData.affiliation}
-                                    onChange={(e) => setFormData({ ...formData, affiliation: e.target.value.slice(0, 10) })}
-                                    maxLength={10}
-                                    required
-                                />
-                                <p className="text-xs text-gray-400 mt-1 text-right">{formData.affiliation.length}/10</p>
-                            </div>
-
-                            {/* Age Selection (Dial/Select Style) */}
-                            <div>
-                                <label className="block text-sm font-bold text-navy-900 mb-2">나이 (만 나이)</label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.age}
-                                        onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 appearance-none font-medium text-gray-700"
-                                        required
-                                    >
-                                        <option value="" disabled>나이를 선택하세요</option>
-                                        {Array.from({ length: 19 }, (_, i) => i + 1).map((age) => (
-                                            <option key={age} value={age}>{age}세</option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    <div>
+                        <label className="block text-sm font-bold text-navy-900 mb-2">축구 구력 / 경험</label>
+                        <textarea
+                            placeholder="축구를 배운 경험이 있다면 적어주세요."
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 min-h-[100px]"
+                            value={formData.experience}
+                            onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                        />
+                    </div>
                 </div>
 
                 {/* Submit Buttons */}
