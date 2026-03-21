@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+import { cookies } from 'next/headers';
+
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { studentName, classMonth } = body;
+        const { studentName, classMonth, itemName, amount: bodyAmount } = body;
 
         if (!studentName || !classMonth) {
             return NextResponse.json({ success: false, error: '이름과 수강월을 입력해주세요.' }, { status: 400 });
@@ -14,9 +16,10 @@ export async function POST(req: Request) {
         SECRET_KEY = SECRET_KEY.replace(/^SECRET_KEY\s+/i, '');
         const CID = (process.env.KAKAO_PAY_CLIENT_ID || '').replace(/['"]/g, '').trim();
 
-        const userId = studentName;
-        // Accept dynamic amount, default to 100 if invalidly passed
-        const amount = body.amount ? parseInt(body.amount, 10) : 100;
+        const userId = studentName || 'guest';
+        const amount = bodyAmount ? parseInt(bodyAmount, 10) : 100;
+        const finalItemName = itemName || `재수강 결제 (${classMonth})`;
+        const partner_order_id = 'order_' + Date.now();
 
         // 1. Create Payment record in DB with pending status
         const payment = await prisma.payment.create({
@@ -30,11 +33,11 @@ export async function POST(req: Request) {
         });
 
         // Derive base URL for callbacks
-        const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+        const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
-        const approvalUrl = `${BASE_URL}/api/payment/kakao/success?paymentId=${payment.id}`;
-        const cancelUrl = `${BASE_URL}/api/payment/kakao/cancel`;
-        const failUrl = `${BASE_URL}/api/payment/kakao/fail`;
+        const approvalUrl = `${BASE_URL}/payment/success`;
+        const cancelUrl = `${BASE_URL}/payment/cancel`;
+        const failUrl = `${BASE_URL}/payment/fail`;
 
         // 2. Call KakaoPay Ready API
         const response = await fetch('https://open-api.kakaopay.com/online/v1/payment/ready', {
@@ -45,12 +48,11 @@ export async function POST(req: Request) {
             },
             body: JSON.stringify({
                 cid: CID,
-                partner_order_id: payment.id,
+                partner_order_id: partner_order_id,
                 partner_user_id: userId,
-                item_name: `재수강 결제 (${classMonth})`,
+                item_name: finalItemName,
                 quantity: 1,
                 total_amount: amount,
-                vat_amount: 0,
                 tax_free_amount: 0,
                 approval_url: approvalUrl,
                 cancel_url: cancelUrl,
@@ -70,6 +72,13 @@ export async function POST(req: Request) {
             where: { id: payment.id },
             data: { tid: data.tid }
         });
+
+        // Store tid and partner_order_id and payment_id in cookies for the approve step
+        const cookieStore = await cookies();
+        cookieStore.set('kakao_tid', data.tid, { path: '/', maxAge: 1800 });
+        cookieStore.set('kakao_order_id', partner_order_id, { path: '/', maxAge: 1800 });
+        cookieStore.set('kakao_payment_db_id', payment.id, { path: '/', maxAge: 1800 });
+        cookieStore.set('kakao_user_id', userId, { path: '/', maxAge: 1800 });
 
         // 4. Return redirect URL to the client
         return NextResponse.json({

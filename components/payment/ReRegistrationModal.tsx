@@ -49,11 +49,18 @@ export default function ReRegistrationModal({ isOpen, onClose }: ReRegistrationM
 
         const calculatedAmount = calculateTotalAmount().toString();
 
+        let itemName = '';
+        if (category === 'soccer') {
+            itemName = `축구 ${soccerOption === '1' ? '1회권' : '4회권'}${soccerShuttle ? ' + 차량운행' : ''}`;
+        } else {
+            itemName = `피지컬 ${physicalOption}시간 ${physicalCount}회`;
+        }
+
         try {
             const res = await fetch('/api/payment/kakao/ready', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ studentName, classMonth, amount: calculatedAmount }),
+                body: JSON.stringify({ studentName, classMonth, amount: calculatedAmount, itemName }),
             });
 
             const data = await res.json();
