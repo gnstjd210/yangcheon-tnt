@@ -13,8 +13,15 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "양천TNT스포츠 아카데미",
-  description: "양천구 최고의 축구 아카데미 - 유소년부터 성인까지",
+  title: "양천 TNT 스포츠 아카데미 | 김진국 축구교실 1995",
+  description: "양천구 목동 최고의 유소년 축구교실. 30년 전통 김진국 감독의 체계적인 훈련과 엘리트 피지컬 트레이닝을 경험하세요.",
+  keywords: "양천구 축구교실, 목동 축구교실, 유소년 축구, 김진국 축구교실, TNT 스포츠 아카데미",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: {
+      "naver-site-verification": process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION as string,
+    },
+  },
 };
 
 export default function RootLayout({

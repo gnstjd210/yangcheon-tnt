@@ -66,6 +66,15 @@ export default function ReRegistrationModal({ isOpen, onClose }: ReRegistrationM
             const data = await res.json();
 
             if (data.success && data.redirectUrl) {
+                // Reset state
+                setStudentName('');
+                setClassMonth('');
+                setCategory('soccer');
+                setSoccerOption('4');
+                setSoccerShuttle(false);
+                setPhysicalOption('1.5');
+                setPhysicalCount(1);
+                
                 // Redirect user to KakaoPay
                 window.location.href = data.redirectUrl;
             } else {
