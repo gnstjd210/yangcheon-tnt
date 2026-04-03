@@ -15,7 +15,7 @@ type AdminMenuSeed = {
 const INITIAL_MENUS: AdminMenuSeed[] = [
     { label: "대시보드", href: "/admin", iconName: "LayoutDashboard", group: "기본", orderIndex: 0 },
     { label: "메인 페이지 관리", href: "/admin/main-page", iconName: "LayoutDashboard", group: "운영", orderIndex: 1 },
-    { label: "공지사항 관리", href: "/admin/notices", iconName: "Megaphone", group: "운영", orderIndex: 2 },
+    { label: "공지사항 관리", href: "/admin/notice", iconName: "Megaphone", group: "운영", orderIndex: 2 },
     { label: "레슨 후기 관리", href: "/admin/reviews", iconName: "Star", group: "운영", orderIndex: 3 },
     { label: "신청서 관리", href: "/admin/registrations", iconName: "FileText", group: "회원", orderIndex: 4 },
     { label: "회원 관리", href: "/admin/users", iconName: "Users", group: "회원", orderIndex: 5 },
