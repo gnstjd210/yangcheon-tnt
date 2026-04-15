@@ -34,7 +34,12 @@ const MENU_STRUCTURE = [
     },
     {
         label: '피지컬 트레이닝',
-        href: '/program/physical/intro'
+        href: '/program/physical/intro',
+        subItems: [
+            { label: '프로그램 소개', href: '/program/physical/intro' },
+            { label: '시설 안내', href: '/program/physical/facility' },
+            { label: '상담 절차', href: '/program/physical/process' }
+        ]
     },
     {
         label: '성인 트레이닝',
