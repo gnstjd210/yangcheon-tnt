@@ -34,8 +34,7 @@ const MENU_STRUCTURE = [
     },
     {
         label: '피지컬 트레이닝',
-        href: '/program/physical/intro',
-        subItems: []
+        href: '/program/physical/intro'
     },
     {
         label: '성인 트레이닝',
@@ -248,7 +247,7 @@ export default function Header() {
                                     <span className="absolute bottom-[35%] left-1/2 -translate-x-1/2 h-[3px] bg-sky-500 transition-all duration-300 w-0 opacity-0 group-hover:w-[40%] group-hover:opacity-100"></span>
 
                                     {/* INDIVIDUAL DROPDOWN MENU (Hover Default) */}
-                                    {item.subItems.length > 0 && (
+                                    {item.subItems && item.subItems.length > 0 && (
                                     <div className={clsx(
                                         "absolute top-[80%] left-1/2 -translate-x-1/2 pt-0 transition-all duration-300 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto",
                                         isHoverMenuOpen ? "block" : "hidden"
@@ -443,7 +442,7 @@ export default function Header() {
                                         {MENU_STRUCTURE.map((item) => (
                                             <div key={item.label} className="w-full flex flex-col items-center">
                                                 <div className="flex flex-col space-y-4 text-center mt-2">
-                                                    {item.subItems.map((sub) => (
+                                                    {item.subItems?.map((sub) => (
                                                         <Link
                                                             key={sub.label}
                                                             href={sub.href}
@@ -569,28 +568,42 @@ export default function Header() {
                                 {/* Accordion Menu */}
                                 <div className="flex-1 overflow-y-auto w-full px-6 py-2 pb-8 scrollbar-hide">
                                     {MENU_STRUCTURE.map((section, index) => {
+                                        const hasSubItems = section.subItems && section.subItems.length > 0;
                                         const isExpanded = expandedMenu === index;
                                         return (
                                             <div key={section.label} className="border-b border-white/10 last:border-0">
-                                                <button
-                                                    onClick={() => setExpandedMenu(isExpanded ? null : index)}
-                                                    className="w-full flex items-center justify-between py-4 text-left"
-                                                >
-                                                    <span className={clsx(
-                                                        "font-bold text-lg tracking-tight transition-colors",
-                                                        isExpanded ? "text-sky-400" : "text-white"
-                                                    )}>
-                                                        {section.label}
-                                                    </span>
-                                                    <ChevronRight
-                                                        size={20}
-                                                        className={clsx(
-                                                            "transition-transform duration-300",
-                                                            isExpanded ? "rotate-90 text-sky-400" : "text-gray-500"
-                                                        )}
-                                                    />
-                                                </button>
+                                                {hasSubItems ? (
+                                                    <button
+                                                        onClick={() => setExpandedMenu(isExpanded ? null : index)}
+                                                        className="w-full flex items-center justify-between py-4 text-left"
+                                                    >
+                                                        <span className={clsx(
+                                                            "font-bold text-lg tracking-tight transition-colors",
+                                                            isExpanded ? "text-sky-400" : "text-white"
+                                                        )}>
+                                                            {section.label}
+                                                        </span>
+                                                        <ChevronRight
+                                                            size={20}
+                                                            className={clsx(
+                                                                "transition-transform duration-300",
+                                                                isExpanded ? "rotate-90 text-sky-400" : "text-gray-500"
+                                                            )}
+                                                        />
+                                                    </button>
+                                                ) : (
+                                                    <Link
+                                                        href={section.href}
+                                                        onClick={() => setIsMobileMenuOpen(false)}
+                                                        className="w-full flex items-center justify-between py-4 text-left"
+                                                    >
+                                                        <span className="font-bold text-lg tracking-tight transition-colors text-white hover:text-sky-400">
+                                                            {section.label}
+                                                        </span>
+                                                    </Link>
+                                                )}
 
+                                                {hasSubItems && (
                                                 <AnimatePresence>
                                                     {isExpanded && (
                                                         <motion.div
@@ -601,7 +614,7 @@ export default function Header() {
                                                             className="overflow-hidden"
                                                         >
                                                             <div className="flex flex-col space-y-1 pb-4 pl-2">
-                                                                {section.subItems.map(sub => (
+                                                                {section.subItems?.map(sub => (
                                                                     <Link
                                                                         key={sub.label}
                                                                         href={sub.href}
@@ -616,6 +629,7 @@ export default function Header() {
                                                         </motion.div>
                                                     )}
                                                 </AnimatePresence>
+                                                )}
                                             </div>
                                         );
                                     })}
