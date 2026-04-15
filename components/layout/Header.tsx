@@ -35,11 +35,7 @@ const MENU_STRUCTURE = [
     {
         label: '피지컬 트레이닝',
         href: '/program/physical/intro',
-        subItems: [
-            { label: '프로그램 소개', href: '/program/physical/intro' },
-            { label: '시설 안내', href: '/program/physical/facility' },
-            { label: '상담 절차', href: '/program/physical/process' }
-        ]
+        subItems: []
     },
     {
         label: '성인 트레이닝',
@@ -252,6 +248,7 @@ export default function Header() {
                                     <span className="absolute bottom-[35%] left-1/2 -translate-x-1/2 h-[3px] bg-sky-500 transition-all duration-300 w-0 opacity-0 group-hover:w-[40%] group-hover:opacity-100"></span>
 
                                     {/* INDIVIDUAL DROPDOWN MENU (Hover Default) */}
+                                    {item.subItems.length > 0 && (
                                     <div className={clsx(
                                         "absolute top-[80%] left-1/2 -translate-x-1/2 pt-0 transition-all duration-300 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto",
                                         isHoverMenuOpen ? "block" : "hidden"
@@ -269,6 +266,7 @@ export default function Header() {
                                             ))}
                                         </div>
                                     </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -440,50 +438,23 @@ export default function Header() {
                                         </div>
                                     </div>
 
-                                    {/* CENTER: 6-Column CSS Banner Grid aligned exactly to Center */}
-                                    <div className="hidden xl:grid grid-cols-6 flex-1 max-w-[1300px] mx-4 2xl:mx-8 gap-4 justify-items-center z-30 w-full">
-                                        {MEGA_BANNER_MENUS.map((item) => (
-                                            <Link
-                                                key={item.href}
-                                                href={item.href}
-                                                className="w-full flex-col relative group flex items-center justify-center py-6 px-1 rounded-xl transition-all duration-300"
-                                                onClick={() => setIsDesktopMegaMenuOpen(false)}
-                                            >
-                                                {/* Hover Highlight Background (Subtle Navy Glow) */}
-                                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300" />
-
-                                                <div className="w-full flex flex-col items-center justify-center gap-5 z-10">
-                                                    {/* Top Section with Visual Elements */}
-                                                    <div className="w-full relative flex items-center justify-center px-1">
-                                                        {/* Tiny Emblem left side */}
-                                                        <div className="absolute left-0 lg:w-5 lg:h-5 2xl:w-7 2xl:h-7 rounded-full bg-navy-900 border border-white/80 flex items-center justify-center overflow-hidden z-10 transition-transform group-hover:rotate-12">
-                                                            <span className="text-[5px] 2xl:text-[7px] text-white font-black">TNT</span>
-                                                        </div>
-
-                                                        <h3 className="text-[#38bdf8] italic font-black text-[12px] md:text-[14px] 2xl:text-[16px] tracking-tighter leading-none transition-colors group-hover:text-white drop-shadow-md z-0 text-center w-full">
-                                                            TNT SPORTS<br />ACADEMY
-                                                        </h3>
-
-                                                        {/* Fire Soccer Ball emerging on hover */}
-                                                        <div className="absolute right-0 opacity-80 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 group-hover:-translate-y-1 scale-[1.2] z-10 w-8 h-8 flex items-center justify-center">
-                                                            <span className="drop-shadow-lg text-xl md:text-2xl">🔥⚽</span>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* White Title Box */}
-                                                    <div className="w-full py-3.5 bg-white hover:bg-gray-50 rounded-lg border border-white shadow-[0_4px_10px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_20px_rgba(56,189,248,0.4)] group-hover:-translate-y-1 transition-all duration-300 overflow-hidden flex items-center justify-center px-2 min-h-[56px] relative">
-                                                        {/* Faint soccer field lines inside the white box to mimic pattern slightly */}
-                                                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none overflow-hidden">
-                                                            <div className="absolute border-[1.5px] border-black rounded-full w-24 h-24 -left-12 top-1/2 -translate-y-1/2" />
-                                                            <div className="absolute border-[1.5px] border-black rounded-full w-24 h-24 -right-12 top-1/2 -translate-y-1/2" />
-                                                            <div className="absolute border-l-[1.5px] border-black h-full w-[1.5px] top-0 left-1/2 -translate-x-1/2" />
-                                                        </div>
-                                                        <span className="block text-navy-900 font-extrabold text-[12px] md:text-[13px] 2xl:text-[14px] leading-tight text-center break-keep w-full whitespace-pre-line z-10">
-                                                            {item.label}
-                                                        </span>
-                                                    </div>
+                                    {/* CENTER: 7-Column Grid aligned exactly to Header */}
+                                    <div className="hidden xl:grid grid-cols-7 flex-1 max-w-[1200px] mx-6 2xl:mx-10 justify-items-center z-30 w-full">
+                                        {MENU_STRUCTURE.map((item) => (
+                                            <div key={item.label} className="w-full flex flex-col items-center">
+                                                <div className="flex flex-col space-y-4 text-center mt-2">
+                                                    {item.subItems.map((sub) => (
+                                                        <Link
+                                                            key={sub.label}
+                                                            href={sub.href}
+                                                            className="text-gray-400 hover:text-white transition-colors text-[14px] 2xl:text-[15px] font-medium"
+                                                            onClick={() => setIsDesktopMegaMenuOpen(false)}
+                                                        >
+                                                            {sub.label}
+                                                        </Link>
+                                                    ))}
                                                 </div>
-                                            </Link>
+                                            </div>
                                         ))}
                                     </div>
 
