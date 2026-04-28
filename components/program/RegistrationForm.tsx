@@ -25,6 +25,8 @@ export default function RegistrationForm({ type, title, subtitle }: Registration
         email: "",
         detailAddress: "",
         experience: "",
+        experienceYears: "신입/없음",
+        team: "풋살팀",
         agreed: false
     });
 
@@ -72,6 +74,10 @@ export default function RegistrationForm({ type, title, subtitle }: Registration
         form.append("address", address);
         form.append("detailAddress", formData.detailAddress);
         form.append("experience", formData.experience);
+        form.append("experienceYears", formData.experienceYears);
+        if (type === "TNTW") {
+            form.append("team", formData.team);
+        }
         form.append("type", type);
 
         try {
@@ -246,14 +252,46 @@ export default function RegistrationForm({ type, title, subtitle }: Registration
                         </div>
                     )}
 
-                    <div>
-                        <label className="block text-sm font-bold text-navy-900 mb-2">축구 구력 / 경험</label>
-                        <textarea
-                            placeholder="축구를 배운 경험이 있다면 적어주세요."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 min-h-[100px]"
-                            value={formData.experience}
-                            onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                        />
+                    {type === "TNTW" && (
+                        <div>
+                            <label className="block text-sm font-bold text-navy-900 mb-2">지원 분야(팀)</label>
+                            <div className="flex gap-6 mt-2 mb-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="team" value="풋살팀" checked={formData.team === "풋살팀"} onChange={(e) => setFormData({...formData, team: e.target.value})} className="w-5 h-5 text-sky-600 border-gray-300 focus:ring-sky-500" />
+                                    <span className="text-sm font-bold text-gray-700">풋살팀</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="team" value="축구팀" checked={formData.team === "축구팀"} onChange={(e) => setFormData({...formData, team: e.target.value})} className="w-5 h-5 text-sky-600 border-gray-300 focus:ring-sky-500" />
+                                    <span className="text-sm font-bold text-gray-700">축구팀</span>
+                                </label>
+                            </div>
+                        </div>
+                    )}
+                    
+                    <div className="grid grid-cols-1 gap-4">
+                        <div>
+                            <label className="block text-sm font-bold text-navy-900 mb-2">구력</label>
+                            <select 
+                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width=%2214%22%20height=%228%22%20viewBox=%220%200%2014%208%22%20fill=%22none%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d=%22M1%201L7%207L13%201%22%20stroke=%22%239CA3AF%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22/%3E%3C/svg%3E')] bg-[length:14px_8px] bg-[position:right_1rem_center] bg-no-repeat pr-10"
+                                value={formData.experienceYears}
+                                onChange={(e) => setFormData({ ...formData, experienceYears: e.target.value })}
+                            >
+                                <option value="신입/없음">신입/없음</option>
+                                {Array.from({ length: 20 }, (_, i) => i + 1).map(year => (
+                                    <option key={year} value={`${year}년`}>{year}년</option>
+                                ))}
+                                <option value="20년 이상">20년 이상</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-bold text-navy-900 mb-2">경험 / 비고</label>
+                            <textarea
+                                placeholder="축구를 배운 경험이나 추가 내역이 있다면 적어주세요."
+                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 min-h-[100px]"
+                                value={formData.experience}
+                                onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                            />
+                        </div>
                     </div>
                 </div>
 

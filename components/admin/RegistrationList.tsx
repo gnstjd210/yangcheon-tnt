@@ -11,6 +11,7 @@ type Registration = {
     phone: string;
     email: string | null;
     address: string | null;
+    experienceYears: string | null;
     experience: string | null;
     affiliation: string | null;
     age: string | null;
@@ -90,7 +91,7 @@ export default function RegistrationList({ initialRegistrations }: { initialRegi
                     <div className="col-span-2">이름</div>
                     <div className="col-span-3">연락처</div>
                     <div className="col-span-2">구분</div>
-                    <div className="col-span-3">신청일시</div>
+                    <div className="col-span-3 text-gray-400">신청일시</div>
                     <div className="col-span-1 text-center">더보기</div>
                 </div>
 
@@ -115,8 +116,8 @@ export default function RegistrationList({ initialRegistrations }: { initialRegi
                                         )}
                                     </div>
                                     <div className="col-span-2 font-bold">{reg.name}</div>
-                                    <div className="col-span-2 text-gray-600">{reg.phone}</div>
-                                    <div className="col-span-1">
+                                    <div className="col-span-3 text-gray-600">{reg.phone}</div>
+                                    <div className="col-span-2 flex flex-col gap-1 items-start">
                                         <span className={`px-2 py-0.5 rounded text-xs font-bold ${reg.type === 'Youth' ? 'bg-sky-50 text-sky-600' :
                                             reg.type === 'Adult' ? 'bg-orange-50 text-orange-600' :
                                                 reg.type === 'Trial' ? 'bg-purple-50 text-purple-600' :
@@ -124,24 +125,20 @@ export default function RegistrationList({ initialRegistrations }: { initialRegi
                                             }`}>
                                             {reg.type === 'Trial' ? '체험 수업' : reg.type}
                                         </span>
-                                    </div>
-                                    {/* New column for Affiliation/Age/Team */}
-                                    <div className="col-span-2 text-gray-600">
-                                        {reg.type === 'Youth' ? (
-                                            <>
-                                                {reg.affiliation && <div className="font-medium">{reg.affiliation}</div>}
-                                                {reg.age && <div className="text-xs text-gray-500">{reg.age}세</div>}
-                                                {!reg.affiliation && !reg.age && '-'}
-                                            </>
-                                        ) : reg.type === 'TNTW' ? (
-                                            <div className="font-bold text-navy-900">{reg.team || '-'}</div>
-                                        ) : reg.type === 'Trial' ? (
-                                            <>
-                                                <div className="font-medium">{reg.desiredClass}</div>
-                                                <div className="text-xs text-gray-500">{reg.age}세</div>
-                                            </>
-                                        ) : (
-                                            '-'
+                                        {reg.type === 'Youth' && (reg.affiliation || reg.age) && (
+                                            <span className="text-xs text-gray-500 font-medium">
+                                                {reg.affiliation ? `${reg.affiliation} ` : ''}{reg.age ? `(${reg.age}세)` : ''}
+                                            </span>
+                                        )}
+                                        {reg.type === 'TNTW' && reg.team && (
+                                            <span className="text-xs font-bold text-navy-900">
+                                                [{reg.team}]
+                                            </span>
+                                        )}
+                                        {reg.type === 'Trial' && reg.desiredClass && (
+                                            <span className="text-xs text-gray-500 font-medium">
+                                                {reg.desiredClass} {reg.age ? `(${reg.age}세)` : ''}
+                                            </span>
                                         )}
                                     </div>
                                     <div className="col-span-3 text-gray-400 text-xs">
@@ -191,7 +188,14 @@ export default function RegistrationList({ initialRegistrations }: { initialRegi
                                                         <p className="text-navy-900 font-medium">{reg.email || "-"}</p>
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <h4 className="font-bold text-gray-500 text-xs mb-1">축구 경험 / 비고</h4>
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <h4 className="font-bold text-gray-500 text-xs">경험</h4>
+                                                            {reg.experienceYears && (
+                                                                <span className="bg-sky-100 text-sky-700 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                                                                    구력: {reg.experienceYears}
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                         <p className="text-navy-900 font-medium whitespace-pre-wrap">{reg.experience || "없음"}</p>
                                                     </div>
                                                 </>

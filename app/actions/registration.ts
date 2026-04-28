@@ -11,6 +11,7 @@ export async function submitRegistration(formData: FormData) {
     const detailAddress = formData.get("detailAddress") as string;
     const fullAddress = `${address} ${detailAddress}`;
     const experience = formData.get("experience") as string; // Optional (Adult)
+    const experienceYears = formData.get("experienceYears") as string; // Optional (Dropdown)
     const affiliation = formData.get("affiliation") as string; // Optional (Youth)
     const age = formData.get("age") as string; // Optional (Youth)
     const team = formData.get("team") as string; // Optional (TNTW)
@@ -28,6 +29,7 @@ export async function submitRegistration(formData: FormData) {
                 email,
                 address: fullAddress,
                 experience,
+                experienceYears,
                 affiliation,
                 age,
                 team,

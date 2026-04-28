@@ -202,6 +202,7 @@ model Registration {
   email      String?
   address    String?
   detailAddress String?
+  experienceYears String? // Added for tracking years of experience separately
   experience String? // Adult only
   affiliation String? // Youth only: School/Kindergarten
   age        String? // Youth only: 1-19
